@@ -1,3 +1,9 @@
+(*
+  Copyright 2015, TFrameStand
+
+  Author:
+    Andrea Magni <andrea(dot)magni(at)gmail(dot)com>
+*)
 unit FrameStand;
 
 interface
@@ -61,10 +67,12 @@ type
     function FireCustomBeforeShowMethods: Boolean; virtual;
     function FireCustomShowMethods: Boolean; virtual;
     function FireCustomHideMethods: Boolean; virtual;
-    function FireAnimations(const AFmxObject: TFmxObject; const APattern: string): Boolean;
+    function FireAnimations(const AFmxObject: TFmxObject; const APattern: string; const AStart: Boolean = True): Boolean;
     function FireShowAnimations: Boolean; virtual;
     function FireHideAnimations: Boolean; virtual;
   public
+    procedure StopAnimations; virtual;
+
     procedure Show();
     procedure Hide(const ADelay: Integer = 0; const AThen: TProc = nil);
     procedure Close();
@@ -143,11 +151,8 @@ destructor TFrameStand.Destroy;
 var
   LKey: TFrame;
 begin
-  while FFrameInfos.Count > 0 do
-  begin
-    LKey := FFrameInfos.Keys.ToArray[0];
+  for LKey in FFrameInfos.Keys.ToArray do
     Remove(LKey);
-  end;
 
   FFrameInfos.Free;
   inherited;
@@ -280,6 +285,7 @@ end;
 
 procedure TFrameInfo<T>.DefaultHide;
 begin
+  StopAnimations;
   Stand.Visible := False;
 end;
 
@@ -342,7 +348,7 @@ begin
 end;
 
 function TFrameInfo<T>.FireAnimations(const AFmxObject: TFmxObject;
-  const APattern: string): Boolean;
+  const APattern: string; const AStart: Boolean = True): Boolean;
 var
   LChild: TFmxObject;
 begin
@@ -362,7 +368,10 @@ begin
       then
       begin
         Result := True;
-        TAnimation(LChild).Start;
+        if AStart then
+          TAnimation(LChild).Start
+        else
+          TAnimation(LChild).Stop;
       end
       else if LChild.ChildrenCount > 0 then // recursion
       begin
@@ -518,6 +527,13 @@ begin
   if not FireCustomShowMethods then
     DefaultShow;
   FireShowAnimations;
+end;
+
+procedure TFrameInfo<T>.StopAnimations;
+begin
+  // FMX does not like if you free an object when animation are still running
+  FireAnimations(FStand, FFrameStand.AnimationHide, False);
+  FireAnimations(FStand, FFrameStand.AnimationShow, False);
 end;
 
 { TDelayedAction }

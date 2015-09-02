@@ -55,3 +55,5 @@ __history/
 
 # Castalia statistics file
 *.stat
+/demos/wait/Android
+/demos/wait/Win32

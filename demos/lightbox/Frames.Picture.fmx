@@ -1,0 +1,44 @@
+object PictureFrame: TPictureFrame
+  Align = Client
+  Size.Width = 320.000000000000000000
+  Size.Height = 240.000000000000000000
+  Size.PlatformDefault = False
+  object PictureImage: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Align = Contents
+    Size.Width = 320.000000000000000000
+    Size.Height = 240.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object BottomLayout: TLayout
+    Align = Bottom
+    Position.Y = 190.000000000000000000
+    Size.Width = 320.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Rectangle1: TRectangle
+      Align = Contents
+      Fill.Color = claWhite
+      Opacity = 0.750000000000000000
+      Sides = [Top]
+      Size.Width = 320.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claSlategray
+    end
+    object DescriptionLabel: TLabel
+      Align = Client
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Size.Width = 310.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'DescriptionLabel'
+    end
+  end
+end

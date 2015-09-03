@@ -57,3 +57,5 @@ __history/
 *.stat
 /demos/wait/Android
 /demos/wait/Win32
+Android
+Win32

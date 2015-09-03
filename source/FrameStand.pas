@@ -63,6 +63,7 @@ type
     function HasAttribute<A: TCustomAttribute>(ARttiObject: TRttiObject): A;
     procedure InjectContext; virtual;
     procedure FindCustomMethods; virtual;
+    procedure FindCommonActions(const AFmxObject: TFmxObject); virtual;
     function FireCustomMethods(AMethods: TArray<TRttiMethod>): Boolean; virtual;
     function FireCustomBeforeShowMethods: Boolean; virtual;
     function FireCustomShowMethods: Boolean; virtual;
@@ -70,6 +71,7 @@ type
     function FireAnimations(const AFmxObject: TFmxObject; const APattern: string; const AStart: Boolean = True): Boolean;
     function FireShowAnimations: Boolean; virtual;
     function FireHideAnimations: Boolean; virtual;
+    procedure DoCommonActionClick(Sender: TObject);
   public
     procedure StopAnimations; virtual;
 
@@ -90,6 +92,23 @@ type
     property IsVisible: Boolean read GetIsVisible;
   end;
 
+  TActionDictionary = class
+  private
+    FDictionary: TDictionary<string, TProc<TFrameInfo<TFrame>>>;
+    function GetCount: Integer;
+    function GetKeys: TArray<string>;
+  protected
+  public
+    procedure Add(const APattern: string; const AAction: TProc<TFrameInfo<TFrame>>);
+    function TryGetValue(const APattern: string; out AAction: TProc<TFrameInfo<TFrame>>): Boolean;
+
+    constructor Create; virtual;
+    destructor Destroy; override;
+
+    property Count: Integer read GetCount;
+    property Keys: TArray<string> read GetKeys;
+  end;
+
   TFrameStand = class(TComponent)
   private
     FStyleBook: TStyleBook;
@@ -97,6 +116,7 @@ type
     FAnimationHide: string;
     FAnimationShow: string;
     FOnGetFrameClass: TOnGetFrameClassEvent;
+    FCommonActions: TActionDictionary;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -117,11 +137,14 @@ type
     procedure Remove(AFrame: TFrame);
 
     property Count: Integer read GetCount;
+    property CommonActions: TActionDictionary read FCommonActions;
   published
     property StyleBook: TStyleBook read FStyleBook write FStyleBook;
     property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
+
+    // Events
     property OnGetFrameClass: TOnGetFrameClassEvent read FOnGetFrameClass write FOnGetFrameClass;
   end;
 
@@ -129,7 +152,7 @@ procedure Register;
 
 implementation
 
-uses FMX.Layouts, FMX.Ani;
+uses FMX.Layouts, FMX.Ani, FMX.StdCtrls;
 
 procedure Register;
 begin
@@ -145,6 +168,7 @@ begin
   FAnimationShow := 'OnShow*';
   FAnimationHide := 'OnHide*';
   FFrameInfos := TObjectDictionary<TFrame, TFrameInfo<TFrame>>.Create();
+  FCommonActions := TActionDictionary.Create;
 end;
 
 destructor TFrameStand.Destroy;
@@ -155,6 +179,7 @@ begin
     Remove(LKey);
 
   FFrameInfos.Free;
+  FCommonActions.Free;
   inherited;
 end;
 
@@ -281,6 +306,9 @@ begin
 
   // FRAME
   FContainer.AddObject(FFrame);
+
+  // CommonActions
+  FindCommonActions(FStand);
 end;
 
 procedure TFrameInfo<T>.DefaultHide;
@@ -320,6 +348,61 @@ begin
   end;
 
   inherited;
+end;
+
+procedure TFrameInfo<T>.DoCommonActionClick(Sender: TObject);
+var
+  LName: string;
+  LObj: TFmxObject;
+  LPattern: string;
+  LAction: TProc<TFrameInfo<TFrame>>;
+begin
+  LObj := TFmxObject(Sender);
+  LName := LObj.StyleName;
+  if LName = '' then
+    LName := LObj.Name;
+
+  for LPattern in FrameStand.CommonActions.Keys do
+  begin
+    if MatchesMask(LName, LPattern) then
+    begin
+      if FrameStand.CommonActions.TryGetValue(LPattern, LAction) then
+        LAction(TFrameInfo<TFrame>(Self));
+    end;
+  end;
+end;
+
+procedure TFrameInfo<T>.FindCommonActions(const AFmxObject: TFmxObject);
+var
+  LChild: TFmxObject;
+  LCommonActionPattern: string;
+begin
+  if FrameStand.CommonActions.Count = 0 then
+    Exit;
+
+  if Assigned(AFmxObject.Children) then
+  begin
+    for LCommonActionPattern in FrameStand.CommonActions.Keys do
+    begin
+      for LChild in AFmxObject.Children do
+      begin
+        if (LChild is TButton) // TODO: expand to other controls or switch to TAction model!
+           and
+          ( // matches StyleName or Name (if no StyleName is provided)
+              ((LChild.StyleName <> '') and  MatchesMask(LChild.StyleName, LCommonActionPattern))
+           or ((LChild.StyleName = '') and  MatchesMask(LChild.Name, LCommonActionPattern))
+           )
+        then
+        begin
+          TButton(LChild).OnClick := DoCommonActionClick;
+        end
+        else if LChild.ChildrenCount > 0 then // recursion
+          FindCommonActions(LChild);
+      end;
+
+    end;
+
+  end;
 end;
 
 procedure TFrameInfo<T>.FindCustomMethods;
@@ -551,6 +634,42 @@ begin
         TThread.Synchronize(nil, TThreadProcedure(AAction));
       end
     ).Start;
+end;
+
+{ TActionDictionary }
+
+procedure TActionDictionary.Add(const APattern: string;
+  const AAction: TProc<TFrameInfo<TFrame>>);
+begin
+  FDictionary.Add(APattern, AAction);
+end;
+
+constructor TActionDictionary.Create;
+begin
+  inherited Create;
+  FDictionary := TDictionary<string, TProc<TFrameInfo<TFrame>>>.Create;
+end;
+
+destructor TActionDictionary.Destroy;
+begin
+  FDictionary.Free;
+  inherited;
+end;
+
+function TActionDictionary.GetCount: Integer;
+begin
+  Result := FDictionary.Count;
+end;
+
+function TActionDictionary.GetKeys: TArray<string>;
+begin
+  Result := FDictionary.Keys.ToArray;
+end;
+
+function TActionDictionary.TryGetValue(const APattern: string;
+  out AAction: TProc<TFrameInfo<TFrame>>): Boolean;
+begin
+  Result := FDictionary.TryGetValue(APattern, AAction);
 end;
 
 end.

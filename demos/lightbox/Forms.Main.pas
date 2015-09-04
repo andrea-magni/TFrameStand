@@ -6,20 +6,24 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, FrameStand, FMX.ListBox, FMX.Objects,
-  System.ImageList, FMX.ImgList;
+  System.ImageList, FMX.ImgList, Data.DB, Datasnap.DBClient;
 
 type
   TMainForm = class(TForm)
     FrameStand1: TFrameStand;
-    ShowSomethingButton: TButton;
+    PictureButton: TButton;
     Layout1: TLayout;
     ToolBar1: TToolBar;
     Label1: TLabel;
     StyleBook1: TStyleBook;
-    ComboBox1: TComboBox;
     ImageList1: TImageList;
-    procedure ShowSomethingButtonClick(Sender: TObject);
+    TextButton: TButton;
+    DatasetButton: TButton;
+    ClientDataSet1: TClientDataSet;
+    procedure PictureButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure TextButtonClick(Sender: TObject);
+    procedure DatasetButtonClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -35,7 +39,23 @@ implementation
 
 uses
  FMX.MultiResBitmap
- , Frames.Picture;
+ , Frames.Picture
+ , Frames.Text
+ , Frames.Dataset
+ ;
+
+procedure TMainForm.DatasetButtonClick(Sender: TObject);
+var
+  LFrameInfo: TFrameInfo<TDatasetFrame>;
+begin
+  LFrameInfo := FrameStand1.New<TDatasetFrame>();
+
+  LFrameInfo.Frame.DataSet := ClientDataSet1;
+  LFrameInfo.Frame.ItemTextField := 'LastName';
+  LFrameInfo.Frame.DetailField := 'FirstName';
+
+  LFrameInfo.Show;
+end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
@@ -47,21 +67,36 @@ begin
   );
 end;
 
-procedure TMainForm.ShowSomethingButtonClick(Sender: TObject);
+procedure TMainForm.PictureButtonClick(Sender: TObject);
 var
   LFrameInfo: TFrameInfo<TPictureFrame>;
   LItem: TCustomBitmapItem;
   LSize: TSize;
 begin
+  LFrameInfo := FrameStand1.New<TPictureFrame>();
+
   if ImageList1.BitmapItemByName('sample1', LItem, LSize) then
-  begin
-    LFrameInfo := FrameStand1.New<TPictureFrame>(Layout1);
+    LFrameInfo.Frame.Bitmap := LItem.Bitmap;
+  LFrameInfo.Frame.Description := 'A nice description of the picture here';
 
-    LFrameInfo.Frame.PictureImage.Bitmap := LItem.Bitmap;
-    LFrameInfo.Frame.DescriptionLabel.Text := 'A nice description of the picture here';
+  LFrameInfo.Show;
+end;
 
-    LFrameInfo.Show;
-  end;
+procedure TMainForm.TextButtonClick(Sender: TObject);
+var
+  LFrameInfo: TFrameInfo<TTextFrame>;
+begin
+  LFrameInfo := FrameStand1.New<TTextFrame>();
+
+  LFrameInfo.Frame.Text :=
+    'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod '
+  + 'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
+  + 'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo '
+  + 'consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse '
+  + 'cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non '
+  + 'proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+
+  LFrameInfo.Show;
 end;
 
 initialization

@@ -24,6 +24,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure TextButtonClick(Sender: TObject);
     procedure DatasetButtonClick(Sender: TObject);
+    procedure FrameStand1BeforeShow(const ASender: TFrameStand;
+      const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
   private
     { Private declarations }
   public
@@ -65,6 +67,26 @@ begin
       AInfo.Hide();
     end
   );
+end;
+
+procedure TMainForm.FrameStand1BeforeShow(const ASender: TFrameStand;
+  const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
+var
+  LContentBackground: TRectangle;
+  LTenPercent: Single;
+begin
+  LTenPercent := 0;
+  if AFrameInfo.Parent is TCustomForm then
+    LTenPercent := TCustomForm(AFrameInfo.Parent).Width / 10
+  else if AFrameInfo.Parent is TControl then
+    LTenPercent := TControl(AFrameInfo.Parent).Width / 10;
+
+  LContentBackground := AFrameInfo.Stand.FindStyleResource('content_background') as TRectangle;
+
+  LContentBackground.Margins.Left := LTenPercent;
+  LContentBackground.Margins.Right := LTenPercent;
+  LContentBackground.Margins.Top := LTenPercent;
+  LContentBackground.Margins.Bottom := LTenPercent;
 end;
 
 procedure TMainForm.PictureButtonClick(Sender: TObject);

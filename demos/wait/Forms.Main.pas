@@ -41,7 +41,11 @@ begin
   TThread.CreateAnonymousThread(
     procedure
     begin
-      Sleep(5000); // simulate doing something (5s)
+      LFrameInfo.Frame.UpdateMessageText('Phase 1...');
+      Sleep(2000); // simulate doing something
+
+      LFrameInfo.Frame.UpdateMessageText('Phase 2...');
+      Sleep(3000); // simulate doing something
 
       TThread.Synchronize(nil,
         procedure

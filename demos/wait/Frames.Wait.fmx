@@ -6,7 +6,7 @@ object WaitFrame: TWaitFrame
   object BackgroundRectangle: TRectangle
     Align = Contents
     Fill.Color = claBlack
-    Opacity = 0.660000026226043600
+    Opacity = 0.660000026226043700
     Size.Width = 200.000000000000000000
     Size.Height = 200.000000000000000000
     Size.PlatformDefault = False

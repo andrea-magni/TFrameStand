@@ -41,7 +41,7 @@ type
     class procedure Execute(const ADelay: Integer; const AAction: TProc);
   end;
 
-  TOnGetFrameClassEvent = procedure (const AParent: TFmxObject;
+  TOnGetFrameClassEvent = procedure (const ASender: TFrameStand; const AParent: TFmxObject;
     const AStandStyleName: string; var AFrameClass: TFrameClass) of object;
 
   TFrameInfo<T: TFrame> = class
@@ -92,6 +92,8 @@ type
     property IsVisible: Boolean read GetIsVisible;
   end;
 
+  TOnBeforeShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>) of object;
+
   TActionDictionary = class
   private
     FDictionary: TDictionary<string, TProc<TFrameInfo<TFrame>>>;
@@ -117,6 +119,7 @@ type
     FAnimationShow: string;
     FOnGetFrameClass: TOnGetFrameClassEvent;
     FCommonActions: TActionDictionary;
+    FOnBeforeShow: TOnBeforeShowEvent;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -145,6 +148,7 @@ type
     property AnimationHide: string read FAnimationHide write FAnimationHide;
 
     // Events
+    property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
     property OnGetFrameClass: TOnGetFrameClassEvent read FOnGetFrameClass write FOnGetFrameClass;
   end;
 
@@ -197,7 +201,7 @@ function TFrameStand.GetFrameClass<T>(const AParent: TFmxObject; const AStandSty
 begin
   Result := TFrameClass(T);
   if Assigned(FOnGetFrameClass) then
-    FOnGetFrameClass(AParent, AStandStyleName, Result);
+    FOnGetFrameClass(Self, AParent, AStandStyleName, Result);
 end;
 
 function TFrameStand.GetStandStyleName(AStandStyleName: string): string;
@@ -607,6 +611,9 @@ end;
 procedure TFrameInfo<T>.Show();
 begin
   FireCustomBeforeShowMethods;
+  if Assigned(FrameStand) and Assigned(FrameStand.OnBeforeShow) then
+    FrameStand.OnBeforeShow(FrameStand, TFrameInfo<TFrame>(Self));
+
   if not FireCustomShowMethods then
     DefaultShow;
   FireShowAnimations;

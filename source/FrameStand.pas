@@ -9,13 +9,9 @@ unit FrameStand;
 interface
 
 uses
-  System.SysUtils, System.Classes
-  , FMX.Controls
-  , FMX.Types
-  , FMX.Forms
-  , System.Rtti
+  System.SysUtils, System.Classes, System.Rtti, System.Masks, System.Threading
   , Generics.Collections
-  , System.Masks
+  , FMX.Controls, FMX.Types, FMX.Forms
   ;
 
 type
@@ -75,7 +71,9 @@ type
   public
     procedure StopAnimations; virtual;
 
-    procedure Show();
+    function Show(const ABackgroundTask: TProc<TFrameInfo<T>> = nil;
+      const AOnTaskComplete: TProc<TFrameInfo<T>> = nil;
+      const AOnTaskCompleteSynchronized: Boolean = True): ITask;
     procedure Hide(const ADelay: Integer = 0; const AThen: TProc = nil);
     procedure Close();
 
@@ -156,7 +154,9 @@ procedure Register;
 
 implementation
 
-uses FMX.Layouts, FMX.Ani, FMX.StdCtrls;
+uses
+    FMX.Layouts, FMX.Ani, FMX.StdCtrls
+  ;
 
 procedure Register;
 begin
@@ -608,8 +608,12 @@ begin
 
 end;
 
-procedure TFrameInfo<T>.Show();
+function TFrameInfo<T>.Show(const ABackgroundTask: TProc<TFrameInfo<T>> = nil;
+  const AOnTaskComplete: TProc<TFrameInfo<T>> = nil;
+  const AOnTaskCompleteSynchronized: Boolean = True
+): ITask;
 begin
+  Result := nil;
   FireCustomBeforeShowMethods;
   if Assigned(FrameStand) and Assigned(FrameStand.OnBeforeShow) then
     FrameStand.OnBeforeShow(FrameStand, TFrameInfo<TFrame>(Self));
@@ -617,11 +621,35 @@ begin
   if not FireCustomShowMethods then
     DefaultShow;
   FireShowAnimations;
+
+  if Assigned(ABackgroundTask) then
+  begin
+    Result := TTask.Create(
+      procedure
+      begin
+        ABackgroundTask(Self);
+
+        if Assigned(AOnTaskComplete) then
+        begin
+          if AOnTaskCompleteSynchronized then
+            TThread.Synchronize(nil,
+              procedure
+              begin
+                AOnTaskComplete(Self);
+              end
+            )
+          else
+            AOnTaskComplete(Self);
+        end;
+      end
+    ).Start;
+  end;
 end;
 
 procedure TFrameInfo<T>.StopAnimations;
 begin
-  // FMX does not like if you free an object when animation are still running
+  // FMX does not like if you free an object when animation are still running,
+  // so stop them all
   FireAnimations(FStand, FFrameStand.AnimationHide, False);
   FireAnimations(FStand, FFrameStand.AnimationShow, False);
 end;

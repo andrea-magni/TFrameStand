@@ -31,31 +31,27 @@ implementation
 uses Frames.Wait;
 
 procedure TMainForm.DoSomethingButtonClick(Sender: TObject);
-var
-  LFrameInfo: TFrameInfo<TWaitFrame>;
 begin
-  LFrameInfo := FrameStand1.New<TWaitFrame>(Layout1);
+  FrameStand1.New<TWaitFrame>(Layout1)
+    .Show(
+      // background task to execute
+      procedure(AFrameInfo: TFrameInfo<TWaitFrame>)
+      begin
+        Sleep(1000); // using Sleep to simulate some computation
 
-  LFrameInfo.Show;
+        AFrameInfo.Frame.UpdateMessageText('Phase 1...');
+        Sleep(2000);
 
-  TThread.CreateAnonymousThread(
-    procedure
-    begin
-      LFrameInfo.Frame.UpdateMessageText('Phase 1...');
-      Sleep(2000); // simulate doing something
-
-      LFrameInfo.Frame.UpdateMessageText('Phase 2...');
-      Sleep(3000); // simulate doing something
-
-      TThread.Synchronize(nil,
-        procedure
-        begin
-          LFrameInfo.Hide;
-          LFrameInfo.Close;
-        end
-      );
-    end
-  ).Start;
+        AFrameInfo.Frame.UpdateMessageText('Phase 2...');
+        Sleep(3000);
+      end
+      , // On background task completion, hide the wait frame
+      procedure(AFrameInfo: TFrameInfo<TWaitFrame>)
+      begin
+        AFrameInfo.Hide;
+        AFrameInfo.Close;
+      end
+    );
 end;
 
 initialization

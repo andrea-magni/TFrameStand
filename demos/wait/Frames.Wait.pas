@@ -45,12 +45,12 @@ procedure TWaitFrame.UpdateMessageText(const AText: string;
   const ASync: Boolean);
 begin
   if not ASync then
-    MessageLabel.Text := AText
+    MessageText := AText
   else
     TThread.Synchronize(nil,
       procedure
       begin
-        MessageLabel.Text := AText;
+        MessageText := AText;
       end
     );
 end;

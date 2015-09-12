@@ -10,6 +10,6 @@ _All code and demos tested on Delphi XE8 and Delphi 10 Seattle._
 * Share CommonActions through different UI combinations
 
 ##Demo projects
-* wait: a wait splashscreen with running animation and opacity. Can be show on the top of a whole form or a single FMX control. 
-* lightbox: achieves the popular lightbox effect to show different kind of content (pictures, text, data) using a consistent UI. Also provides an example of CommonActions use (the Close button) and provides fade-in animation of content
+* *wait*: a wait splashscreen with running animation and opacity. Can be show on the top of a whole form or a single FMX control. 
+* *lightbox*: achieves the popular lightbox effect to show different kind of content (pictures, text, data) using a consistent UI. Also provides an example of CommonActions use (the Close button) and provides fade-in animation of content
 

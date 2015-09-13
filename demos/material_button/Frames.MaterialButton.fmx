@@ -1,13 +1,13 @@
 object MaterialButtonFrame: TMaterialButtonFrame
   Align = Contents
-  Size.Width = 126.000000000000000000
-  Size.Height = 105.000000000000000000
+  Size.Width = 114.000000000000000000
+  Size.Height = 107.000000000000000000
   Size.PlatformDefault = False
   object Circle1: TCircle
     Align = Client
     Fill.Color = xFFF44336
-    Size.Width = 126.000000000000000000
-    Size.Height = 105.000000000000000000
+    Size.Width = 114.000000000000000000
+    Size.Height = 107.000000000000000000
     Size.PlatformDefault = False
     Stroke.Kind = None
     OnClick = Circle1Click
@@ -45,12 +45,11 @@ object MaterialButtonFrame: TMaterialButtonFrame
             000049454E44AE426082}
           FileName = 'Z:\Download\Batch-master\PNG\64x64\pencil.png'
         end>
-      Align = Contents
+      Align = Center
       HitTest = False
-      Size.Width = 126.000000000000000000
-      Size.Height = 105.000000000000000000
+      Size.Width = 47.000000000000000000
+      Size.Height = 51.000000000000000000
       Size.PlatformDefault = False
-      WrapMode = Center
     end
   end
 end

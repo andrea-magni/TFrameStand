@@ -1,0 +1,235 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'MaterialButton demo - TFrameStand'
+  ClientHeight = 480
+  ClientWidth = 363
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Client
+    Size.Width = 363.000000000000000000
+    Size.Height = 440.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object Layout2: TLayout
+      Align = Top
+      Size.Width = 363.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object ShowButton: TButton
+        Action = ShowAction
+        Enabled = True
+        ImageIndex = -1
+        Position.X = 178.000000000000000000
+        Position.Y = 8.000000000000000000
+        TabOrder = 1
+        Visible = True
+      end
+      object HideButton: TButton
+        Action = HideAction
+        Enabled = True
+        ImageIndex = -1
+        Position.X = 264.000000000000000000
+        Position.Y = 8.000000000000000000
+        TabOrder = 0
+        Visible = True
+      end
+      object StyleNameComboBox: TComboBox
+        Items.Strings = (
+          'slide_down_up'
+          'slide_right_left')
+        ItemIndex = 0
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 161.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+    object ListBox1: TListBox
+      Align = Client
+      Size.Width = 363.000000000000000000
+      Size.Height = 391.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      DisableFocusEffect = True
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      Viewport.Width = 359.000000000000000000
+      Viewport.Height = 387.000000000000000000
+      object ListBoxItem1: TListBoxItem
+        TabOrder = 0
+        Text = 'ListBoxItem1'
+      end
+      object ListBoxItem2: TListBoxItem
+        Position.Y = 19.000000000000000000
+        TabOrder = 1
+        Text = 'ListBoxItem2'
+      end
+      object ListBoxItem3: TListBoxItem
+        Position.Y = 38.000000000000000000
+        TabOrder = 2
+        Text = 'ListBoxItem3'
+      end
+      object ListBoxItem4: TListBoxItem
+        Position.Y = 57.000000000000000000
+        TabOrder = 3
+        Text = 'ListBoxItem4'
+      end
+      object ListBoxItem5: TListBoxItem
+        Position.Y = 76.000000000000000000
+        TabOrder = 4
+        Text = 'ListBoxItem5'
+      end
+      object ListBoxItem6: TListBoxItem
+        Position.Y = 95.000000000000000000
+        TabOrder = 5
+        Text = 'ListBoxItem6'
+      end
+      object ListBoxItem7: TListBoxItem
+        Position.Y = 114.000000000000000000
+        TabOrder = 6
+        Text = 'ListBoxItem7'
+      end
+      object ListBoxItem8: TListBoxItem
+        Position.Y = 133.000000000000000000
+        TabOrder = 7
+        Text = 'ListBoxItem8'
+      end
+      object ListBoxItem9: TListBoxItem
+        Position.Y = 152.000000000000000000
+        TabOrder = 8
+        Text = 'ListBoxItem9'
+      end
+      object ListBoxItem10: TListBoxItem
+        Position.Y = 171.000000000000000000
+        TabOrder = 9
+        Text = 'ListBoxItem10'
+      end
+      object ListBoxItem11: TListBoxItem
+        Position.Y = 190.000000000000000000
+        TabOrder = 10
+        Text = 'ListBoxItem11'
+      end
+      object ListBoxItem12: TListBoxItem
+        Position.Y = 209.000000000000000000
+        TabOrder = 11
+        Text = 'ListBoxItem12'
+      end
+      object ListBoxItem13: TListBoxItem
+        Position.Y = 228.000000000000000000
+        TabOrder = 12
+        Text = 'ListBoxItem13'
+      end
+      object ListBoxItem14: TListBoxItem
+        Position.Y = 247.000000000000000000
+        TabOrder = 13
+        Text = 'ListBoxItem14'
+      end
+    end
+  end
+  object ToolBar1: TToolBar
+    Size.Width = 363.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object Label1: TLabel
+      Align = Center
+      AutoSize = True
+      Size.Width = 197.000000000000000000
+      Size.Height = 16.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.WordWrap = False
+      Text = 'MaterialButton demo - TFrameStand'
+    end
+  end
+  object FrameStand1: TFrameStand
+    StyleBook = StyleBook1
+    DefaultStyleName = 'framestand'
+    AnimationShow = 'OnShow*'
+    AnimationHide = 'OnHide*'
+    Left = 32
+    Top = 384
+  end
+  object StyleBook1: TStyleBook
+    Styles = <
+      item
+        ResourcesBin = {
+          464D585F5354594C4520322E3501060D736C6964655F646F776E5F7570032303
+          0610736C6964655F72696768745F6C656674032C03005450463007544C61796F
+          757400095374796C654E616D65060D736C6964655F646F776E5F757005416C69
+          676E0708436F6E74656E74730A53697A652E57696474680500000000000000C8
+          04400B53697A652E4865696768740500000000000000C804401453697A652E50
+          6C6174666F726D44656661756C7408085461624F7264657202000007544C6179
+          6F757400095374796C654E616D650606736C6964657205416C69676E0706426F
+          74746F6D0A506F736974696F6E2E590500000000000000C804C00A53697A652E
+          57696474680500000000000000C804400B53697A652E48656967687405000000
+          00000000C805401453697A652E506C6174666F726D44656661756C7408085461
+          624F7264657202000007544C61796F757400095374796C654E616D650609636F
+          6E7461696E657205416C69676E070A486F727A43656E7465720A506F73697469
+          6F6E2E580500000000000000C803C00A53697A652E5769647468050000000000
+          0000C805400B53697A652E4865696768740500000000000000C805401453697A
+          652E506C6174666F726D44656661756C7408085461624F72646572020000000F
+          54466C6F6174416E696D6174696F6E00095374796C654E616D65060D4F6E5368
+          6F77536C696465496E0D416E696D6174696F6E5479706507034F757408447572
+          6174696F6E050000000000000080FE3F0D496E746572706F6C6174696F6E0706
+          426F756E63650C50726F70657274794E616D65060E4D617267696E732E426F74
+          746F6D0A537461727456616C75650500000000000000C805C00953746F705661
+          6C75650500000000000000A0024000000F54466C6F6174416E696D6174696F6E
+          00095374796C654E616D65060E4F6E48696465536C6964654F75740D416E696D
+          6174696F6E5479706507034F7574084475726174696F6E050000000000000080
+          FE3F0D496E746572706F6C6174696F6E07095175616472617469630C50726F70
+          657274794E616D65060E4D617267696E732E426F74746F6D0A53746172745661
+          6C7565050000000000000000000010537461727446726F6D43757272656E7409
+          0953746F7056616C75650500000000000000C805C0000000005450463007544C
+          61796F757400095374796C654E616D650610736C6964655F72696768745F6C65
+          667405416C69676E0708436F6E74656E74730A53697A652E5769647468050000
+          0000000080FD08400B53697A652E4865696768740500000000000040CC084014
+          53697A652E506C6174666F726D44656661756C74080756697369626C65080854
+          61624F7264657202010007544C61796F757400095374796C654E616D65060673
+          6C6964657205416C69676E070552696768740A506F736974696F6E2E58050000
+          0000000080E408400A53697A652E57696474680500000000000000C805400B53
+          697A652E4865696768740500000000000040CC08401453697A652E506C617466
+          6F726D44656661756C7408085461624F7264657202000007544C61796F757400
+          095374796C654E616D650609636F6E7461696E657205416C69676E070A566572
+          7443656E7465720A506F736974696F6E2E590500000000000000B307400A5369
+          7A652E57696474680500000000000000C805400B53697A652E48656967687405
+          00000000000000C805401453697A652E506C6174666F726D44656661756C7408
+          085461624F72646572020000000F54466C6F6174416E696D6174696F6E000953
+          74796C654E616D65060D4F6E53686F77536C696465496E0D416E696D6174696F
+          6E5479706507034F7574084475726174696F6E050000000000000080FE3F0D49
+          6E746572706F6C6174696F6E0706426F756E63650C50726F70657274794E616D
+          65060D4D617267696E732E52696768740A537461727456616C75650500000000
+          000000C805C00953746F7056616C75650500000000000000A0024000000F5446
+          6C6F6174416E696D6174696F6E00095374796C654E616D65060E4F6E48696465
+          536C6964654F75740D416E696D6174696F6E5479706507034F75740844757261
+          74696F6E050000000000000080FE3F0D496E746572706F6C6174696F6E070951
+          75616472617469630C50726F70657274794E616D65060D4D617267696E732E52
+          696768740A537461727456616C75650500000000000000000000105374617274
+          46726F6D43757272656E74090953746F7056616C75650500000000000000C805
+          C000000000}
+      end>
+    Left = 104
+    Top = 384
+  end
+  object ActionList1: TActionList
+    Left = 186
+    Top = 387
+    object ShowAction: TAction
+      Text = 'ShowAction'
+      OnExecute = ShowActionExecute
+      OnUpdate = ShowActionUpdate
+    end
+    object HideAction: TAction
+      Text = 'HideAction'
+      OnExecute = HideActionExecute
+      OnUpdate = HideActionUpdate
+    end
+  end
+end

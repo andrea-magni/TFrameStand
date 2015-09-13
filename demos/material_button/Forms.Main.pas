@@ -44,7 +44,6 @@ type
     procedure HideActionUpdate(Sender: TObject);
   private
     FMaterialButtonInfo: TFrameInfo<TMaterialButtonFrame>;
-    procedure HideAndCloseMaterialButton;
   public
   end;
 
@@ -69,10 +68,6 @@ end;
 procedure TMainForm.HideActionUpdate(Sender: TObject);
 begin
   HideAction.Enabled := Assigned(FMaterialButtonInfo) and (FMaterialButtonInfo.IsVisible);
-end;
-
-procedure TMainForm.HideAndCloseMaterialButton;
-begin
 end;
 
 procedure TMainForm.ShowActionExecute(Sender: TObject);

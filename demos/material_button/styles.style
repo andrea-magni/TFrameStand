@@ -1,0 +1,169 @@
+object TStyleContainer
+  object TLayout
+    StyleName = 'slide_down_up'
+    Align = Contents
+    Size.Width = 873.000000000000000000
+    Size.Height = 665.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    TabOrder = 0
+    object TLayout
+      StyleName = 'slider'
+      Align = Bottom
+      Position.Y = 565.000000000000000000
+      Size.Width = 873.000000000000000000
+      Size.Height = 100.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object TLayout
+        StyleName = 'container'
+        Align = HorzCenter
+        Position.X = 386.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 100.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowSlideIn'
+        AnimationType = Out
+        Duration = 0.500000000000000000
+        Interpolation = Bounce
+        PropertyName = 'Margins.Bottom'
+        StartValue = -100.000000000000000000
+        StopValue = 10.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideSlideOut'
+        AnimationType = Out
+        Duration = 0.500000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Bottom'
+        StartValue = 0.000000000000000000
+        StartFromCurrent = True
+        StopValue = -100.000000000000000000
+      end
+    end
+  end
+  object TLayout
+    StyleName = 'slide_right_left'
+    Align = Contents
+    Size.Width = 1014.000000000000000000
+    Size.Height = 817.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    TabOrder = 1
+    object TLayout
+      StyleName = 'slider'
+      Align = Right
+      Position.X = 914.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 817.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object TLayout
+        StyleName = 'container'
+        Align = VertCenter
+        Position.Y = 358.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 100.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowSlideIn'
+        AnimationType = Out
+        Duration = 0.500000000000000000
+        Interpolation = Bounce
+        PropertyName = 'Margins.Right'
+        StartValue = -100.000000000000000000
+        StopValue = 10.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideSlideOut'
+        AnimationType = Out
+        Duration = 0.500000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Right'
+        StartValue = 0.000000000000000000
+        StartFromCurrent = True
+        StopValue = -100.000000000000000000
+      end
+    end
+  end
+  object TLayout
+    StyleName = 'slide_center'
+    Align = Contents
+    Size.Width = 873.000000000000000000
+    Size.Height = 665.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    TabOrder = 2
+    object TLayout
+      StyleName = 'slider'
+      Align = Center
+      ClipChildren = True
+      Size.Width = 120.000000000000000000
+      Size.Height = 120.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object TLayout
+        StyleName = 'container'
+        Position.X = -100.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 100.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object TFloatAnimation
+          StyleName = 'OnShowSlideIn'
+          AnimationType = Out
+          Delay = 0.500000000000000000
+          Duration = 0.500000000000000000
+          Interpolation = Bounce
+          PropertyName = 'Position.X'
+          StartValue = -100.000000000000000000
+          StopValue = 10.000000000000000000
+        end
+        object TFloatAnimation
+          StyleName = 'OnHideSlideOut'
+          AnimationType = Out
+          Duration = 0.500000000000000000
+          Interpolation = Quadratic
+          PropertyName = 'Position.X'
+          StartValue = 0.000000000000000000
+          StartFromCurrent = True
+          StopValue = -100.000000000000000000
+        end
+      end
+      object TLine
+        StyleName = 'line1style'
+        Align = Left
+        LineType = Left
+        Size.Width = 10.000000000000000000
+        Size.Height = 120.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFFF44336
+        Stroke.Thickness = 5.000000000000000000
+        Stroke.Cap = Round
+        Stroke.Join = Round
+        object TFloatAnimation
+          StyleName = 'OnShowFadeIn'
+          AnimationType = Out
+          Duration = 0.500000000000000000
+          PropertyName = 'Scale.Y'
+          StartValue = 0.000000000000000000
+          StopValue = 1.000000000000000000
+        end
+        object TShadowEffect
+          StyleName = 'shadoweffect1style'
+          Distance = 3.000000000000000000
+          Direction = 45.000000000000000000
+          Softness = 0.300000011920929000
+          Opacity = 0.600000023841857900
+          ShadowColor = claBlack
+        end
+      end
+    end
+  end
+end

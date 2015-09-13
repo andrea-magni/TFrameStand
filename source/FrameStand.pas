@@ -329,27 +329,27 @@ end;
 
 destructor TFrameInfo<T>.Destroy;
 begin
-  if FrameIsOwned and Assigned(FFrame) then
-  begin
-    if not (csDestroying in FFrameStand.ComponentState) then
-    begin
-      FFrame.Free;
-      FFrame := nil;
-    end;
-  end
-  else
-  begin
-    FContainer.RemoveObject(FFrame);
-  end;
-
-  Parent.RemoveObject(Stand);
-  Parent := nil;
-
-  if not (csDestroying in FFrameStand.ComponentState) then
-  begin
-    Stand.Free;
-    Stand := nil;
-  end;
+//  if FrameIsOwned and Assigned(FFrame) then
+//  begin
+//    if not (csDestroying in FFrameStand.ComponentState) then
+//    begin
+//      FFrame.DisposeOf;
+//      FFrame := nil;
+//    end;
+//  end
+//  else
+//  begin
+//    FContainer.RemoveObject(FFrame);
+//  end;
+//
+//  Parent.RemoveObject(Stand);
+//  Parent := nil;
+//
+//  if not (csDestroying in FFrameStand.ComponentState) then
+//  begin
+//    Stand.DisposeOf;
+//    Stand := nil;
+//  end;
 
   inherited;
 end;

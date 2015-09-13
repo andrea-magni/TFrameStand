@@ -1,0 +1,136 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'Dialogs demo - TFrameStand'
+  ClientHeight = 480
+  ClientWidth = 363
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnKeyDown = FormKeyDown
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Client
+    Size.Width = 363.000000000000000000
+    Size.Height = 430.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object ListView1: TListView
+      ItemAppearanceClassName = 'TImageListItemBottomDetailRightButtonAppearance'
+      ItemEditAppearanceClassName = 'TImageListItemBottomDetailRightButtonShowCheckAppearance'
+      HeaderAppearanceClassName = 'TListHeaderObjects'
+      FooterAppearanceClassName = 'TListHeaderObjects'
+      ItemIndex = 0
+      Align = Client
+      Size.Width = 363.000000000000000000
+      Size.Height = 430.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      ItemAppearanceObjects.ItemObjects.TextButton.TintColor = xFFE3F2FD
+      ItemAppearanceObjects.ItemObjects.TextButton.Text = 'Rate'
+      OnItemClickEx = ListView1ItemClickEx
+      OnButtonClick = ListView1ButtonClick
+    end
+  end
+  object StyleBook1: TStyleBook
+    Styles = <
+      item
+        ResourcesBin = {
+          464D585F5354594C4520322E35010606657870616E6403140400545046300754
+          4C61796F757400095374796C654E616D650606657870616E6405416C69676E07
+          08436F6E74656E74730A53697A652E57696474680500000000000040DA08400B
+          53697A652E4865696768740500000000000040A608401453697A652E506C6174
+          666F726D44656661756C74080756697369626C6508085461624F726465720200
+          000A5452656374616E676C6500095374796C654E616D65060F72656374616E67
+          6C65317374796C6505416C69676E0708436F6E74656E74730A46696C6C2E436F
+          6C6F720708636C61426C61636B074F706163697479050000000000000080FE3F
+          0A53697A652E57696474680500000000000040DA08400B53697A652E48656967
+          68740500000000000040A608401453697A652E506C6174666F726D4465666175
+          6C74080B5374726F6B652E4B696E6407044E6F6E65000F54466C6F6174416E69
+          6D6174696F6E00095374796C654E616D65060F4F6E53686F7746616465496E42
+          6B67084475726174696F6E050000000000CDCCCCFC3F0C50726F70657274794E
+          616D6506074F7061636974790A537461727456616C7565050000000000000000
+          00000953746F7056616C75650500000000009A9999FE3F0000000A5452656374
+          616E676C6500095374796C654E616D65060D636F6E7461696E65725F626B6705
+          416C69676E0708436F6E74656E74730A46696C6C2E436F6C6F720708636C6157
+          686974650A53697A652E57696474680500000000000040DA08400B53697A652E
+          4865696768740500000000000040A608401453697A652E506C6174666F726D44
+          656661756C74080007544C61796F757400095374796C654E616D650609636F6E
+          7461696E657205416C69676E0708436F6E74656E74730A53697A652E57696474
+          680500000000000040DA08400B53697A652E4865696768740500000000000040
+          A608401453697A652E506C6174666F726D44656661756C7408085461624F7264
+          6572020000000F54466C6F6174416E696D6174696F6E00095374796C654E616D
+          6506164F6E53686F774D617267696E73546F70546F5A65726F08447572617469
+          6F6E0500000000003333B3FD3F0C50726F70657274794E616D65060B4D617267
+          696E732E546F700A537461727456616C75650500000000000000000000105374
+          61727446726F6D43757272656E74090953746F7056616C756505000000000000
+          0000000000000F54466C6F6174416E696D6174696F6E00095374796C654E616D
+          6506194F6E53686F774D617267696E73426F74746F6D546F5A65726F08447572
+          6174696F6E0500000000003333B3FD3F0C50726F70657274794E616D65060E4D
+          617267696E732E426F74746F6D0A537461727456616C75650500000000000000
+          00000010537461727446726F6D43757272656E74090953746F7056616C756505
+          0000000000000000000000000000}
+      end>
+    Left = 256
+    Top = 312
+  end
+  object Rectangle1: TRectangle
+    Align = Top
+    Fill.Color = xFF2196F3
+    Size.Width = 363.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object Label1: TLabel
+      Align = Center
+      AutoSize = True
+      Size.Width = 205.000000000000000000
+      Size.Height = 16.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.WordWrap = False
+      Text = 'ViewAndDialogs demo - TFrameStand'
+    end
+  end
+  object FrameStand1: TFrameStand
+    StyleBook = StyleBook1
+    DefaultStyleName = 'expand'
+    AnimationShow = 'OnShow*'
+    AnimationHide = 'OnHide*'
+    OnBeforeShow = FrameStand1BeforeShow
+    Left = 176
+    Top = 312
+  end
+  object ActionList1: TActionList
+    Left = 186
+    Top = 387
+    object ShowAction: TAction
+      Text = 'ShowAction'
+    end
+    object HideAction: TAction
+      Text = 'HideAction'
+    end
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 60
+    Top = 149
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = MainDataModule.PrototypeBindSource1
+      FieldName = 'ContactName1'
+      Control = ListView1
+      FillExpressions = <
+        item
+          SourceMemberName = 'ContactTitle1'
+          ControlMemberName = 'Detail'
+        end
+        item
+          SourceMemberName = 'ContactBitmap1'
+          ControlMemberName = 'Bitmap'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+end

@@ -1,0 +1,171 @@
+object EmployeeDetailsFrame: TEmployeeDetailsFrame
+  Align = Contents
+  Size.Width = 278.000000000000000000
+  Size.Height = 288.000000000000000000
+  Size.PlatformDefault = False
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 278.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Rectangle1: TRectangle
+      Align = Contents
+      Fill.Color = xFFBBDEFB
+      Size.Width = 278.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object Label1: TLabel
+      Align = Top
+      AutoSize = True
+      StyledSettings = [Family, FontColor]
+      Margins.Top = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 278.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 14.000000000000000000
+      TextSettings.Font.Style = [fsBold]
+      TextSettings.HorzAlign = Center
+      TextSettings.WordWrap = False
+      Text = 'Mark Anderson'
+    end
+    object Label2: TLabel
+      Align = Top
+      AutoSize = True
+      Position.Y = 29.000000000000000000
+      Size.Width = 278.000000000000000000
+      Size.Height = 16.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      TextSettings.WordWrap = False
+      Text = 'Software Engineer'
+    end
+  end
+  object Layout2: TLayout
+    Align = Bottom
+    Position.Y = 248.000000000000000000
+    Size.Width = 278.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object Rectangle2: TRectangle
+      Align = Contents
+      Fill.Color = xFFE3F2FD
+      Size.Width = 278.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+    object Switch1: TSwitch
+      Align = Right
+      IsChecked = False
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 195.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 78.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Align = Left
+      Margins.Left = 5.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 5.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 84.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Close'
+      OnClick = Button1Click
+    end
+    object Label3: TLabel
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Position.X = 147.000000000000000000
+      Position.Y = 9.000000000000000000
+      Size.Width = 39.000000000000000000
+      Size.Height = 16.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Trailing
+      TextSettings.WordWrap = False
+      Text = 'Active:'
+    end
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Lines.Strings = (
+      
+        'ipsum mi vehicula purus, eu congue sapien orci eu est. Morbi bla' +
+        'ndit volutpat ante, non ultrices eros semper at. Fusce leo leo, ' +
+        'mollis id viverra a, pulvinar non diam. Praesent ornare mauris a' +
+        'c magna placerat rutrum.Curabitur volutpat urna fermentum sem ia' +
+        'culis ultrices. Maecenas adipiscing sapien risus, nec consectetu' +
+        'r arcu. Sed in arcu iaculis felis placerat elementum vitae porta' +
+        ' libero. Donec quis purus nisi, ac ultrices lorem. Proin vitae d' +
+        'iam id turpis rhoncus vestibulum scelerisque vel leo. Nulla quis' +
+        ' scelerisque sem. Etiam imperdiet lacinia nulla sit amet varius.' +
+        ' Aliquam in interdum mauris. Praesent placerat, libero vel biben' +
+        'dum malesuada, velit libero vestibulum erat, vel porttitor diam ' +
+        'urna et nibh. Nullam fringilla cursus tempor. Cras eleifend male' +
+        'suada lacus quis consectetur. Cum sociis natoque penatibus et ma' +
+        'gnis dis parturient montes, nascetur ridiculus mus. Sed vestibul' +
+        'um bibendum sodales.Mauris consectetur ipsum ac turpis aliquam i' +
+        'd placerat justo ornare. Donec nisl arcu, faucibus vel dictum vi' +
+        'tae, dapibus vel mauris. Sed lacinia, elit ut commodo tempor, ma' +
+        'uris felis consequat nisl, sit amet laoreet est quam et tortor. ' +
+        'Proin mattis interdum tempus. Etiam ac vehicula neque. Donec tem' +
+        'por, velit sit')
+    TextSettings.WordWrap = True
+    Align = Client
+    Size.Width = 278.000000000000000000
+    Size.Height = 198.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Viewport.Width = 258.000000000000000000
+    Viewport.Height = 194.000000000000000000
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 20
+    Top = 117
+    object LinkPropertyToFieldText: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = MainDataModule.PrototypeBindSource1
+      FieldName = 'ContactName1'
+      Component = Label1
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText2: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = MainDataModule.PrototypeBindSource1
+      FieldName = 'ContactTitle1'
+      Component = Label2
+      ComponentProperty = 'Text'
+    end
+    object LinkControlToField1: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = MainDataModule.PrototypeBindSource1
+      FieldName = 'BoolField1'
+      Control = Switch1
+      Track = True
+    end
+    object LinkControlToField2: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = MainDataModule.PrototypeBindSource1
+      FieldName = 'LoremIpsum1'
+      Control = Memo1
+      Track = False
+    end
+  end
+end

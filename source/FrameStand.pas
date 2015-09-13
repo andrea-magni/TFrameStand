@@ -51,6 +51,7 @@ type
     FCustomShowMethods: TArray<TRttiMethod>;
     FCustomHideMethods: TArray<TRttiMethod>;
     FContainer: TFmxObject;
+    FStandStyleName: string;
     function GetIsVisible: Boolean;
   protected
     procedure DefaultShow; virtual;
@@ -85,6 +86,7 @@ type
     property FrameIsOwned: Boolean read FFrameIsOwned write FFrameIsOwned;
     property FrameStand: TFrameStand read FFrameStand;
     property Stand: TControl read FStand write FStand;
+    property StandStyleName: string read FStandStyleName;
     property Container: TFmxObject read FContainer write FContainer;
     property Parent: TFmxObject read FParent write FParent;
     property IsVisible: Boolean read GetIsVisible;
@@ -284,13 +286,14 @@ begin
   FFrameStand := AFrameStand;
   FFrame := AFrame;
   FFrameIsOwned := False;
+  FStandStyleName := AStandStyleName;
 
   FindCustomMethods;
 
   // STAND
   FStand := nil;
   if Assigned(FFrameStand.StyleBook) and Assigned(FFrameStand.StyleBook.Style) then
-    FStand := FFrameStand.StyleBook.Style.FindStyleResource(AStandStyleName, True) as TControl;
+    FStand := FFrameStand.StyleBook.Style.FindStyleResource(FStandStyleName, True) as TControl;
   if not Assigned(FStand) then
   begin
     FStand := TLayout.Create(nil);

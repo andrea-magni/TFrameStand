@@ -109,7 +109,7 @@ end;
 procedure TMainForm.ListView1ButtonClick(const Sender: TObject;
   const AItem: TListItem; const AObject: TListItemSimpleControl);
 begin
-  RatingDialogInfo.Show();
+  EmployeeDetailsInfo.Show();
 end;
 
 procedure TMainForm.ListView1ItemClickEx(const Sender: TObject;
@@ -117,7 +117,7 @@ procedure TMainForm.ListView1ItemClickEx(const Sender: TObject;
   const ItemObject: TListItemDrawable);
 begin
   if ItemObject is TListItemImage then
-    EmployeeDetailsInfo.Show();
+    RatingDialogInfo.Show();
 end;
 
 initialization

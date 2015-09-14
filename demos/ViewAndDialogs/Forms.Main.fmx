@@ -27,7 +27,7 @@ object MainForm: TMainForm
       Size.PlatformDefault = False
       TabOrder = 0
       ItemAppearanceObjects.ItemObjects.TextButton.TintColor = xFFE3F2FD
-      ItemAppearanceObjects.ItemObjects.TextButton.Text = 'Rate'
+      ItemAppearanceObjects.ItemObjects.TextButton.Text = 'Details'
       OnItemClickEx = ListView1ItemClickEx
       OnButtonClick = ListView1ButtonClick
     end

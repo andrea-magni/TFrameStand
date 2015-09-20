@@ -83,8 +83,9 @@ begin
 
   LContentBackground := AFrameInfo.Stand.FindStyleResource('content_background') as TRectangle;
 
-  LContentBackground.Margins.Rect := TRectF.Create(LTenPercent, LTenPercent
-  , LTenPercent, LTenPercent);
+  if Assigned(LContentBackground) then
+    LContentBackground.Margins.Rect := TRectF.Create(LTenPercent, LTenPercent
+    , LTenPercent, LTenPercent);
 end;
 
 procedure TMainForm.PictureButtonClick(Sender: TObject);

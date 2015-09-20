@@ -7,7 +7,8 @@ uses
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.ListView.Types, FMX.ListView, Data.Bind.Components, Data.Bind.DBScope
   , Data.DB, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
-  Data.Bind.EngExt, Fmx.Bind.DBEngExt;
+  Data.Bind.EngExt, Fmx.Bind.DBEngExt, FMX.ListView.Appearances,
+  FMX.ListView.Adapters.Base;
 
 type
   TDatasetFrame = class(TFrame)

@@ -11,7 +11,7 @@ interface
 uses
   System.SysUtils, System.Classes, System.Rtti, System.Masks, System.Threading
   , Generics.Collections
-  , FMX.Controls, FMX.Types, FMX.Forms
+  , FMX.Controls, FMX.Types, FMX.Forms, FMX.Ani
   ;
 
 type
@@ -65,6 +65,7 @@ type
     function FireCustomBeforeShowMethods: Boolean; virtual;
     function FireCustomShowMethods: Boolean; virtual;
     function FireCustomHideMethods: Boolean; virtual;
+    procedure DoBeforeStartAnimation(const AAnimation: TAnimation); virtual;
     function FireAnimations(const AFmxObject: TFmxObject; const APattern: string; const AStart: Boolean = True): Boolean;
     function FireShowAnimations: Boolean; virtual;
     function FireHideAnimations: Boolean; virtual;
@@ -93,6 +94,7 @@ type
   end;
 
   TOnBeforeShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>) of object;
+  TOnBeforeStartAnimationEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>; const AAnimation: TAnimation) of object;
 
   TActionDictionary = class
   private
@@ -120,6 +122,7 @@ type
     FOnGetFrameClass: TOnGetFrameClassEvent;
     FCommonActions: TActionDictionary;
     FOnBeforeShow: TOnBeforeShowEvent;
+    FOnBeforeStartAnimation: TOnBeforeStartAnimationEvent;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -149,6 +152,7 @@ type
 
     // Events
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
+    property OnBeforeStartAnimation: TOnBeforeStartAnimationEvent read FOnBeforeStartAnimation write FOnBeforeStartAnimation;
     property OnGetFrameClass: TOnGetFrameClassEvent read FOnGetFrameClass write FOnGetFrameClass;
   end;
 
@@ -157,7 +161,7 @@ procedure Register;
 implementation
 
 uses
-    FMX.Layouts, FMX.Ani, FMX.StdCtrls
+    FMX.Layouts, FMX.StdCtrls
   ;
 
 procedure Register;
@@ -268,6 +272,12 @@ begin
 end;
 
 { TFrameInfo<T> }
+
+procedure TFrameInfo<T>.DoBeforeStartAnimation(const AAnimation: TAnimation);
+begin
+  if Assigned(FFrameStand) and Assigned(FFrameStand.OnBeforeStartAnimation) then
+    FFrameStand.OnBeforeStartAnimation(FFrameStand, TFrameInfo<TFrame>(Self), AAnimation);
+end;
 
 procedure TFrameInfo<T>.Close;
 begin
@@ -459,7 +469,10 @@ begin
       begin
         Result := True;
         if AStart then
-          TAnimation(LChild).Start
+        begin
+          DoBeforeStartAnimation(TAnimation(LChild));
+          TAnimation(LChild).Start;
+        end
         else
           TAnimation(LChild).Stop;
       end

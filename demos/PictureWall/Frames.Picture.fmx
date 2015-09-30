@@ -1,0 +1,25 @@
+object PictureFrame: TPictureFrame
+  Align = Client
+  ClipChildren = True
+  Size.Width = 256.000000000000000000
+  Size.Height = 256.000000000000000000
+  Size.PlatformDefault = False
+  object Image1: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Align = Client
+    Size.Width = 256.000000000000000000
+    Size.Height = 226.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object DisplayNameLabel: TLabel
+    Align = Bottom
+    Position.Y = 226.000000000000000000
+    Size.Width = 256.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Center
+    Text = 'DisplayNameLabel'
+  end
+end

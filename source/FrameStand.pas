@@ -149,6 +149,7 @@ type
     property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
+    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
 
     // Events
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
@@ -342,27 +343,27 @@ end;
 
 destructor TFrameInfo<T>.Destroy;
 begin
-//  if FrameIsOwned and Assigned(FFrame) then
-//  begin
-//    if not (csDestroying in FFrameStand.ComponentState) then
-//    begin
-//      FFrame.DisposeOf;
-//      FFrame := nil;
-//    end;
-//  end
-//  else
-//  begin
-//    FContainer.RemoveObject(FFrame);
-//  end;
-//
-//  Parent.RemoveObject(Stand);
-//  Parent := nil;
-//
-//  if not (csDestroying in FFrameStand.ComponentState) then
-//  begin
-//    Stand.DisposeOf;
-//    Stand := nil;
-//  end;
+  if FrameIsOwned and Assigned(FFrame) then
+  begin
+    if not (csDestroying in FFrameStand.ComponentState) then
+    begin
+      FFrame.DisposeOf;
+      FFrame := nil;
+    end;
+  end
+  else
+  begin
+    FContainer.RemoveObject(FFrame);
+  end;
+
+  Parent.RemoveObject(Stand);
+  Parent := nil;
+
+  if not (csDestroying in FFrameStand.ComponentState) then
+  begin
+    Stand.DisposeOf;
+    Stand := nil;
+  end;
 
   inherited;
 end;

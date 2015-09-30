@@ -35,6 +35,9 @@ requires
   fmx;
 
 contains
-  FrameStand in '..\source\FrameStand.pas';
+  FrameStand in '..\source\FrameStand.pas',
+  FrameStand.Editors in '..\source\FrameStand.Editors.pas',
+  FrameStand.Editors.Forms.Test in '..\source\FrameStand.Editors.Forms.Test.pas' {TestForm},
+  Frames.Test in '..\source\Frames.Test.pas' {TestFrame: TFrame};
 
 end.

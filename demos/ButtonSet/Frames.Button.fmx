@@ -1,0 +1,49 @@
+object ButtonFrame: TButtonFrame
+  Size.Width = 299.000000000000000000
+  Size.Height = 86.000000000000000000
+  Size.PlatformDefault = False
+  object Image: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Align = Left
+    Margins.Left = 3.000000000000000000
+    Margins.Top = 3.000000000000000000
+    Margins.Right = 3.000000000000000000
+    Margins.Bottom = 3.000000000000000000
+    Position.X = 3.000000000000000000
+    Position.Y = 3.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 80.000000000000000000
+    Size.PlatformDefault = False
+    OnClick = ImageClick
+  end
+  object TextLabel: TLabel
+    Align = Client
+    StyledSettings = []
+    HitTest = True
+    Margins.Left = 3.000000000000000000
+    Margins.Top = 3.000000000000000000
+    Margins.Right = 3.000000000000000000
+    Margins.Bottom = 3.000000000000000000
+    Size.Width = 187.000000000000000000
+    Size.Height = 80.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Family = 'Lucida Sans Unicode'
+    TextSettings.Font.Size = 20.000000000000000000
+    TextSettings.Font.Style = [fsBold]
+    TextSettings.FontColor = claWhite
+    Text = 'Button Text Here'
+    OnClick = TextLabelClick
+  end
+  object OnShowSlideIn: TFloatAnimation
+    AnimationType = InOut
+    Delay = 0.250000000000000000
+    Duration = 0.750000000000000000
+    Interpolation = Quadratic
+    PropertyName = 'Margins.Left'
+    StartValue = 0.000000000000000000
+    StartFromCurrent = True
+    StopValue = 0.000000000000000000
+  end
+end

@@ -1,0 +1,67 @@
+object ButtonSetFrame: TButtonSetFrame
+  Align = Client
+  Size.Width = 421.000000000000000000
+  Size.Height = 283.000000000000000000
+  Size.PlatformDefault = False
+  inline ButtonFrame1: TButtonFrame
+    Align = Top
+    Padding.Top = 3.000000000000000000
+    Padding.Bottom = 3.000000000000000000
+    Size.Width = 421.000000000000000000
+    Size.Height = 86.000000000000000000
+    Size.PlatformDefault = False
+    inherited Image: TImage
+      Position.Y = 6.000000000000000000
+      Size.Height = 74.000000000000000000
+    end
+    inherited TextLabel: TLabel
+      Size.Width = 309.000000000000000000
+      Size.Height = 74.000000000000000000
+    end
+    inherited OnShowSlideIn: TFloatAnimation
+      Delay = 0.100000001490116100
+      Duration = 0.500000000000000000
+    end
+  end
+  inline ButtonFrame2: TButtonFrame
+    Align = Top
+    Padding.Top = 3.000000000000000000
+    Padding.Bottom = 3.000000000000000000
+    Position.Y = 86.000000000000000000
+    Size.Width = 421.000000000000000000
+    Size.Height = 86.000000000000000000
+    Size.PlatformDefault = False
+    inherited Image: TImage
+      Position.Y = 6.000000000000000000
+      Size.Height = 74.000000000000000000
+    end
+    inherited TextLabel: TLabel
+      Size.Width = 309.000000000000000000
+      Size.Height = 74.000000000000000000
+    end
+    inherited OnShowSlideIn: TFloatAnimation
+      Duration = 0.500000000000000000
+    end
+  end
+  inline ButtonFrame3: TButtonFrame
+    Align = Top
+    Padding.Top = 3.000000000000000000
+    Padding.Bottom = 3.000000000000000000
+    Position.Y = 172.000000000000000000
+    Size.Width = 421.000000000000000000
+    Size.Height = 86.000000000000000000
+    Size.PlatformDefault = False
+    inherited Image: TImage
+      Position.Y = 6.000000000000000000
+      Size.Height = 74.000000000000000000
+    end
+    inherited TextLabel: TLabel
+      Size.Width = 309.000000000000000000
+      Size.Height = 74.000000000000000000
+    end
+    inherited OnShowSlideIn: TFloatAnimation
+      Delay = 0.400000005960464400
+      Duration = 0.500000000000000000
+    end
+  end
+end

@@ -1,0 +1,54 @@
+object HelperFrame: THelperFrame
+  Align = Client
+  Size.Width = 223.000000000000000000
+  Size.Height = 50.000000000000000000
+  Size.PlatformDefault = False
+  object FlowLayout1: TFlowLayout
+    Align = Client
+    Size.Width = 223.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Justify = Center
+    JustifyLastLine = Center
+    FlowDirection = LeftToRight
+    HorizontalGap = 5.000000000000000000
+    VerticalGap = 5.000000000000000000
+    object TenLessButton: TButton
+      Position.X = 4.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = '-10'
+      OnClick = TenLessButtonClick
+    end
+    object FiveLessButton: TButton
+      Position.X = 59.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = '-5'
+      OnClick = FiveLessButtonClick
+    end
+    object FiveMoreButton: TButton
+      Position.X = 114.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = '+5'
+      OnClick = FiveMoreButtonClick
+    end
+    object TenMoreButton: TButton
+      Position.X = 169.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = '+10'
+      OnClick = TenMoreButtonClick
+    end
+  end
+end

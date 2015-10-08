@@ -144,12 +144,12 @@ type
 
     property Count: Integer read GetCount;
     property CommonActions: TActionDictionary read FCommonActions;
+    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
   published
     property StyleBook: TStyleBook read FStyleBook write FStyleBook;
     property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
-    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
 
     // Events
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;

@@ -1,0 +1,108 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{8984F431-4320-47D5-9A11-B0C13D8B73A8}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Wait\WaitFrameStand.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="LightBox\LightBoxFrameStand.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MaterialButton\MaterialButtonFrameStand.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ViewAndDialogs\ViewAndDialogsFrameStand.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="PictureWall\PictureWallFrameStand.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ButtonSet\ButtonSetTFrameStand.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="EditHelper\EditHelperTFrameStand.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="WaitFrameStand">
+        <MSBuild Projects="Wait\WaitFrameStand.dproj"/>
+    </Target>
+    <Target Name="WaitFrameStand:Clean">
+        <MSBuild Projects="Wait\WaitFrameStand.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="WaitFrameStand:Make">
+        <MSBuild Projects="Wait\WaitFrameStand.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="LightBoxFrameStand">
+        <MSBuild Projects="LightBox\LightBoxFrameStand.dproj"/>
+    </Target>
+    <Target Name="LightBoxFrameStand:Clean">
+        <MSBuild Projects="LightBox\LightBoxFrameStand.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LightBoxFrameStand:Make">
+        <MSBuild Projects="LightBox\LightBoxFrameStand.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MaterialButtonFrameStand">
+        <MSBuild Projects="MaterialButton\MaterialButtonFrameStand.dproj"/>
+    </Target>
+    <Target Name="MaterialButtonFrameStand:Clean">
+        <MSBuild Projects="MaterialButton\MaterialButtonFrameStand.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MaterialButtonFrameStand:Make">
+        <MSBuild Projects="MaterialButton\MaterialButtonFrameStand.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ViewAndDialogsFrameStand">
+        <MSBuild Projects="ViewAndDialogs\ViewAndDialogsFrameStand.dproj"/>
+    </Target>
+    <Target Name="ViewAndDialogsFrameStand:Clean">
+        <MSBuild Projects="ViewAndDialogs\ViewAndDialogsFrameStand.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ViewAndDialogsFrameStand:Make">
+        <MSBuild Projects="ViewAndDialogs\ViewAndDialogsFrameStand.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="PictureWallFrameStand">
+        <MSBuild Projects="PictureWall\PictureWallFrameStand.dproj"/>
+    </Target>
+    <Target Name="PictureWallFrameStand:Clean">
+        <MSBuild Projects="PictureWall\PictureWallFrameStand.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PictureWallFrameStand:Make">
+        <MSBuild Projects="PictureWall\PictureWallFrameStand.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ButtonSetTFrameStand">
+        <MSBuild Projects="ButtonSet\ButtonSetTFrameStand.dproj"/>
+    </Target>
+    <Target Name="ButtonSetTFrameStand:Clean">
+        <MSBuild Projects="ButtonSet\ButtonSetTFrameStand.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ButtonSetTFrameStand:Make">
+        <MSBuild Projects="ButtonSet\ButtonSetTFrameStand.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="EditHelperTFrameStand">
+        <MSBuild Projects="EditHelper\EditHelperTFrameStand.dproj"/>
+    </Target>
+    <Target Name="EditHelperTFrameStand:Clean">
+        <MSBuild Projects="EditHelper\EditHelperTFrameStand.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EditHelperTFrameStand:Make">
+        <MSBuild Projects="EditHelper\EditHelperTFrameStand.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="WaitFrameStand;LightBoxFrameStand;MaterialButtonFrameStand;ViewAndDialogsFrameStand;PictureWallFrameStand;ButtonSetTFrameStand;EditHelperTFrameStand"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="WaitFrameStand:Clean;LightBoxFrameStand:Clean;MaterialButtonFrameStand:Clean;ViewAndDialogsFrameStand:Clean;PictureWallFrameStand:Clean;ButtonSetTFrameStand:Clean;EditHelperTFrameStand:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="WaitFrameStand:Make;LightBoxFrameStand:Make;MaterialButtonFrameStand:Make;ViewAndDialogsFrameStand:Make;PictureWallFrameStand:Make;ButtonSetTFrameStand:Make;EditHelperTFrameStand:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

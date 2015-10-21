@@ -1,0 +1,24 @@
+object HelloWorldFrame: THelloWorldFrame
+  Align = Client
+  Size.Width = 273.000000000000000000
+  Size.Height = 196.000000000000000000
+  Size.PlatformDefault = False
+  object Label1: TLabel
+    Align = Center
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    HitTest = True
+    Size.Width = 132.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 22.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'Hello, World!'
+    object OnShowSpin: TFloatAnimation
+      Duration = 2.000000000000000000
+      PropertyName = 'RotationAngle'
+      StartValue = 0.000000000000000000
+      StopValue = 360.000000000000000000
+    end
+  end
+end

@@ -60,3 +60,5 @@ __history/
 Android
 Win32
 OSX32
+
+*.db

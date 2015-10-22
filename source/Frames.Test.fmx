@@ -1,24 +1,40 @@
 object TestFrame: TTestFrame
-  Align = Client
-  Size.Width = 234.000000000000000000
-  Size.Height = 183.000000000000000000
+  Size.Width = 100.000000000000000000
+  Size.Height = 100.000000000000000000
   Size.PlatformDefault = False
   object Rectangle1: TRectangle
     Align = Client
     Fill.Color = claRed
-    Size.Width = 234.000000000000000000
-    Size.Height = 183.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 100.000000000000000000
     Size.PlatformDefault = False
-    Stroke.Color = claWhite
-    Stroke.Thickness = 10.000000000000000000
-    Stroke.Dash = Dash
+    Stroke.Color = claMaroon
+    Stroke.Thickness = 5.000000000000000000
     object Circle1: TCircle
-      Align = Center
-      Size.Width = 50.000000000000000000
-      Size.Height = 50.000000000000000000
+      Align = Client
+      Fill.Color = claRed
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 80.000000000000000000
       Size.PlatformDefault = False
-      Stroke.Color = claWhite
-      Stroke.Thickness = 10.000000000000000000
+      Stroke.Color = claPeachpuff
+      Stroke.Thickness = 5.000000000000000000
+      Stroke.Cap = Round
+      Stroke.Dash = Dot
+      Stroke.Join = Round
+      object Circle2: TCircle
+        Align = Center
+        Fill.Color = claPeachpuff
+        Size.Width = 32.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claMaroon
+        Stroke.Thickness = 2.000000000000000000
+        Stroke.Cap = Round
+      end
     end
   end
 end

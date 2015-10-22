@@ -11,6 +11,7 @@ type
   TTestFrame = class(TFrame)
     Rectangle1: TRectangle;
     Circle1: TCircle;
+    Circle2: TCircle;
   private
     { Private declarations }
   public

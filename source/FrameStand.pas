@@ -67,9 +67,12 @@ type
     function FireCustomShowMethods: Boolean; virtual;
     function FireCustomHideMethods: Boolean; virtual;
     procedure DoBeforeStartAnimation(const AAnimation: TAnimation); virtual;
-    function FireAnimations(const AFmxObject: TFmxObject; const APattern: string; const AStart: Boolean = True): Boolean;
+    function FireAnimations(const AFmxObject: TFmxObject; const APattern: string;
+      const AStart: Boolean = True;
+      const AOnBeforeStart: TProc<TAnimation> = nil;
+      const AOnBeforeStop: TProc<TAnimation> = nil): Boolean;
     function FireShowAnimations: Boolean; virtual;
-    function FireHideAnimations: Boolean; virtual;
+    function FireHideAnimations(out AHideDelay: Single): Boolean; virtual;
     procedure DoCommonActionClick(Sender: TObject);
   public
     procedure StopAnimations; virtual;
@@ -451,7 +454,10 @@ begin
 end;
 
 function TFrameInfo<T>.FireAnimations(const AFmxObject: TFmxObject;
-  const APattern: string; const AStart: Boolean = True): Boolean;
+  const APattern: string; const AStart: Boolean = True;
+  const AOnBeforeStart: TProc<TAnimation> = nil;
+  const AOnBeforeStop: TProc<TAnimation> = nil
+): Boolean;
 var
   LChild: TFmxObject;
 begin
@@ -474,14 +480,21 @@ begin
         if AStart then
         begin
           DoBeforeStartAnimation(TAnimation(LChild));
+          if Assigned(AOnBeforeStart) then
+            AOnBeforeStart(TAnimation(LChild));
+
           TAnimation(LChild).Start;
         end
         else
+        begin
+          if Assigned(AOnBeforeStop) then
+            AOnBeforeStop(TAnimation(LChild));
           TAnimation(LChild).Stop;
+        end;
       end
       else if LChild.ChildrenCount > 0 then // recursion
       begin
-        if FireAnimations(LChild, APattern) then
+        if FireAnimations(LChild, APattern, AStart, AOnBeforeStart, AOnBeforeStop) then
           Result := True;
       end;
     end;
@@ -543,9 +556,24 @@ begin
   Result := FireCustomMethods(FCustomShowMethods);
 end;
 
-function TFrameInfo<T>.FireHideAnimations: Boolean;
+function TFrameInfo<T>.FireHideAnimations(out AHideDelay: Single): Boolean;
+var
+  LHideDelay: Single;
 begin
-  Result := FireAnimations(FStand, FFrameStand.AnimationHide);
+  LHideDelay := 0;
+  Result := FireAnimations(FStand, FFrameStand.AnimationHide, True,
+     procedure (AAnimation: TAnimation)
+     var
+       LThisAnimationTime: Single;
+     begin
+       LThisAnimationTime := AAnimation.Delay + AAnimation.Duration;
+
+       if LThisAnimationTime > LHideDelay then
+         LHideDelay := LThisAnimationTime;
+     end
+  );
+
+  AHideDelay := LHideDelay;
 end;
 
 function TFrameInfo<T>.FireShowAnimations: Boolean;
@@ -575,6 +603,9 @@ end;
 
 
 function TFrameInfo<T>.Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
+var
+  LAutoDelayS: Single;
+  LDelay: Integer;
 begin
   Result := False;
   if not FHiding then
@@ -582,9 +613,12 @@ begin
     Result := True;
     FHiding := True;
 
-    FireHideAnimations;
+    FireHideAnimations(LAutoDelayS);
+    LDelay := Round(LAutoDelayS * 1000);
+    if ADelay <> 0 then
+      LDelay := ADelay;
 
-    TDelayedAction.Execute(ADelay
+    TDelayedAction.Execute(LDelay
     , procedure
       begin
         if not FireCustomHideMethods then

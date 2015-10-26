@@ -48,6 +48,8 @@ type
   protected
     procedure Init; virtual;
     procedure DoFrameStandChanged; virtual;
+    procedure SetupTestBed;
+    procedure SetupTestFrameAndTestBed;
     property SelectedStyleName: string read GetSelectedStyleName;
     property SelectedFrameAlign: TAlignLayout read GetSelectedFrameAlign;
   public
@@ -114,6 +116,8 @@ end;
 
 procedure TTestForm.HideActionExecute(Sender: TObject);
 begin
+  SetupTestBed;
+
   FFrameInfo.Hide(StrToInt(DelayEdit.Text),
     procedure
     begin
@@ -149,16 +153,24 @@ begin
 end;
 
 
-procedure TTestForm.ShowActionExecute(Sender: TObject);
+procedure TTestForm.SetupTestBed;
 begin
-  FFrameInfo := FrameStand.New<TTestFrame>(TestBed, SelectedStyleName);
+  TestBed.ClipChildren := TestBedClipCheckBox.IsChecked;
+end;
 
+procedure TTestForm.SetupTestFrameAndTestBed;
+begin
   FFrameInfo.Frame.Align := SelectedFrameAlign;
   FFrameInfo.Frame.Width := StrToFloat(FrameWidthEdit.Text);
   FFrameInfo.Frame.Height := StrToFloat(FrameHeightEdit.Text);
 
-  TestBed.ClipChildren := TestBedClipCheckBox.IsChecked;
+  SetupTestBed;
+end;
 
+procedure TTestForm.ShowActionExecute(Sender: TObject);
+begin
+  FFrameInfo := FrameStand.New<TTestFrame>(TestBed, SelectedStyleName);
+  SetupTestFrameAndTestBed;
   FFrameInfo.Show();
 end;
 

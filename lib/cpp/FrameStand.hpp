@@ -214,6 +214,7 @@ private:
 	System::DynamicArray<System::Rtti::TRttiMethod*> FCustomHideMethods;
 	Fmx::Types::TFmxObject* FContainer;
 	System::UnicodeString FStandStyleName;
+	bool FHiding;
 	bool __fastcall GetIsVisible(void);
 	
 protected:
@@ -236,7 +237,7 @@ protected:
 public:
 	virtual void __fastcall StopAnimations(void);
 	System::Threading::_di_ITask __fastcall Show(const System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> > ABackgroundTask = (System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> >)(0x0), const System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> > AOnTaskComplete = (System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> >)(0x0), const bool AOnTaskCompleteSynchronized = true);
-	void __fastcall Hide(const int ADelay = 0x0, const System::Sysutils::_di_TProc AThen = System::Sysutils::_di_TProc());
+	bool __fastcall Hide(const int ADelay = 0x0, const System::Sysutils::_di_TProc AThen = System::Sysutils::_di_TProc());
 	void __fastcall Close(void);
 	__fastcall virtual TFrameInfo__1(TFrameStand* const AFrameStand, const T AFrame, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString AStandStyleName);
 	__fastcall virtual ~TFrameInfo__1(void);
@@ -248,6 +249,7 @@ public:
 	__property Fmx::Types::TFmxObject* Container = {read=FContainer, write=FContainer};
 	__property Fmx::Types::TFmxObject* Parent = {read=FParent, write=FParent};
 	__property bool IsVisible = {read=GetIsVisible, nodefault};
+	__property bool Hiding = {read=FHiding, nodefault};
 };
 
 #pragma pack(pop)

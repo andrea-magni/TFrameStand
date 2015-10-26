@@ -52,6 +52,7 @@ type
     FCustomHideMethods: TArray<TRttiMethod>;
     FContainer: TFmxObject;
     FStandStyleName: string;
+    FHiding: Boolean;
     function GetIsVisible: Boolean;
   protected
     procedure DefaultShow; virtual;
@@ -76,7 +77,7 @@ type
     function Show(const ABackgroundTask: TProc<TFrameInfo<T>> = nil;
       const AOnTaskComplete: TProc<TFrameInfo<T>> = nil;
       const AOnTaskCompleteSynchronized: Boolean = True): ITask;
-    procedure Hide(const ADelay: Integer = 0; const AThen: TProc = nil);
+    function Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
     procedure Close();
 
     constructor Create(const AFrameStand: TFrameStand; const AFrame: T;
@@ -91,6 +92,7 @@ type
     property Container: TFmxObject read FContainer write FContainer;
     property Parent: TFmxObject read FParent write FParent;
     property IsVisible: Boolean read GetIsVisible;
+    property Hiding: Boolean read FHiding;
   end;
 
   TOnBeforeShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>) of object;
@@ -572,18 +574,29 @@ begin
 end;
 
 
-procedure TFrameInfo<T>.Hide(const ADelay: Integer = 0; const AThen: TProc = nil);
+function TFrameInfo<T>.Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
 begin
-  FireHideAnimations;
-  TDelayedAction.Execute(ADelay
-  , procedure
-    begin
-      if not FireCustomHideMethods then
-        DefaultHide;
-      if Assigned(AThen) then
-        AThen();
-    end
-  );
+  Result := False;
+  if not FHiding then
+  begin
+    Result := True;
+    FHiding := True;
+
+    FireHideAnimations;
+
+    TDelayedAction.Execute(ADelay
+    , procedure
+      begin
+        if not FireCustomHideMethods then
+          DefaultHide;
+
+        FHiding := False;
+
+        if Assigned(AThen) then
+          AThen();
+      end
+    );
+  end;
 end;
 
 procedure TFrameInfo<T>.InjectContext;

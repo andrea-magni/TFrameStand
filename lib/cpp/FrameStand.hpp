@@ -24,6 +24,8 @@
 #include <FMX.Types.hpp>
 #include <FMX.Forms.hpp>
 #include <FMX.Ani.hpp>
+#include <System.Actions.hpp>
+#include <FMX.ActnList.hpp>
 #include <System.Generics.Defaults.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -292,6 +294,7 @@ private:
 	TActionDictionary* FCommonActions;
 	TOnBeforeShowEvent FOnBeforeShow;
 	TOnBeforeStartAnimationEvent FOnBeforeStartAnimation;
+	Fmx::Actnlist::TActionList* FCommonActionList;
 	int __fastcall GetCount(void);
 	
 protected:
@@ -316,6 +319,7 @@ __published:
 	__property System::UnicodeString DefaultStyleName = {read=FDefaultStyleName, write=FDefaultStyleName};
 	__property System::UnicodeString AnimationShow = {read=FAnimationShow, write=FAnimationShow};
 	__property System::UnicodeString AnimationHide = {read=FAnimationHide, write=FAnimationHide};
+	__property Fmx::Actnlist::TActionList* CommonActionList = {read=FCommonActionList, write=FCommonActionList};
 	__property TOnBeforeShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
 	__property TOnBeforeStartAnimationEvent OnBeforeStartAnimation = {read=FOnBeforeStartAnimation, write=FOnBeforeStartAnimation};
 	__property TOnGetFrameClassEvent OnGetFrameClass = {read=FOnGetFrameClass, write=FOnGetFrameClass};

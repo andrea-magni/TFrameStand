@@ -12,6 +12,7 @@ uses
   System.SysUtils, System.Classes, System.Rtti, System.Masks, System.Threading
   , Generics.Collections
   , FMX.Controls, FMX.Types, FMX.Forms, FMX.Ani
+  , System.Actions, FMX.ActnList
   ;
 
 type
@@ -128,6 +129,7 @@ type
     FCommonActions: TActionDictionary;
     FOnBeforeShow: TOnBeforeShowEvent;
     FOnBeforeStartAnimation: TOnBeforeStartAnimationEvent;
+    FCommonActionList: TActionList;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -155,6 +157,7 @@ type
     property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
+    property CommonActionList: TActionList read FCommonActionList write FCommonActionList;
 
     // Events
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
@@ -262,8 +265,14 @@ procedure TFrameStand.Notification(AComponent: TComponent;
   Operation: TOperation);
 begin
   inherited;
-  if (Operation = TOperation.opRemove) and (AComponent = FStyleBook) then
-    FStyleBook := nil;
+
+  if (Operation = TOperation.opRemove) then
+  begin
+    if (AComponent = FStyleBook) then
+      FStyleBook := nil
+    else if (AComponent = FCommonActionList) then
+      FCommonActionList := nil;
+  end;
 end;
 
 procedure TFrameStand.Remove(AFrame: TFrame);

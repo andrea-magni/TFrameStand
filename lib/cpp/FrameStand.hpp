@@ -229,9 +229,9 @@ protected:
 	virtual bool __fastcall FireCustomShowMethods(void);
 	virtual bool __fastcall FireCustomHideMethods(void);
 	virtual void __fastcall DoBeforeStartAnimation(Fmx::Ani::TAnimation* const AAnimation);
-	bool __fastcall FireAnimations(Fmx::Types::TFmxObject* const AFmxObject, const System::UnicodeString APattern, const bool AStart = true);
+	bool __fastcall FireAnimations(Fmx::Types::TFmxObject* const AFmxObject, const System::UnicodeString APattern, const bool AStart = true, const System::DelphiInterface<System::Sysutils::TProc__1<Fmx::Ani::TAnimation*> > AOnBeforeStart = (System::DelphiInterface<System::Sysutils::TProc__1<Fmx::Ani::TAnimation*> >)(0x0), const System::DelphiInterface<System::Sysutils::TProc__1<Fmx::Ani::TAnimation*> > AOnBeforeStop = (System::DelphiInterface<System::Sysutils::TProc__1<Fmx::Ani::TAnimation*> >)(0x0));
 	virtual bool __fastcall FireShowAnimations(void);
-	virtual bool __fastcall FireHideAnimations(void);
+	virtual bool __fastcall FireHideAnimations(/* out */ float &AHideDelay);
 	void __fastcall DoCommonActionClick(System::TObject* Sender);
 	
 public:

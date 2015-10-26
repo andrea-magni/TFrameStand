@@ -96,6 +96,8 @@ private:
 protected:
 	virtual void __fastcall Init(void);
 	virtual void __fastcall DoFrameStandChanged(void);
+	void __fastcall SetupTestBed(void);
+	void __fastcall SetupTestFrameAndTestBed(void);
 	__property System::UnicodeString SelectedStyleName = {read=GetSelectedStyleName};
 	__property Fmx::Types::TAlignLayout SelectedFrameAlign = {read=GetSelectedFrameAlign, nodefault};
 	

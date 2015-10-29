@@ -56,10 +56,14 @@ type
     FHiding: Boolean;
     function GetIsVisible: Boolean;
   protected
+    function BindCommonActions(const AObject: TFmxObject): Boolean; virtual;
+    function BindCommonActionList(const AObject: TFmxObject): Boolean; virtual;
+
     procedure DefaultShow; virtual;
     procedure DefaultHide; virtual;
 
     function HasAttribute<A: TCustomAttribute>(ARttiObject: TRttiObject): A;
+    function FindActionProperty(AObject: TObject): TRttiInstanceProperty; virtual;
     procedure InjectContext; virtual;
     procedure FindCustomMethods; virtual;
     procedure FindCommonActions(const AFmxObject: TFmxObject); virtual;
@@ -130,6 +134,7 @@ type
     FOnBeforeShow: TOnBeforeShowEvent;
     FOnBeforeStartAnimation: TOnBeforeStartAnimationEvent;
     FCommonActionList: TActionList;
+    FCommonActionPrefix: string;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -158,6 +163,7 @@ type
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
     property CommonActionList: TActionList read FCommonActionList write FCommonActionList;
+    property CommonActionPrefix: string read FCommonActionPrefix write FCommonActionPrefix;
 
     // Events
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
@@ -186,6 +192,7 @@ begin
   FDefaultStyleName := 'framestand';
   FAnimationShow := 'OnShow*';
   FAnimationHide := 'OnHide*';
+  FCommonActionPrefix := 'CA_';
   FFrameInfos := TObjectDictionary<TFrame, TFrameInfo<TFrame>>.Create();
   FCommonActions := TActionDictionary.Create;
 end;
@@ -292,6 +299,71 @@ procedure TFrameInfo<T>.DoBeforeStartAnimation(const AAnimation: TAnimation);
 begin
   if Assigned(FFrameStand) and Assigned(FFrameStand.OnBeforeStartAnimation) then
     FFrameStand.OnBeforeStartAnimation(FFrameStand, TFrameInfo<TFrame>(Self), AAnimation);
+end;
+
+function TFrameInfo<T>.BindCommonActionList(const AObject: TFmxObject): Boolean;
+var
+  LProperty: TRttiInstanceProperty;
+  LAction: TContainedAction;
+  LName, LCommonActionPrefix, LCommonActionName: string;
+
+begin
+  Result := False;
+  if not Assigned(FFrameStand.CommonActionList) then
+    Exit;
+
+  LCommonActionName := '';
+  // stylename or name selection
+  LName := AObject.StyleName;
+  if LName = '' then
+    LName := AObject.Name;
+
+  LCommonActionPrefix := FFrameStand.CommonActionPrefix;
+  // stylename match
+  if (LName.StartsWith(LCommonActionPrefix, True)) then
+    LCommonActionName := LName.Substring(LCommonActionPrefix.Length);
+
+  if LCommonActionName = '' then
+    Exit;
+
+  // has a Action property
+  LProperty := FindActionProperty(AObject);
+  if not Assigned(LProperty) then
+    Exit;
+
+  // bind the corresponding Action, if any
+  for LAction in FFrameStand.CommonActionList do
+  begin
+    if SameText(LAction.Name, LCommonActionName)  then
+    begin
+      LProperty.SetValue(AObject, LAction);
+      Result := True;
+      Break;
+    end;
+  end;
+end;
+
+function TFrameInfo<T>.BindCommonActions(const AObject: TFmxObject): Boolean;
+var
+  LCommonActionPattern: string;
+begin
+  Result := False;
+  if not (AObject is TButton) then
+    Exit;
+
+  for LCommonActionPattern in FrameStand.CommonActions.Keys do
+  begin
+    if ( // matches StyleName or Name (if no StyleName is provided)
+         ((AObject.StyleName <> '') and  MatchesMask(AObject.StyleName, LCommonActionPattern))
+         or ((AObject.StyleName = '') and  MatchesMask(AObject.Name, LCommonActionPattern))
+       )
+    then
+    begin
+      TButton(AObject).OnClick := DoCommonActionClick;
+      Result := True;
+      Break; // no need to continue since DoCommonActionClick will fire all CommonActions that match
+    end;
+  end;
 end;
 
 procedure TFrameInfo<T>.Close;
@@ -409,30 +481,40 @@ var
   LChild: TFmxObject;
   LCommonActionPattern: string;
 begin
-  if FrameStand.CommonActions.Count = 0 then
+  if (FrameStand.CommonActions.Count = 0) and not Assigned(FrameStand.CommonActionList) then
     Exit;
 
   if Assigned(AFmxObject.Children) then
   begin
-    for LCommonActionPattern in FrameStand.CommonActions.Keys do
+    for LChild in AFmxObject.Children do
     begin
-      for LChild in AFmxObject.Children do
-      begin
-        if (LChild is TButton) // TODO: expand to other controls or switch to TAction model!
-           and
-          ( // matches StyleName or Name (if no StyleName is provided)
-              ((LChild.StyleName <> '') and  MatchesMask(LChild.StyleName, LCommonActionPattern))
-           or ((LChild.StyleName = '') and  MatchesMask(LChild.Name, LCommonActionPattern))
-           )
-        then
-        begin
-          TButton(LChild).OnClick := DoCommonActionClick;
-        end
-        else if LChild.ChildrenCount > 0 then // recursion
-          FindCommonActions(LChild);
-      end;
+      BindCommonActions(LChild);
+      BindCommonActionList(LChild);
 
+      if LChild.ChildrenCount > 0 then // recursion
+        FindCommonActions(LChild);
     end;
+
+
+//    for LCommonActionPattern in FrameStand.CommonActions.Keys do
+//    begin
+//      for LChild in AFmxObject.Children do
+//      begin
+//        if (LChild is TButton) // TODO: expand to other controls or switch to TAction model!
+//           and
+//          ( // matches StyleName or Name (if no StyleName is provided)
+//              ((LChild.StyleName <> '') and  MatchesMask(LChild.StyleName, LCommonActionPattern))
+//           or ((LChild.StyleName = '') and  MatchesMask(LChild.Name, LCommonActionPattern))
+//           )
+//        then
+//        begin
+//          TButton(LChild).OnClick := DoCommonActionClick;
+//        end
+//        else if LChild.ChildrenCount > 0 then // recursion
+//          FindCommonActions(LChild);
+//      end;
+//
+//    end;
 
   end;
 end;
@@ -593,6 +675,20 @@ end;
 function TFrameInfo<T>.GetIsVisible: Boolean;
 begin
   Result := Assigned(FStand) and FStand.Visible;
+end;
+
+function TFrameInfo<T>.FindActionProperty(AObject: TObject): TRttiInstanceProperty;
+var
+  LProperty: TRttiProperty;
+begin
+  Result := nil;
+  LProperty := TRttiContext.Create.GetType(AObject.ClassType).GetProperty('Action');
+  if Assigned(LProperty)
+     and (LProperty is TRttiInstanceProperty)
+     and (TRttiInstanceProperty(LProperty).PropertyType is TRttiInstanceType)
+     and TRttiInstanceType(TRttiInstanceProperty(LProperty).PropertyType).MetaclassType.InheritsFrom(TBasicAction)
+  then
+    Result := TRttiInstanceProperty(LProperty);
 end;
 
 function TFrameInfo<T>.HasAttribute<A>(ARttiObject: TRttiObject): A;

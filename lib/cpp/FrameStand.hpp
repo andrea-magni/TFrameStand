@@ -220,9 +220,12 @@ private:
 	bool __fastcall GetIsVisible(void);
 	
 protected:
+	virtual bool __fastcall BindCommonActions(Fmx::Types::TFmxObject* const AObject);
+	virtual bool __fastcall BindCommonActionList(Fmx::Types::TFmxObject* const AObject);
 	virtual void __fastcall DefaultShow(void);
 	virtual void __fastcall DefaultHide(void);
 	template<typename A> A __fastcall HasAttribute(System::Rtti::TRttiObject* ARttiObject);
+	virtual System::Rtti::TRttiInstanceProperty* __fastcall FindActionProperty(System::TObject* AObject);
 	virtual void __fastcall InjectContext(void);
 	virtual void __fastcall FindCustomMethods(void);
 	virtual void __fastcall FindCommonActions(Fmx::Types::TFmxObject* const AFmxObject);
@@ -295,6 +298,7 @@ private:
 	TOnBeforeShowEvent FOnBeforeShow;
 	TOnBeforeStartAnimationEvent FOnBeforeStartAnimation;
 	Fmx::Actnlist::TActionList* FCommonActionList;
+	System::UnicodeString FCommonActionPrefix;
 	int __fastcall GetCount(void);
 	
 protected:
@@ -320,6 +324,7 @@ __published:
 	__property System::UnicodeString AnimationShow = {read=FAnimationShow, write=FAnimationShow};
 	__property System::UnicodeString AnimationHide = {read=FAnimationHide, write=FAnimationHide};
 	__property Fmx::Actnlist::TActionList* CommonActionList = {read=FCommonActionList, write=FCommonActionList};
+	__property System::UnicodeString CommonActionPrefix = {read=FCommonActionPrefix, write=FCommonActionPrefix};
 	__property TOnBeforeShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
 	__property TOnBeforeStartAnimationEvent OnBeforeStartAnimation = {read=FOnBeforeStartAnimation, write=FOnBeforeStartAnimation};
 	__property TOnGetFrameClassEvent OnGetFrameClass = {read=FOnGetFrameClass, write=FOnGetFrameClass};

@@ -45,7 +45,7 @@ class DELPHICLASS ShowAttribute;
 class DELPHICLASS HideAttribute;
 class DELPHICLASS TDelayedAction;
 template<typename T> class DELPHICLASS TFrameInfo__1;
-class DELPHICLASS TActionDictionary;
+class DELPHICLASS TCommonActionDictionary;
 class DELPHICLASS TFrameStand;
 //-- type declarations -------------------------------------------------------
 #pragma pack(push,4)
@@ -263,8 +263,10 @@ typedef void __fastcall (__closure *TOnBeforeShowEvent)(TFrameStand* const ASend
 
 typedef void __fastcall (__closure *TOnBeforeStartAnimationEvent)(TFrameStand* const ASender, TFrameInfo__1<Fmx::Forms::TFrame*>* const AFrameInfo, Fmx::Ani::TAnimation* const AAnimation);
 
+typedef void __fastcall (__closure *TOnBindCommonActionList)(TFrameStand* ASender, TFrameInfo__1<Fmx::Forms::TFrame*>* const AFrameInfo, Fmx::Types::TFmxObject* const AObject, System::UnicodeString &ACommonActionName);
+
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION TActionDictionary : public System::TObject
+class PASCALIMPLEMENTATION TCommonActionDictionary : public System::TObject
 {
 	typedef System::TObject inherited;
 	
@@ -276,8 +278,8 @@ private:
 public:
 	void __fastcall Add(const System::UnicodeString APattern, const System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<Fmx::Forms::TFrame*>*> > AAction);
 	bool __fastcall TryGetValue(const System::UnicodeString APattern, /* out */ System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<Fmx::Forms::TFrame*>*> > &AAction);
-	__fastcall virtual TActionDictionary(void);
-	__fastcall virtual ~TActionDictionary(void);
+	__fastcall virtual TCommonActionDictionary(void);
+	__fastcall virtual ~TCommonActionDictionary(void);
 	__property int Count = {read=GetCount, nodefault};
 	__property System::DynamicArray<System::UnicodeString> Keys = {read=GetKeys};
 };
@@ -294,11 +296,12 @@ private:
 	System::UnicodeString FAnimationHide;
 	System::UnicodeString FAnimationShow;
 	TOnGetFrameClassEvent FOnGetFrameClass;
-	TActionDictionary* FCommonActions;
+	TCommonActionDictionary* FCommonActions;
 	TOnBeforeShowEvent FOnBeforeShow;
 	TOnBeforeStartAnimationEvent FOnBeforeStartAnimation;
 	Fmx::Actnlist::TActionList* FCommonActionList;
 	System::UnicodeString FCommonActionPrefix;
+	TOnBindCommonActionList FOnBindCommonActionList;
 	int __fastcall GetCount(void);
 	
 protected:
@@ -315,7 +318,7 @@ public:
 	template<typename T> TFrameInfo__1<T>* __fastcall New(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	HIDESBASE void __fastcall Remove(Fmx::Forms::TFrame* AFrame);
 	__property int Count = {read=GetCount, nodefault};
-	__property TActionDictionary* CommonActions = {read=FCommonActions};
+	__property TCommonActionDictionary* CommonActions = {read=FCommonActions};
 	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TFrameInfo__1<Fmx::Forms::TFrame*>*>* FrameInfos = {read=FFrameInfos};
 	
 __published:
@@ -327,6 +330,7 @@ __published:
 	__property System::UnicodeString CommonActionPrefix = {read=FCommonActionPrefix, write=FCommonActionPrefix};
 	__property TOnBeforeShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
 	__property TOnBeforeStartAnimationEvent OnBeforeStartAnimation = {read=FOnBeforeStartAnimation, write=FOnBeforeStartAnimation};
+	__property TOnBindCommonActionList OnBindCommonActionList = {read=FOnBindCommonActionList, write=FOnBindCommonActionList};
 	__property TOnGetFrameClassEvent OnGetFrameClass = {read=FOnGetFrameClass, write=FOnGetFrameClass};
 };
 

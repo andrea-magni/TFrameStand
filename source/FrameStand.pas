@@ -137,6 +137,7 @@ type
     FCommonActionList: TActionList;
     FCommonActionPrefix: string;
     FOnBindCommonActionList: TOnBindCommonActionList;
+    FDefaultParent: TFmxObject;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -160,12 +161,13 @@ type
     property CommonActions: TCommonActionDictionary read FCommonActions;
     property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
   published
-    property StyleBook: TStyleBook read FStyleBook write FStyleBook;
-    property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
     property CommonActionList: TActionList read FCommonActionList write FCommonActionList;
     property CommonActionPrefix: string read FCommonActionPrefix write FCommonActionPrefix;
+    property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
+    property DefaultParent: TFmxObject read FDefaultParent write FDefaultParent;
+    property StyleBook: TStyleBook read FStyleBook write FStyleBook;
 
     // Events
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
@@ -219,7 +221,10 @@ end;
 
 function TFrameStand.GetDefaultParent: TFmxObject;
 begin
-  Result := Self.Owner as TFmxObject;
+  if Assigned(FDefaultParent) then
+    Result := FDefaultParent
+  else
+    Result := Self.Owner as TFmxObject;
 end;
 
 function TFrameStand.GetFrameClass<T>(const AParent: TFmxObject; const AStandStyleName: string): TFrameClass;
@@ -259,11 +264,16 @@ end;
 function TFrameStand.New<T>(const AParent: TFmxObject; const AStandStyleName: string): TFrameInfo<T>;
 var
   LFrame: T;
+  LParent: TFmxObject;
 begin
-  LFrame := T(GetFrameClass<T>(AParent, AStandStyleName).Create(nil));
+  LParent := AParent;
+  if not Assigned(LParent) then
+    LParent := GetDefaultParent;
+
+  LFrame := T(GetFrameClass<T>(LParent, AStandStyleName).Create(nil));
   try
     LFrame.Name := '';
-    Result := Use<T>(LFrame, AParent, AStandStyleName);
+    Result := Use<T>(LFrame, LParent, AStandStyleName);
     Result.FrameIsOwned := True;
   except
     LFrame.Free;
@@ -281,7 +291,9 @@ begin
     if (AComponent = FStyleBook) then
       FStyleBook := nil
     else if (AComponent = FCommonActionList) then
-      FCommonActionList := nil;
+      FCommonActionList := nil
+    else if (AComponent = FDefaultParent) then
+      FDefaultParent := nil;
   end;
 end;
 

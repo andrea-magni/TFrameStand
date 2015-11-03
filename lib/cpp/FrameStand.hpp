@@ -302,6 +302,7 @@ private:
 	Fmx::Actnlist::TActionList* FCommonActionList;
 	System::UnicodeString FCommonActionPrefix;
 	TOnBindCommonActionList FOnBindCommonActionList;
+	Fmx::Types::TFmxObject* FDefaultParent;
 	int __fastcall GetCount(void);
 	
 protected:
@@ -322,12 +323,13 @@ public:
 	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TFrameInfo__1<Fmx::Forms::TFrame*>*>* FrameInfos = {read=FFrameInfos};
 	
 __published:
-	__property Fmx::Controls::TStyleBook* StyleBook = {read=FStyleBook, write=FStyleBook};
-	__property System::UnicodeString DefaultStyleName = {read=FDefaultStyleName, write=FDefaultStyleName};
 	__property System::UnicodeString AnimationShow = {read=FAnimationShow, write=FAnimationShow};
 	__property System::UnicodeString AnimationHide = {read=FAnimationHide, write=FAnimationHide};
 	__property Fmx::Actnlist::TActionList* CommonActionList = {read=FCommonActionList, write=FCommonActionList};
 	__property System::UnicodeString CommonActionPrefix = {read=FCommonActionPrefix, write=FCommonActionPrefix};
+	__property System::UnicodeString DefaultStyleName = {read=FDefaultStyleName, write=FDefaultStyleName};
+	__property Fmx::Types::TFmxObject* DefaultParent = {read=FDefaultParent, write=FDefaultParent};
+	__property Fmx::Controls::TStyleBook* StyleBook = {read=FStyleBook, write=FStyleBook};
 	__property TOnBeforeShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
 	__property TOnBeforeStartAnimationEvent OnBeforeStartAnimation = {read=FOnBeforeStartAnimation, write=FOnBeforeStartAnimation};
 	__property TOnBindCommonActionList OnBindCommonActionList = {read=FOnBindCommonActionList, write=FOnBindCommonActionList};

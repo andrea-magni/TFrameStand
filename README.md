@@ -22,7 +22,7 @@ _Installing manually you get the latest updates (beware! :-) )_
 * Share CommonActions through different UI combinations
 
 ##Get started
-* Have a look at [my blog posts about TFrameStand](www.andreamagni.eu/wp)
+* Have a look at [my blog posts about TFrameStand](http://www.andreamagni.eu/wp/tag/tframestand/)
 * [My CodeRage X session (50 min video covering all the basic functionalities)](https://www.youtube.com/watch?v=Z6_ZvnCmFCw)
 
 ##Demo projects

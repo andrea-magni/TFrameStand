@@ -1,3 +1,4 @@
+![TFrameStand](media/frame_stand_xhdpi.png)
 #TFrameStand component (FMX)
 Easily use TFrame(s) in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 

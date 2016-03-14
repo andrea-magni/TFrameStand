@@ -38,4 +38,4 @@ _Installing manually you get the latest updates (beware! :-) )_
 # Contributions
 This is an open source project, so obviously every contribution/help/suggestion will be very appreciated.
 
-[Andrea Magni](www.andreamagni.eu)
+[Andrea Magni](http://www.andreamagni.eu)

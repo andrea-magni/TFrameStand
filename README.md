@@ -1,3 +1,4 @@
+![TFrameStand](media/frame_stand_xhdpi.png)
 #TFrameStand component (FMX)
 Easily use TFrame(s) in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 
@@ -33,3 +34,8 @@ _Installing manually you get the latest updates (beware! :-) )_
 * **PictureWall**: show pictures in a TFlowLayout with a fading in transition
 * **ButtonSet**: mimics Android's Camera toolbuttons laying over your content.
 * **EditHelper**: adds easy to customize buttons or controls to any TEdit.
+
+# Contributions
+This is an open source project, so obviously every contribution/help/suggestion will be very appreciated.
+
+[Andrea Magni](http://www.andreamagni.eu)

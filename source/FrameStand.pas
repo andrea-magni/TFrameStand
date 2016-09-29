@@ -41,6 +41,8 @@ type
   TOnGetFrameClassEvent = procedure (const ASender: TFrameStand; const AParent: TFmxObject;
     const AStandStyleName: string; var AFrameClass: TFrameClass) of object;
 
+  TFrameStatus = (Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing);
+
   TFrameInfo<T: TFrame> = class
   private
     FFrame: T;
@@ -54,13 +56,11 @@ type
     FContainer: TFmxObject;
     FStandStyleName: string;
     FHiding: Boolean;
+    FStatus: TFrameStatus;
     function GetIsVisible: Boolean;
   protected
     function BindCommonActions(const AObject: TFmxObject): Boolean; virtual;
     function BindCommonActionList(const AObject: TFmxObject): Boolean; virtual;
-
-    procedure DefaultShow; virtual;
-    procedure DefaultHide; virtual;
 
     function HasAttribute<A: TCustomAttribute>(ARttiObject: TRttiObject): A;
     function FindActionProperty(AObject: TObject): TRttiInstanceProperty; virtual;
@@ -80,6 +80,9 @@ type
     function FireHideAnimations(out AHideDelay: Single): Boolean; virtual;
     procedure DoCommonActionClick(Sender: TObject);
   public
+    procedure DefaultShow; virtual;
+    procedure DefaultHide; virtual;
+
     procedure StopAnimations; virtual;
 
     function Show(const ABackgroundTask: TProc<TFrameInfo<T>> = nil;
@@ -101,6 +104,7 @@ type
     property Parent: TFmxObject read FParent write FParent;
     property IsVisible: Boolean read GetIsVisible;
     property Hiding: Boolean read FHiding;
+    property Status: TFrameStatus read FStatus;
   end;
 
   TOnBeforeShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>) of object;
@@ -392,6 +396,7 @@ end;
 
 procedure TFrameInfo<T>.Close;
 begin
+  FStatus := TFrameStatus.Closing;
   if Assigned(FFrameStand) then
     FFrameStand.Remove(FFrame);
 end;
@@ -404,6 +409,7 @@ begin
 
   inherited Create;
 
+  FStatus := Initializing;
   FFrameStand := AFrameStand;
   FFrame := AFrame;
   FFrameIsOwned := False;
@@ -437,6 +443,8 @@ begin
 
   // CommonActions
   FindCommonActions(FStand);
+
+  FStatus := Ready;
 end;
 
 procedure TFrameInfo<T>.DefaultHide;
@@ -717,6 +725,7 @@ begin
   Result := False;
   if not FHiding then
   begin
+    FStatus := TFrameStatus.Hiding;
     Result := True;
     FHiding := True;
 
@@ -732,6 +741,7 @@ begin
           DefaultHide;
 
         FHiding := False;
+        FStatus := TFrameStatus.Hidden;
 
         if Assigned(AThen) then
           AThen();
@@ -784,6 +794,8 @@ function TFrameInfo<T>.Show(const ABackgroundTask: TProc<TFrameInfo<T>> = nil;
   const AOnTaskCompleteSynchronized: Boolean = True
 ): ITask;
 begin
+  FStatus := Showing;
+
   Result := nil;
   FireCustomBeforeShowMethods;
   if Assigned(FrameStand) and Assigned(FrameStand.OnBeforeShow) then
@@ -792,6 +804,8 @@ begin
   if not FireCustomShowMethods then
     DefaultShow;
   FireShowAnimations;
+
+  FStatus := TFrameStatus.Visible;
 
   if Assigned(ABackgroundTask) then
   begin

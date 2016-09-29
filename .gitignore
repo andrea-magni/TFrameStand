@@ -62,3 +62,5 @@ Win32
 OSX32
 
 *.db
+
+.DS_Store

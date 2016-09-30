@@ -27,6 +27,7 @@ package FrameStandPackage;
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'FrameStand Package'}
+{$LIBSUFFIX '_220'}
 {$DESIGNONLY}
 {$IMPLICITBUILD ON}
 

@@ -1,5 +1,5 @@
 (*
-  Copyright 2015, TFrameStand
+  Copyright 2016, TFrameStand
 
   Author:
     Andrea Magni <andrea(dot)magni(at)gmail(dot)com>
@@ -427,6 +427,12 @@ begin
     FStand.Align := TAlignLayout.Contents;
     FStand.StyleName := 'container';
   end;
+{$if compilerversion >= 31}
+  // 10.1 Berlin and later
+  // See https://github.com/andrea-magni/TFrameStand/issues/12
+  // also see https://quality.embarcadero.com/browse/RSP-14806
+  FStand.Align := TAlignLayout.Contents;
+{$ifend}
   FStand.Visible := False;
 
   // PARENT

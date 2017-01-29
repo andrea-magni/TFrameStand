@@ -376,7 +376,7 @@ var
   LCommonActionPattern: string;
 begin
   Result := False;
-  if not (AObject is TButton) then
+  if not (AObject is TControl) then
     Exit;
 
   for LCommonActionPattern in FrameStand.CommonActions.Keys do
@@ -387,7 +387,7 @@ begin
        )
     then
     begin
-      TButton(AObject).OnClick := DoCommonActionClick;
+      TControl(AObject).OnClick := DoCommonActionClick;
       Result := True;
       Break; // no need to continue since DoCommonActionClick will fire all CommonActions that match
     end;

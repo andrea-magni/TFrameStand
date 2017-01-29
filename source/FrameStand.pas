@@ -108,6 +108,7 @@ type
   end;
 
   TOnBeforeShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>) of object;
+  TOnAfterHideEvent = TOnBeforeShowEvent;
   TOnBeforeStartAnimationEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>; const AAnimation: TAnimation) of object;
   TOnBindCommonActionList = procedure(ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>; const AObject: TFmxObject; var ACommonActionName: string) of object;
 
@@ -136,6 +137,7 @@ type
     FAnimationShow: string;
     FOnGetFrameClass: TOnGetFrameClassEvent;
     FCommonActions: TCommonActionDictionary;
+    FOnAfterHide: TOnAfterHideEvent;
     FOnBeforeShow: TOnBeforeShowEvent;
     FOnBeforeStartAnimation: TOnBeforeStartAnimationEvent;
     FCommonActionList: TActionList;
@@ -174,6 +176,7 @@ type
     property StyleBook: TStyleBook read FStyleBook write FStyleBook;
 
     // Events
+    property OnAfterHide: TOnAfterHideEvent read FOnAfterHide write FOnAfterHide;
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
     property OnBeforeStartAnimation: TOnBeforeStartAnimationEvent read FOnBeforeStartAnimation write FOnBeforeStartAnimation;
     property OnBindCommonActionList: TOnBindCommonActionList read FOnBindCommonActionList write FOnBindCommonActionList;
@@ -751,6 +754,9 @@ begin
 
         if Assigned(AThen) then
           AThen();
+
+        if Assigned(FrameStand) and Assigned(FrameStand.OnAfterHide) then
+          FrameStand.OnAfterHide(FrameStand, TFrameInfo<TFrame>(Self));
       end
     );
   end;

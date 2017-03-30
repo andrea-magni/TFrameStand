@@ -3,40 +3,18 @@
     <ProjectExtensions>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
+    <PropertyGroup>
+        <DeviceId Condition="'$(Platform)'=='Android'">01cace91dbe53a17</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='iOSDevice32'"/>
+        <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
+        <DeviceId Condition="'$(Platform)'=='iOSSimulator'">221BCEB2-91CB-416A-B9C1-CC8A1D2F10B2</DeviceId>
+    </PropertyGroup>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice64'"/>
     <ItemGroup Condition="'$(Platform)'=='Win64'"/>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice32'"/>
-    <ItemGroup Condition="'$(Platform)'=='Win32'">
-        <DeployFile Include="Win32\Debug\LightBoxFrameStand.exe" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand\</RemoteDir>
-            <RemoteName>LightBoxFrameStand.exe</RemoteName>
-            <DeployClass>ProjectOutput</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-            <Required>True</Required>
-        </DeployFile>
-        <DeployFile Include="Frames.Text.Pas" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand\</RemoteDir>
-            <RemoteName>Frames.Text.Pas</RemoteName>
-            <DeployClass>ProjectFile</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-    </ItemGroup>
+    <ItemGroup Condition="'$(Platform)'=='Win32'"/>
+    <ItemGroup Condition="'$(Platform)'=='Linux64'"/>
     <ItemGroup Condition="'$(Platform)'=='OSX32'">
-        <DeployFile Include="OSX32\Debug\LightBoxFrameStand.entitlements" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand.app\../\</RemoteDir>
-            <RemoteName>LightBoxFrameStand.entitlements</RemoteName>
-            <DeployClass>ProjectOSXEntitlements</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="$(BDS)\redist\osx32\libmidas.dylib" Condition="'$(Config)'=='Debug'">
             <RemoteDir>LightBoxFrameStand.app\Contents\Resources\StartUp\</RemoteDir>
             <RemoteName>libmidas.dylib</RemoteName>
@@ -55,19 +33,10 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Frames.Text.Pas" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand.app\</RemoteDir>
-            <RemoteName>Frames.Text.Pas</RemoteName>
-            <DeployClass>ProjectFile</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(BDS)\bin\delphi_PROJECTICNS.icns" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand.app\Contents\Resources\</RemoteDir>
-            <RemoteName>LightBoxFrameStand.icns</RemoteName>
-            <DeployClass>ProjectOSXResource</DeployClass>
+        <DeployFile Include="$(BDS)\Redist\osx32\libcgsqlite3.dylib">
+            <RemoteDir>LightBoxFrameStand.app\Contents\MacOS\</RemoteDir>
+            <RemoteName>libcgsqlite3.dylib</RemoteName>
+            <DeployClass>DependencyModule</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -77,25 +46,6 @@
             <RemoteDir>LightBoxFrameStand.app\Contents\MacOS\</RemoteDir>
             <RemoteName>libcgunwind.1.0.dylib</RemoteName>
             <DeployClass>DependencyModule</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="OSX32\Debug\LightBoxFrameStand" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand.app\Contents\MacOS\</RemoteDir>
-            <RemoteName>LightBoxFrameStand</RemoteName>
-            <DeployClass>ProjectOutput</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-            <Required>True</Required>
-        </DeployFile>
-        <DeployFile Include="OSX32\Debug\LightBoxFrameStand.info.plist" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand.app\Contents\</RemoteDir>
-            <RemoteName>Info.plist</RemoteName>
-            <DeployClass>ProjectOSXInfoPList</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -153,15 +103,6 @@
             <RemoteDir>LightBoxFrameStand\res\drawable-small\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
             <DeployClass>Android_SplashImage426</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Z:\TFrameStand\demos\lightbox\Android\Debug\classes.dex" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand\classes\</RemoteDir>
-            <RemoteName>classes.dex</RemoteName>
-            <DeployClass>AndroidClassesDexFile</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -270,15 +211,6 @@
             <RemoteDir>LightBoxFrameStand\res\drawable-xhdpi\</RemoteDir>
             <RemoteName>ic_launcher.png</RemoteName>
             <DeployClass>Android_LauncherIcon96</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="$(BDS)\lib\android\debug\x86\libnative-activity.so" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>LightBoxFrameStand\library\lib\x86\</RemoteDir>
-            <RemoteName>libLightBoxFrameStand.so</RemoteName>
-            <DeployClass>AndroidLibnativeX86File</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>

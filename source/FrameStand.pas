@@ -16,18 +16,19 @@ uses
   ;
 
 type
-  FrameStandAttribute = class(TCustomAttribute);
+  FrameStandCustomAttribute = class(TCustomAttribute);
 
-  ContextAttribute = class(FrameStandAttribute);
+  ContextAttribute = class(FrameStandCustomAttribute);
+  FrameStandAttribute = class(ContextAttribute);
   StandAttribute = class(ContextAttribute);
   ContainerAttribute = class(ContextAttribute);
   FrameInfoAttribute = class(ContextAttribute);
   ParentAttribute = class(ContextAttribute);
   FrameIsOwnedAttribute = class(ContextAttribute);
 
-  BeforeShowAttribute = class(FrameStandAttribute);
-  ShowAttribute = class(FrameStandAttribute);
-  HideAttribute = class(FrameStandAttribute);
+  BeforeShowAttribute = class(FrameStandCustomAttribute);
+  ShowAttribute = class(FrameStandCustomAttribute);
+  HideAttribute = class(FrameStandCustomAttribute);
 
   TFrameClass = class of TFrame;
 
@@ -483,7 +484,8 @@ begin
     FContainer.RemoveObject(FFrame);
   end;
 
-  Parent.RemoveObject(Stand);
+  if not (csDestroying in FFrameStand.ComponentState) then
+    Parent.RemoveObject(Stand);
   Parent := nil;
 
   if not (csDestroying in FFrameStand.ComponentState) then

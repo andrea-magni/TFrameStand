@@ -22,12 +22,16 @@ type
     ContentLayout: TLayout;
     procedure FormGesture(Sender: TObject; const EventInfo: TGestureEventInfo;
       var Handled: Boolean);
+    procedure FormShow(Sender: TObject);
   private
     FBottomSheetFI: TFrameInfo<TImageFrame>;
     FBottomSheet: TLayout;
+    FPeek: TControl;
+    FDraggingPeek: Boolean;
   protected
     function GetBottomSheetFI: TFrameInfo<TImageFrame>;
     function BottomSheet: TLayout;
+    function Peek: TControl;
     property BottomSheetFI: TFrameInfo<TImageFrame> read GetBottomSheetFI;
   public
     { Public declarations }
@@ -52,28 +56,35 @@ end;
 
 procedure TMainForm.FormGesture(Sender: TObject;
   const EventInfo: TGestureEventInfo; var Handled: Boolean);
+var
+  LLocalPoint: TPointF;
 begin
   if (EventInfo.GestureID = igiPan) then
   begin
-    // initial show of the bottom sheet
     if TInteractiveGestureFlag.gfBegin in EventInfo.Flags then
-      if (not Assigned(FBottomSheetFI)) or (not BottomSheetFI.IsVisible) then
-        BottomSheetFI.Show;
+      FDraggingPeek := Peek.LocalRect.Contains(Peek.AbsoluteToLocal(EventInfo.Location));
 
-    //AM find a way to parametrize the 50 value (read from stand)
-    BottomSheet.Height := 50 + (ContentLayout.Height - EventInfo.Location.Y);
+    if FDraggingPeek then
+      BottomSheet.Height := Peek.Height + (ContentLayout.Height - EventInfo.Location.Y);
 
-    // final "release" animation
     if TInteractiveGestureFlag.gfEnd in EventInfo.Flags then
     begin
-      if BottomSheet.Height > (ContentLayout.Height / 2) then
-        TAnimator.AnimateFloat(BottomSheet, 'Height', ContentLayout.Height, 0.5)
+      FDraggingPeek := False;
+
+      // final "release" animation
+      if BottomSheet.Height >= (ContentLayout.Height / 2) then
+        TAnimator.AnimateFloat(BottomSheet, 'Height', ContentLayout.Height, 0.3)
       else
-        BottomSheetFI.Hide;
+        TAnimator.AnimateFloat(BottomSheet, 'Height', Peek.Height, 0.3)
     end;
 
     Handled := True;
   end;
+end;
+
+procedure TMainForm.FormShow(Sender: TObject);
+begin
+  BottomSheetFI.Show;
 end;
 
 function TMainForm.GetBottomSheetFI: TFrameInfo<TImageFrame>;
@@ -81,6 +92,13 @@ begin
   if not Assigned(FBottomSheetFI) then
     FBottomSheetFI := FrameStand1.New<TImageFrame>(ContentLayout, 'bottomsheetstand');
   Result := FBottomSheetFI;
+end;
+
+function TMainForm.Peek: TControl;
+begin
+  if (not Assigned(FPeek)) and Assigned(FBottomSheetFI) then
+    FPeek := FBottomSheetFI.Stand.FindStyleResource('peek') as TControl;
+  Result := FPeek;
 end;
 
 end.

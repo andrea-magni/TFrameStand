@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2016 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2017 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'FrameStand.pas' rev: 32.00 (Windows)
@@ -33,8 +33,9 @@
 namespace Framestand
 {
 //-- forward type declarations -----------------------------------------------
-class DELPHICLASS FrameStandAttribute;
+class DELPHICLASS FrameStandCustomAttribute;
 class DELPHICLASS ContextAttribute;
+class DELPHICLASS FrameStandAttribute;
 class DELPHICLASS StandAttribute;
 class DELPHICLASS ContainerAttribute;
 class DELPHICLASS FrameInfoAttribute;
@@ -49,26 +50,39 @@ class DELPHICLASS TCommonActionDictionary;
 class DELPHICLASS TFrameStand;
 //-- type declarations -------------------------------------------------------
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION FrameStandAttribute : public System::TCustomAttribute
+class PASCALIMPLEMENTATION FrameStandCustomAttribute : public System::TCustomAttribute
 {
 	typedef System::TCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall FrameStandAttribute(void) : System::TCustomAttribute() { }
-	/* TObject.Destroy */ inline __fastcall virtual ~FrameStandAttribute(void) { }
+	/* TObject.Create */ inline __fastcall FrameStandCustomAttribute(void) : System::TCustomAttribute() { }
+	/* TObject.Destroy */ inline __fastcall virtual ~FrameStandCustomAttribute(void) { }
 	
 };
 
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION ContextAttribute : public FrameStandAttribute
+class PASCALIMPLEMENTATION ContextAttribute : public FrameStandCustomAttribute
 {
-	typedef FrameStandAttribute inherited;
+	typedef FrameStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall ContextAttribute(void) : FrameStandAttribute() { }
+	/* TObject.Create */ inline __fastcall ContextAttribute(void) : FrameStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~ContextAttribute(void) { }
+	
+};
+
+#pragma pack(pop)
+
+#pragma pack(push,4)
+class PASCALIMPLEMENTATION FrameStandAttribute : public ContextAttribute
+{
+	typedef ContextAttribute inherited;
+	
+public:
+	/* TObject.Create */ inline __fastcall FrameStandAttribute(void) : ContextAttribute() { }
+	/* TObject.Destroy */ inline __fastcall virtual ~FrameStandAttribute(void) { }
 	
 };
 
@@ -140,12 +154,12 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION BeforeShowAttribute : public FrameStandAttribute
+class PASCALIMPLEMENTATION BeforeShowAttribute : public FrameStandCustomAttribute
 {
-	typedef FrameStandAttribute inherited;
+	typedef FrameStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall BeforeShowAttribute(void) : FrameStandAttribute() { }
+	/* TObject.Create */ inline __fastcall BeforeShowAttribute(void) : FrameStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~BeforeShowAttribute(void) { }
 	
 };
@@ -153,12 +167,12 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION ShowAttribute : public FrameStandAttribute
+class PASCALIMPLEMENTATION ShowAttribute : public FrameStandCustomAttribute
 {
-	typedef FrameStandAttribute inherited;
+	typedef FrameStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall ShowAttribute(void) : FrameStandAttribute() { }
+	/* TObject.Create */ inline __fastcall ShowAttribute(void) : FrameStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~ShowAttribute(void) { }
 	
 };
@@ -166,12 +180,12 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION HideAttribute : public FrameStandAttribute
+class PASCALIMPLEMENTATION HideAttribute : public FrameStandCustomAttribute
 {
-	typedef FrameStandAttribute inherited;
+	typedef FrameStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall HideAttribute(void) : FrameStandAttribute() { }
+	/* TObject.Create */ inline __fastcall HideAttribute(void) : FrameStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~HideAttribute(void) { }
 	
 };

@@ -38,6 +38,7 @@ type
     procedure HideActionUpdate(Sender: TObject);
     procedure ShowActionUpdate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     FFrameStand: TFrameStand;
     FFrameInfo: TFrameInfo<TTestFrame>;
@@ -53,7 +54,6 @@ type
     property SelectedStyleName: string read GetSelectedStyleName;
     property SelectedFrameAlign: TAlignLayout read GetSelectedFrameAlign;
   public
-
     property FrameStand: TFrameStand read FFrameStand write SetFrameStand;
     property StyleBook: TStyleBook read GetStyleBook;
   end;
@@ -85,12 +85,17 @@ begin
         StandComboBox.ItemIndex := 0;
     end;
   end;
-
 end;
 
 procedure TTestForm.FormCreate(Sender: TObject);
 begin
   Init;
+end;
+
+procedure TTestForm.FormDestroy(Sender: TObject);
+begin
+  if Assigned(FFrameInfo) then
+    FFrameInfo.Close;
 end;
 
 function TTestForm.GetSelectedFrameAlign: TAlignLayout;

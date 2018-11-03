@@ -111,6 +111,7 @@ type
     property Status: TFrameStatus read FStatus;
   end;
 
+  TOnAfterShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>) of object;
   TOnBeforeShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>) of object;
   TOnAfterHideEvent = TOnBeforeShowEvent;
   TOnBeforeStartAnimationEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>; const AAnimation: TAnimation) of object;
@@ -142,13 +143,14 @@ type
     FOnGetFrameClass: TOnGetFrameClassEvent;
     FCommonActions: TCommonActionDictionary;
     FOnAfterHide: TOnAfterHideEvent;
+    FOnAfterShow: TOnAfterShowEvent;
     FOnBeforeShow: TOnBeforeShowEvent;
     FOnBeforeStartAnimation: TOnBeforeStartAnimationEvent;
     FCommonActionList: TActionList;
     FCommonActionPrefix: string;
     FOnBindCommonActionList: TOnBindCommonActionList;
     FDefaultParent: TFmxObject;
-    FOpenFrames : TList<TFrame>;
+    FVisibleFrames : TList<TFrame>;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -156,6 +158,7 @@ type
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetStandStyleName(AStandStyleName: string): string;
     function GetFrameClass<T: TFrame>(const AParent: TFmxObject; const AStandStyleName: string): TFrameClass;
+    procedure DoAfterShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoBeforeShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoAfterHide(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoClose(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
@@ -170,11 +173,13 @@ type
       const AStandStyleName: string = ''): TFrameInfo<T>;
 
     procedure Remove(AFrame: TFrame);
-    function GetActiveFrame: TFrame;
+    function LastShownFrame: TFrame;
+    function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
 
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary read FCommonActions;
     property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
+    property VisibleFrames: TList<TFrame> read FVisibleFrames;
   published
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
@@ -186,6 +191,7 @@ type
 
     // Events
     property OnAfterHide: TOnAfterHideEvent read FOnAfterHide write FOnAfterHide;
+    property OnAfterShow: TOnAfterShowEvent read FOnAfterShow write FOnAfterShow;
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
     property OnBeforeStartAnimation: TOnBeforeStartAnimationEvent read FOnBeforeStartAnimation write FOnBeforeStartAnimation;
     property OnBindCommonActionList: TOnBindCommonActionList read FOnBindCommonActionList write FOnBindCommonActionList;
@@ -216,7 +222,7 @@ begin
   FCommonActionPrefix := 'ca_';
   FFrameInfos := TObjectDictionary<TFrame, TFrameInfo<TFrame>>.Create();
   FCommonActions := TCommonActionDictionary.Create;
-  FOpenFrames := TList<TFrame>.Create;
+  FVisibleFrames := TList<TFrame>.Create;
 end;
 
 destructor TFrameStand.Destroy;
@@ -228,7 +234,7 @@ begin
 
   FFrameInfos.Free;
   FCommonActions.Free;
-  FOpenFrames.Free;
+  FVisibleFrames.Free;
   inherited;
 end;
 
@@ -237,7 +243,14 @@ procedure TFrameStand.DoAfterHide(const ASender: TFrameStand;
 begin
   if Assigned(FOnAfterHide) then
     FOnAfterHide(ASender, AFrameInfo);
-  FOpenFrames.Remove(AFrameInfo.FFrame);
+  FVisibleFrames.Remove(AFrameInfo.FFrame);
+end;
+
+procedure TFrameStand.DoAfterShow(const ASender: TFrameStand;
+  const AFrameInfo: TFrameInfo<TFrame>);
+begin
+   if Assigned(FOnAfterShow) then
+    FOnAfterShow(ASender, AFrameInfo);
 end;
 
 procedure TFrameStand.DoBeforeShow(const ASender: TFrameStand;
@@ -245,14 +258,20 @@ procedure TFrameStand.DoBeforeShow(const ASender: TFrameStand;
 begin
    if Assigned(FOnBeforeShow) then
     FOnBeforeShow(ASender, AFrameInfo);
-   FOpenFrames.Add(AFrameInfo.FFrame);
+   FVisibleFrames.Add(AFrameInfo.FFrame);
 end;
 
 procedure TFrameStand.DoClose(const ASender: TFrameStand;
   const AFrameInfo: TFrameInfo<TFrame>);
 begin
-  FOpenFrames.Remove(AFrameInfo.FFrame);
+  FVisibleFrames.Remove(AFrameInfo.FFrame);
   FFrameInfos.Remove(AFrameInfo.FFrame);
+end;
+
+function TFrameStand.FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
+begin
+  Result := nil;
+  FFrameInfos.TryGetValue(AFrame, Result);
 end;
 
 function TFrameStand.GetCount: Integer;
@@ -354,13 +373,11 @@ begin
   end;
 end;
 
-function TFrameStand.GetActiveFrame: TFrame;
+function TFrameStand.LastShownFrame: TFrame;
 begin
   Result := nil;
-  if FOpenFrames.Count > 0 then
-    begin
-      Result := FOpenFrames.Items[FOpenFrames.Count-1];
-    end;
+  if FVisibleFrames.Count > 0 then
+    Result := FVisibleFrames.Last;
 end;
 
 { TFrameInfo<T> }
@@ -864,7 +881,7 @@ begin
 
   Result := nil;
   FireCustomBeforeShowMethods;
-  if Assigned(FrameStand) {and Assigned(FrameStand.OnBeforeShow)} then
+  if Assigned(FrameStand) then
     FrameStand.DoBeforeShow(FrameStand, TFrameInfo<TFrame>(Self));
 
   if not FireCustomShowMethods then
@@ -874,6 +891,8 @@ begin
   FStatus := TFrameStatus.Visible;
 
   FireCustomAfterShowMethods;
+  if Assigned(FrameStand) then
+    FrameStand.DoAfterShow(FrameStand, TFrameInfo<TFrame>(Self));
 
   if Assigned(ABackgroundTask) then
   begin

@@ -27,6 +27,7 @@ type
   FrameIsOwnedAttribute = class(ContextAttribute);
 
   BeforeShowAttribute = class(FrameStandCustomAttribute);
+  AfterShowAttribute = class(FrameStandCustomAttribute);
   ShowAttribute = class(FrameStandCustomAttribute);
   HideAttribute = class(FrameStandCustomAttribute);
 
@@ -52,6 +53,7 @@ type
     FStand: TControl;
     FParent: TFmxObject;
     FCustomBeforeShowMethods: TArray<TRttiMethod>;
+    FCustomAfterShowMethods: TArray<TRttiMethod>;
     FCustomShowMethods: TArray<TRttiMethod>;
     FCustomHideMethods: TArray<TRttiMethod>;
     FContainer: TFmxObject;
@@ -70,6 +72,7 @@ type
     procedure FindCommonActions(const AFmxObject: TFmxObject); virtual;
     function FireCustomMethods(AMethods: TArray<TRttiMethod>): Boolean; virtual;
     function FireCustomBeforeShowMethods: Boolean; virtual;
+    function FireCustomAfterShowMethods: Boolean; virtual;
     function FireCustomShowMethods: Boolean; virtual;
     function FireCustomHideMethods: Boolean; virtual;
     procedure DoBeforeStartAnimation(const AAnimation: TAnimation); virtual;
@@ -145,6 +148,7 @@ type
     FCommonActionPrefix: string;
     FOnBindCommonActionList: TOnBindCommonActionList;
     FDefaultParent: TFmxObject;
+    FOpenFrames : TList<TFrame>;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -152,6 +156,9 @@ type
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetStandStyleName(AStandStyleName: string): string;
     function GetFrameClass<T: TFrame>(const AParent: TFmxObject; const AStandStyleName: string): TFrameClass;
+    procedure DoBeforeShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
+    procedure DoAfterHide(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
+    procedure DoClose(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -163,6 +170,7 @@ type
       const AStandStyleName: string = ''): TFrameInfo<T>;
 
     procedure Remove(AFrame: TFrame);
+    function GetActiveFrame: TFrame;
 
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary read FCommonActions;
@@ -208,6 +216,7 @@ begin
   FCommonActionPrefix := 'ca_';
   FFrameInfos := TObjectDictionary<TFrame, TFrameInfo<TFrame>>.Create();
   FCommonActions := TCommonActionDictionary.Create;
+  FOpenFrames := TList<TFrame>.Create;
 end;
 
 destructor TFrameStand.Destroy;
@@ -219,7 +228,31 @@ begin
 
   FFrameInfos.Free;
   FCommonActions.Free;
+  FOpenFrames.Free;
   inherited;
+end;
+
+procedure TFrameStand.DoAfterHide(const ASender: TFrameStand;
+  const AFrameInfo: TFrameInfo<TFrame>);
+begin
+  if Assigned(FOnAfterHide) then
+    FOnAfterHide(ASender, AFrameInfo);
+  FOpenFrames.Remove(AFrameInfo.FFrame);
+end;
+
+procedure TFrameStand.DoBeforeShow(const ASender: TFrameStand;
+  const AFrameInfo: TFrameInfo<TFrame>);
+begin
+   if Assigned(FOnBeforeShow) then
+    FOnBeforeShow(ASender, AFrameInfo);
+   FOpenFrames.Add(AFrameInfo.FFrame);
+end;
+
+procedure TFrameStand.DoClose(const ASender: TFrameStand;
+  const AFrameInfo: TFrameInfo<TFrame>);
+begin
+  FOpenFrames.Remove(AFrameInfo.FFrame);
+  FFrameInfos.Remove(AFrameInfo.FFrame);
 end;
 
 function TFrameStand.GetCount: Integer;
@@ -321,6 +354,15 @@ begin
   end;
 end;
 
+function TFrameStand.GetActiveFrame: TFrame;
+begin
+  Result := nil;
+  if FOpenFrames.Count > 0 then
+    begin
+      Result := FOpenFrames.Items[FOpenFrames.Count-1];
+    end;
+end;
+
 { TFrameInfo<T> }
 
 procedure TFrameInfo<T>.DoBeforeStartAnimation(const AAnimation: TAnimation);
@@ -401,8 +443,8 @@ end;
 procedure TFrameInfo<T>.Close;
 begin
   FStatus := TFrameStatus.Closing;
-  if Assigned(FFrameStand) then
-    FFrameStand.Remove(FFrame);
+   if Assigned(FrameStand) then
+        FrameStand.DoClose(FrameStand, TFrameInfo<TFrame>(Self));
 end;
 
 constructor TFrameInfo<T>.Create(const AFrameStand: TFrameStand;
@@ -550,12 +592,16 @@ begin
   LType := LRttiContext.GetType(Frame.ClassInfo);
 
   FCustomBeforeShowMethods := [];
+  FCustomAfterShowMethods := [];
   FCustomShowMethods := [];
   FCustomHideMethods := [];
   for LMethod in LType.GetMethods do
   begin
     if HasAttribute<BeforeShowAttribute>(LMethod) <> nil then
       FCustomBeforeShowMethods := FCustomBeforeShowMethods + [LMethod];
+
+    if HasAttribute<AfterShowAttribute>(LMethod) <> nil then
+      FCustomAfterShowMethods := FCustomAfterShowMethods + [LMethod];
 
     if HasAttribute<ShowAttribute>(LMethod) <> nil then
       FCustomShowMethods := FCustomShowMethods + [LMethod];
@@ -611,6 +657,11 @@ begin
       end;
     end;
   end;
+end;
+
+function TFrameInfo<T>.FireCustomAfterShowMethods: Boolean;
+begin
+  Result := FireCustomMethods(FCustomAfterShowMethods);
 end;
 
 function TFrameInfo<T>.FireCustomBeforeShowMethods: Boolean;
@@ -693,6 +744,7 @@ begin
   Result := FireAnimations(FStand, FFrameStand.AnimationShow);
 end;
 
+
 function TFrameInfo<T>.GetIsVisible: Boolean;
 begin
   Result := Assigned(FStand) and FStand.Visible;
@@ -757,8 +809,8 @@ begin
         if Assigned(AThen) then
           AThen();
 
-        if Assigned(FrameStand) and Assigned(FrameStand.OnAfterHide) then
-          FrameStand.OnAfterHide(FrameStand, TFrameInfo<TFrame>(Self));
+        if Assigned(FrameStand) {and Assigned(FrameStand.OnAfterHide)} then
+          FrameStand.DoAfterHide(FrameStand, TFrameInfo<TFrame>(Self));
       end
     );
   end;
@@ -812,14 +864,16 @@ begin
 
   Result := nil;
   FireCustomBeforeShowMethods;
-  if Assigned(FrameStand) and Assigned(FrameStand.OnBeforeShow) then
-    FrameStand.OnBeforeShow(FrameStand, TFrameInfo<TFrame>(Self));
+  if Assigned(FrameStand) {and Assigned(FrameStand.OnBeforeShow)} then
+    FrameStand.DoBeforeShow(FrameStand, TFrameInfo<TFrame>(Self));
 
   if not FireCustomShowMethods then
     DefaultShow;
   FireShowAnimations;
 
   FStatus := TFrameStatus.Visible;
+
+  FireCustomAfterShowMethods;
 
   if Assigned(ABackgroundTask) then
   begin

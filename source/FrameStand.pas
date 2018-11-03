@@ -10,9 +10,10 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Rtti, System.Masks, System.Threading
-  , Generics.Collections
-  , FMX.Controls, FMX.Types, FMX.Forms, FMX.Ani
-  , System.Actions, FMX.ActnList
+, Generics.Collections
+, FMX.Controls, FMX.Types, FMX.Forms, FMX.Ani
+, System.Actions, FMX.ActnList
+, DeviceAndPlatformInfo
   ;
 
 type
@@ -40,8 +41,8 @@ type
     class procedure Execute(const ADelay: Integer; const AAction: TProc);
   end;
 
-  TOnGetFrameClassEvent = procedure (const ASender: TFrameStand; const AParent: TFmxObject;
-    const AStandStyleName: string; var AFrameClass: TFrameClass) of object;
+  TOnGetFrameClassEvent = procedure (const ASender: TFrameStand; var AParent: TFmxObject;
+    var AStandStyleName: string; var AFrameClass: TFrameClass) of object;
 
   TFrameStatus = (Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing);
 
@@ -157,11 +158,11 @@ type
     function GetDefaultParent: TFmxObject; virtual;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetStandStyleName(AStandStyleName: string): string;
-    function GetFrameClass<T: TFrame>(const AParent: TFmxObject; const AStandStyleName: string): TFrameClass;
+    function GetFrameClass<T: TFrame>(var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
     procedure DoAfterShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoBeforeShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoAfterHide(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
-    procedure DoClose(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
+    procedure DoClose(const AFrame: TFrame);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -175,6 +176,7 @@ type
     procedure Remove(AFrame: TFrame);
     function LastShownFrame: TFrame;
     function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
+    function DeviceAndPlatformInfo(const AForm: TForm = nil): TDeviceAndPlatformInfo;
 
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary read FCommonActions;
@@ -238,6 +240,11 @@ begin
   inherited;
 end;
 
+function TFrameStand.DeviceAndPlatformInfo(const AForm: TForm): TDeviceAndPlatformInfo;
+begin
+  Result := TDeviceAndPlatformInfo.Retrieve(AForm);
+end;
+
 procedure TFrameStand.DoAfterHide(const ASender: TFrameStand;
   const AFrameInfo: TFrameInfo<TFrame>);
 begin
@@ -261,11 +268,10 @@ begin
    FVisibleFrames.Add(AFrameInfo.FFrame);
 end;
 
-procedure TFrameStand.DoClose(const ASender: TFrameStand;
-  const AFrameInfo: TFrameInfo<TFrame>);
+procedure TFrameStand.DoClose(const AFrame: TFrame);
 begin
-  FVisibleFrames.Remove(AFrameInfo.FFrame);
-  FFrameInfos.Remove(AFrameInfo.FFrame);
+  FVisibleFrames.Remove(AFrame);
+  Remove(AFrame);
 end;
 
 function TFrameStand.FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
@@ -287,7 +293,7 @@ begin
     Result := Self.Owner as TFmxObject;
 end;
 
-function TFrameStand.GetFrameClass<T>(const AParent: TFmxObject; const AStandStyleName: string): TFrameClass;
+function TFrameStand.GetFrameClass<T>(var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
 begin
   Result := TFrameClass(T);
   if Assigned(FOnGetFrameClass) then
@@ -325,15 +331,16 @@ function TFrameStand.New<T>(const AParent: TFmxObject; const AStandStyleName: st
 var
   LFrame: T;
   LParent: TFmxObject;
+  LStandName: string;
 begin
   LParent := AParent;
   if not Assigned(LParent) then
     LParent := GetDefaultParent;
-
-  LFrame := T(GetFrameClass<T>(LParent, AStandStyleName).Create(nil));
+  LStandName := AStandStyleName;
+  LFrame := T(GetFrameClass<T>(LParent, LStandName).Create(nil));
   try
     LFrame.Name := '';
-    Result := Use<T>(LFrame, LParent, AStandStyleName);
+    Result := Use<T>(LFrame, LParent, LStandName);
     Result.FrameIsOwned := True;
   except
     LFrame.Free;
@@ -460,8 +467,8 @@ end;
 procedure TFrameInfo<T>.Close;
 begin
   FStatus := TFrameStatus.Closing;
-   if Assigned(FrameStand) then
-        FrameStand.DoClose(FrameStand, TFrameInfo<TFrame>(Self));
+  if Assigned(FFrameStand) then
+    FFrameStand.DoClose(FFrame);
 end;
 
 constructor TFrameInfo<T>.Create(const AFrameStand: TFrameStand;

@@ -148,6 +148,7 @@
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="..\source\DeviceAndPlatformInfo.pas"/>
         <RcItem Include="..\media\frame_stand_mdpi.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>TFRAMESTAND</ResourceId>
@@ -203,7 +204,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\lib\bpl\FrameStandPackage_10_.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\lib\bpl\FrameStandPackage_10_2_250.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>FrameStandPackage_10_2.bpl</RemoteName>
                         <Overwrite>true</Overwrite>

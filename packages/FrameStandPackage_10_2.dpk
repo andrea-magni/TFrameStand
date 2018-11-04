@@ -40,6 +40,7 @@ contains
   FrameStand.Editors in '..\source\FrameStand.Editors.pas',
   FrameStand.Editors.Forms.Test in '..\source\FrameStand.Editors.Forms.Test.pas' {TestForm},
   Frames.Test in '..\source\Frames.Test.pas' {TestFrame: TFrame},
-  DeviceAndPlatformInfo in '..\source\DeviceAndPlatformInfo.pas';
+  DeviceAndPlatformInfo in '..\source\DeviceAndPlatformInfo.pas',
+  ResponsiveContainer in '..\source\ResponsiveContainer.pas';
 
 end.

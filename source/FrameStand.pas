@@ -13,7 +13,7 @@ uses
 , Generics.Collections
 , FMX.Controls, FMX.Types, FMX.Forms, FMX.Ani
 , System.Actions, FMX.ActnList
-, DeviceAndPlatformInfo
+, DeviceAndPlatformInfo, ResponsiveContainer
   ;
 
 type
@@ -152,6 +152,7 @@ type
     FOnBindCommonActionList: TOnBindCommonActionList;
     FDefaultParent: TFmxObject;
     FVisibleFrames : TList<TFrame>;
+    FResponsive: TResponsiveContainer;
     function GetCount: Integer;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
@@ -163,6 +164,8 @@ type
     procedure DoBeforeShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoAfterHide(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoClose(const AFrame: TFrame);
+    procedure DoResponsiveLookup(var AFrameClass: TFrameClass; var AStandStyleName: string;
+      var AParent: TFmxObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -190,6 +193,7 @@ type
     property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property DefaultParent: TFmxObject read FDefaultParent write FDefaultParent;
     property StyleBook: TStyleBook read FStyleBook write FStyleBook;
+    property Responsive: TResponsiveContainer read FResponsive;
 
     // Events
     property OnAfterHide: TOnAfterHideEvent read FOnAfterHide write FOnAfterHide;
@@ -225,6 +229,7 @@ begin
   FFrameInfos := TObjectDictionary<TFrame, TFrameInfo<TFrame>>.Create();
   FCommonActions := TCommonActionDictionary.Create;
   FVisibleFrames := TList<TFrame>.Create;
+  FResponsive := TResponsiveContainer.Create;
 end;
 
 destructor TFrameStand.Destroy;
@@ -234,9 +239,10 @@ begin
   for LKey in FFrameInfos.Keys.ToArray do
     Remove(LKey);
 
-  FFrameInfos.Free;
-  FCommonActions.Free;
-  FVisibleFrames.Free;
+  FreeAndNil(FFrameInfos);
+  FreeAndNil(FCommonActions);
+  FreeAndNil(FVisibleFrames);
+  FreeAndNil(FResponsive);
   inherited;
 end;
 
@@ -274,6 +280,26 @@ begin
   Remove(AFrame);
 end;
 
+procedure TFrameStand.DoResponsiveLookup(var AFrameClass: TFrameClass;
+  var AStandStyleName: string; var AParent: TFmxObject);
+var
+  FTarget: TResponsiveDefinition;
+  LWidth: Single;
+begin
+  if Assigned(AParent) and (AParent is TControl) then
+    LWidth := TControl(AParent).Width
+  else
+    raise Exception.Create('Error in DoResponsiveLookup: cannot determine parent Width');
+
+  FTarget := FResponsive.Lookup(
+    TResponsiveDefinition.Create(AFrameClass, AStandStyleName, AParent)
+  , FResponsive.CurrentBreakpoint(LWidth).Name);
+
+  AFrameClass := FTarget.FrameClass;
+  AStandStyleName := FTarget.StandName;
+  AParent := FTarget.Parent;
+end;
+
 function TFrameStand.FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
 begin
   Result := nil;
@@ -296,6 +322,7 @@ end;
 function TFrameStand.GetFrameClass<T>(var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
 begin
   Result := TFrameClass(T);
+  DoResponsiveLookup(Result, AStandStyleName, AParent);
   if Assigned(FOnGetFrameClass) then
     FOnGetFrameClass(Self, AParent, AStandStyleName, Result);
 end;

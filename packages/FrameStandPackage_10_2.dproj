@@ -149,6 +149,7 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="..\source\DeviceAndPlatformInfo.pas"/>
+        <DCCReference Include="..\source\ResponsiveContainer.pas"/>
         <RcItem Include="..\media\frame_stand_mdpi.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>TFRAMESTAND</ResourceId>

@@ -1,0 +1,172 @@
+inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
+  inherited ListView1: TListView
+    ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+      item
+        AppearanceObjectName = 'OrderNo'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Font.StyleExt = {00070000000000000004000000}
+        Appearance.TextAlign = Leading
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.PlaceOffset.Y = 3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'SaleDate'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Font.Size = 10.000000000000000000
+        Appearance.TextAlign = Leading
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.VertAlign = Trailing
+        Appearance.PlaceOffset.Y = -3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'ItemsTotal'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Trailing
+        Appearance.TextColor = claDarkred
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.PlaceOffset.Y = 3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'AmountPaid'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Font.Size = 10.000000000000000000
+        Appearance.TextAlign = Trailing
+        Appearance.TextColor = claSeagreen
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.VertAlign = Trailing
+        Appearance.PlaceOffset.Y = -3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'ShipTo'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Font.Size = 10.000000000000000000
+        Appearance.TextAlign = Leading
+        Appearance.Width = 150.000000000000000000
+        Appearance.Align = Center
+        Appearance.PlaceOffset.X = -30.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'Customer'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Font.Size = 10.000000000000000000
+        Appearance.Width = 100.000000000000000000
+        Appearance.Align = Center
+        Appearance.PlaceOffset.X = 25.000000000000000000
+      end>
+  end
+  inherited RightPanel: TLayout
+    inherited ListBox1: TListBox
+      Margins.Right = 5.000000000000000000
+      Size.Width = 232.000000000000000000
+      AlternatingRowBackground = True
+      Viewport.Width = 228.000000000000000000
+      Viewport.Height = 304.000000000000000000
+      inherited ListBoxGroupHeader1: TListBoxGroupHeader
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+      end
+      inherited ListBoxItem1: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited TermsText: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxItem2: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited MethodText: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxItem3: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited TaxRateText: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxGroupHeader2: TListBoxGroupHeader
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+      end
+      inherited ListBoxItem4: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited EmpFullNameText: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxItem5: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited EmpPhoneExtText: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxItem6: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited EmpSalaryText: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxGroupHeader3: TListBoxGroupHeader
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+      end
+      inherited ListBoxItem7: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited CustCompanyText: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxItem8: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited CustAddress: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+      inherited ListBoxItem9: TListBoxItem
+        TextSettings.Font.Size = 10.000000000000000000
+        StyledSettings = [Family, Style, Other]
+        inherited CustPhone: TText
+          HitTest = False
+          Position.X = 28.000000000000000000
+          TextSettings.HorzAlign = Trailing
+        end
+      end
+    end
+    object Line1: TLine
+      Align = Left
+      LineLocation = InnerWithin
+      LineType = Left
+      Size.Width = 3.000000000000000000
+      Size.Height = 308.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claChocolate
+      Stroke.Thickness = 5.000000000000000000
+    end
+  end
+end

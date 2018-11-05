@@ -1,0 +1,127 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'TFrameStand_MultiPlatform'
+  ClientHeight = 480
+  ClientWidth = 496
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnKeyDown = FormKeyDown
+  OnResize = FormResize
+  DesignerMasterStyle = 0
+  object TopToolBar: TToolBar
+    Size.Width = 496.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Text1: TText
+      Align = Center
+      AutoSize = True
+      Size.Width = 137.125000000000000000
+      Size.Height = 15.960937500000000000
+      Size.PlatformDefault = False
+      Text = 'TFrameStand_Responsive'
+      TextSettings.WordWrap = False
+    end
+  end
+  object MainContent: TLayout
+    Align = Client
+    Size.Width = 496.000000000000000000
+    Size.Height = 361.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+  end
+  object Layout1: TLayout
+    Align = Bottom
+    Position.Y = 410.000000000000000000
+    Size.Width = 496.000000000000000000
+    Size.Height = 70.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object LineXS: TLine
+      LineLocation = Inner
+      LineType = Bottom
+      Size.Width = 240.000000000000000000
+      Size.Height = 15.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claRed
+      Stroke.Thickness = 3.000000000000000000
+      object TextXS: TText
+        Align = Contents
+        Size.Width = 240.000000000000000000
+        Size.Height = 15.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'XS'
+        TextSettings.HorzAlign = Leading
+        OnClick = TextXSClick
+      end
+    end
+    object LineSM: TLine
+      LineLocation = Inner
+      LineType = Bottom
+      Position.Y = 15.000000000000000000
+      Size.Width = 480.000000000000000000
+      Size.Height = 15.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claOrange
+      Stroke.Thickness = 3.000000000000000000
+      object TextSM: TText
+        Align = Contents
+        Size.Width = 480.000000000000000000
+        Size.Height = 15.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'SM'
+        TextSettings.HorzAlign = Leading
+        OnClick = TextSMClick
+      end
+    end
+    object LineMD: TLine
+      LineLocation = Inner
+      LineType = Bottom
+      Position.Y = 30.000000000000000000
+      Size.Width = 720.000000000000000000
+      Size.Height = 15.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claGreen
+      Stroke.Thickness = 3.000000000000000000
+      object TextMD: TText
+        Align = Contents
+        Size.Width = 720.000000000000000000
+        Size.Height = 15.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'MD'
+        TextSettings.HorzAlign = Leading
+        OnClick = TextMDClick
+      end
+    end
+    object LineLG: TLine
+      LineLocation = Inner
+      LineType = Bottom
+      Position.Y = 45.000000000000000000
+      Size.Width = 1080.000000000000000000
+      Size.Height = 15.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claBlue
+      Stroke.Thickness = 3.000000000000000000
+      object TextLG: TText
+        Align = Contents
+        Size.Width = 1080.000000000000000000
+        Size.Height = 15.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'LG'
+        TextSettings.HorzAlign = Leading
+        OnClick = TextLGClick
+      end
+    end
+  end
+  object FrameStand1: TFrameStand
+    AnimationShow = 'OnShow*'
+    AnimationHide = 'OnHide*'
+    CommonActionPrefix = 'ca_'
+    DefaultStyleName = 'framestand'
+    OnBeforeShow = FrameStand1BeforeShow
+    Left = 200
+    Top = 192
+  end
+end

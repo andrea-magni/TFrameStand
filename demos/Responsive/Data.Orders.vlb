@@ -1,0 +1,16 @@
+﻿[OrdersTable]
+Coordinates=10,10,81,429
+Visible=True
+
+[]
+Coordinates=125,1,91,36
+
+[OrdersDS]
+Coordinates=110,1,62,33
+
+[EmployeesTable]
+Coordinates=110,449,95,159
+
+[CustomersTable]
+Coordinates=110,1,95,285
+

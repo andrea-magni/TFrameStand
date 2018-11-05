@@ -1,0 +1,105 @@
+inherited OrdersFrame_sm: TOrdersFrame_sm
+  Size.Width = 480.000000000000000000
+  inherited ListView1: TListView
+    ItemAppearanceClassName = 'TDynamicAppearance'
+    ItemEditAppearanceClassName = 'TDynamicAppearance'
+    Size.Width = 480.000000000000000000
+    ItemAppearance.ItemHeight = 60
+    ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+      item
+        AppearanceObjectName = 'OrderNo'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Font.StyleExt = {00070000000000000004000000}
+        Appearance.TextAlign = Leading
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.PlaceOffset.Y = 3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'SaleDate'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Leading
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.VertAlign = Trailing
+        Appearance.PlaceOffset.Y = -3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'ItemsTotal'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Trailing
+        Appearance.TextColor = claDarkred
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.PlaceOffset.Y = 3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'AmountPaid'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Trailing
+        Appearance.TextColor = claSeagreen
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.VertAlign = Trailing
+        Appearance.PlaceOffset.Y = -3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'ShipTo'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Align = Center
+      end>
+    ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
+      item
+        AppearanceObjectName = 'Text1'
+        AppearanceClassName = 'TTextObjectAppearance'
+      end>
+  end
+  inherited OrdersBS: TBindSourceDB
+    Left = 216
+    Top = 136
+  end
+  inherited BindingsList1: TBindingsList
+    Left = 220
+    Top = 77
+    inherited LinkListControlToField1: TLinkListControlToField
+      FillExpressions = <
+        item
+          SourceMemberName = 'OrderNo'
+          ControlMemberName = 'Text'
+          CustomFormat = #39'Order '#39' + %s'
+        end
+        item
+          SourceMemberName = 'OrderNo'
+          ControlMemberName = 'OrderNo'
+          CustomFormat = #39'Order '#39' + %s'
+        end
+        item
+          SourceMemberName = 'SaleDate'
+          ControlMemberName = 'SaleDate'
+          CustomFormat = 
+            #39'Sale date: '#39' + FormatDateTime('#39'ddd dd/mm'#39', Owner.ShipDate.AsDat' +
+            'eTime)'
+        end
+        item
+          SourceMemberName = 'ItemsTotal'
+          ControlMemberName = 'ItemsTotal'
+          CustomFormat = #39'Total: '#39' + %s'
+        end
+        item
+          SourceMemberName = 'AmountPaid'
+          ControlMemberName = 'AmountPaid'
+          CustomFormat = 
+            'IfThen(Owner.AmountPaid.Value < Owner.ItemsTotal.Value, '#39'Amount ' +
+            'due: '#39' + Format('#39'%%m'#39', Owner.ItemsTotal.Value- Owner.AmountPaid.' +
+            'Value +0.0), '#39'OK Paid'#39')'
+        end
+        item
+          SourceMemberName = 'ShipToAddr1'
+          ControlMemberName = 'ShipTo'
+          CustomFormat = 'Self.Owner.Owner.ShipToDescription()'
+        end>
+    end
+  end
+end

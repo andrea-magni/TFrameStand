@@ -1,0 +1,44 @@
+object OrdersFrame_xs: TOrdersFrame_xs
+  Align = Client
+  Size.Width = 240.000000000000000000
+  Size.Height = 240.000000000000000000
+  Size.PlatformDefault = False
+  object ListView1: TListView
+    ItemAppearanceClassName = 'TListItemAppearance'
+    ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+    HeaderAppearanceClassName = 'TListHeaderObjects'
+    FooterAppearanceClassName = 'TListHeaderObjects'
+    ItemIndex = 0
+    Align = Client
+    Size.Width = 240.000000000000000000
+    Size.Height = 240.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+  end
+  object OrdersBS: TBindSourceDB
+    DataSet = OrdersData.OrdersTable
+    ScopeMappings = <>
+    Left = 144
+    Top = 104
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 20
+    Top = 5
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = OrdersBS
+      FieldName = 'OrderNo'
+      Control = ListView1
+      FillExpressions = <
+        item
+          SourceMemberName = 'OrderNo'
+          ControlMemberName = 'Text'
+          CustomFormat = #39'Order '#39' + %s'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+end

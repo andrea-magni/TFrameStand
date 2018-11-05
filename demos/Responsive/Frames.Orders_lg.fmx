@@ -1,0 +1,366 @@
+inherited OrdersFrame_lg: TOrdersFrame_lg
+  Size.Width = 720.000000000000000000
+  Size.Height = 308.000000000000000000
+  inherited ListView1: TListView
+    Size.Height = 308.000000000000000000
+    ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+      item
+        AppearanceObjectName = 'OrderNo'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Font.StyleExt = {00070000000000000004000000}
+        Appearance.TextAlign = Leading
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.PlaceOffset.Y = 3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'SaleDate'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Leading
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.VertAlign = Trailing
+        Appearance.PlaceOffset.Y = -3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'ItemsTotal'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Trailing
+        Appearance.TextColor = claDarkred
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.PlaceOffset.Y = 3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'AmountPaid'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.TextAlign = Trailing
+        Appearance.TextColor = claSeagreen
+        Appearance.Width = 150.000000000000000000
+        Appearance.Height = 30.000000000000000000
+        Appearance.Align = Trailing
+        Appearance.VertAlign = Trailing
+        Appearance.PlaceOffset.Y = -3.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'ShipTo'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Width = 150.000000000000000000
+        Appearance.Align = Center
+        Appearance.PlaceOffset.X = -100.000000000000000000
+      end
+      item
+        AppearanceObjectName = 'Customer'
+        AppearanceClassName = 'TTextObjectAppearance'
+        Appearance.Width = 100.000000000000000000
+        Appearance.Align = Center
+        Appearance.PlaceOffset.X = 25.000000000000000000
+      end>
+  end
+  object RightPanel: TLayout [1]
+    Align = Right
+    Position.X = 480.000000000000000000
+    Size.Width = 240.000000000000000000
+    Size.Height = 308.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object ListBox1: TListBox
+      Align = Client
+      Size.Width = 240.000000000000000000
+      Size.Height = 308.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      DisableFocusEffect = True
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      Viewport.Width = 236.000000000000000000
+      Viewport.Height = 304.000000000000000000
+      object ListBoxGroupHeader1: TListBoxGroupHeader
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claDodgerblue
+        StyledSettings = [Family, Size, Other]
+        TabOrder = 0
+        Text = 'Payment details'
+      end
+      object ListBoxItem1: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 19.000000000000000000
+        TabOrder = 1
+        Text = 'Terms'
+        object TermsText: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'FOB'
+        end
+      end
+      object ListBoxItem2: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 38.000000000000000000
+        TabOrder = 2
+        Text = 'Method'
+        object MethodText: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Credit'
+        end
+      end
+      object ListBoxItem3: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 57.000000000000000000
+        TabOrder = 4
+        Text = 'Tax rate'
+        object TaxRateText: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = '4,50%'
+        end
+      end
+      object ListBoxGroupHeader2: TListBoxGroupHeader
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claDodgerblue
+        StyledSettings = [Family, Size, Other]
+        Position.Y = 76.000000000000000000
+        TabOrder = 3
+        Text = 'Employee details'
+      end
+      object ListBoxItem4: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 95.000000000000000000
+        TabOrder = 5
+        Text = 'Full name'
+        object EmpFullNameText: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Bill Parker'
+        end
+      end
+      object ListBoxItem5: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 114.000000000000000000
+        TabOrder = 6
+        Text = 'Phone Ext'
+        object EmpPhoneExtText: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = '247'
+        end
+      end
+      object ListBoxItem6: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 133.000000000000000000
+        TabOrder = 7
+        Text = 'Salary'
+        object EmpSalaryText: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = '35.000,00 '#8364
+        end
+      end
+      object ListBoxGroupHeader3: TListBoxGroupHeader
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claDodgerblue
+        StyledSettings = [Family, Size, Other]
+        Position.Y = 152.000000000000000000
+        TabOrder = 8
+        Text = 'Customer details'
+      end
+      object ListBoxItem7: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 171.000000000000000000
+        TabOrder = 9
+        Text = 'Company'
+        object CustCompanyText: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'Sight Diver'
+        end
+      end
+      object ListBoxItem8: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 190.000000000000000000
+        TabOrder = 10
+        Text = 'Address'
+        object CustAddress: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = '1 Neptune Lane'
+        end
+      end
+      object ListBoxItem9: TListBoxItem
+        TextSettings.FontColor = claCadetblue
+        StyledSettings = [Family, Size, Style, Other]
+        Position.Y = 209.000000000000000000
+        TabOrder = 11
+        Text = 'Phone'
+        object CustPhone: TText
+          Align = Right
+          Position.X = 36.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          Text = '357-6-876708'
+        end
+      end
+    end
+  end
+  inherited OrdersBS: TBindSourceDB
+    Left = 208
+    Top = 144
+  end
+  inherited BindingsList1: TBindingsList
+    inherited LinkListControlToField1: TLinkListControlToField
+      FillExpressions = <
+        item
+          SourceMemberName = 'OrderNo'
+          ControlMemberName = 'Text'
+          CustomFormat = #39'Order '#39' + %s'
+        end
+        item
+          SourceMemberName = 'OrderNo'
+          ControlMemberName = 'OrderNo'
+          CustomFormat = #39'Order '#39' + %s'
+        end
+        item
+          SourceMemberName = 'SaleDate'
+          ControlMemberName = 'SaleDate'
+          CustomFormat = 
+            #39'Sale date: '#39' + FormatDateTime('#39'ddd dd/mm'#39', Owner.ShipDate.AsDat' +
+            'eTime)'
+        end
+        item
+          SourceMemberName = 'ItemsTotal'
+          ControlMemberName = 'ItemsTotal'
+          CustomFormat = #39'Total: '#39' + %s'
+        end
+        item
+          SourceMemberName = 'AmountPaid'
+          ControlMemberName = 'AmountPaid'
+          CustomFormat = 
+            'IfThen(Owner.AmountPaid.Value < Owner.ItemsTotal.Value, '#39'Amount ' +
+            'due: '#39' + Format('#39'%%m'#39', Owner.ItemsTotal.Value- Owner.AmountPaid.' +
+            'Value +0.0), '#39'OK Paid'#39')'
+        end
+        item
+          SourceMemberName = 'ShipToAddr1'
+          ControlMemberName = 'ShipTo'
+          CustomFormat = 'Self.Owner.Owner.ShipToDescription()'
+        end
+        item
+          SourceMemberName = 'ShipToPhone'
+          ControlMemberName = 'Customer'
+        end>
+    end
+    object LinkPropertyToFieldText: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = OrdersBS
+      FieldName = 'TaxRate'
+      Component = TaxRateText
+      CustomFormat = 'Format('#39'%%.2f'#39', Owner.TaxRate.Value +0.0) + '#39'%%'#39
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText2: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = OrdersBS
+      FieldName = 'PaymentMethod'
+      Component = MethodText
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText3: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = OrdersBS
+      FieldName = 'Terms'
+      Component = TermsText
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText4: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = EmployeeBS
+      FieldName = 'LastName'
+      Component = EmpFullNameText
+      CustomFormat = 'Owner.FirstName.Value + '#39' '#39' + %s'
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText5: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = EmployeeBS
+      FieldName = 'Salary'
+      Component = EmpSalaryText
+      CustomFormat = 'Format('#39'%%m'#39', Owner.Salary.Value +0.0)'
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText6: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = EmployeeBS
+      FieldName = 'PhoneExt'
+      Component = EmpPhoneExtText
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText7: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = CustomersBS
+      FieldName = 'Company'
+      Component = CustCompanyText
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText8: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = CustomersBS
+      FieldName = 'Addr1'
+      Component = CustAddress
+      ComponentProperty = 'Text'
+    end
+    object LinkPropertyToFieldText9: TLinkPropertyToField
+      Category = 'Quick Bindings'
+      DataSource = CustomersBS
+      FieldName = 'Phone'
+      Component = CustPhone
+      ComponentProperty = 'Text'
+    end
+  end
+  object EmployeeBS: TBindSourceDB
+    DataSet = OrdersData.EmployeesTable
+    ScopeMappings = <>
+    Left = 544
+    Top = 248
+  end
+  object CustomersBS: TBindSourceDB
+    DataSet = OrdersData.CustomersTable
+    ScopeMappings = <>
+    Left = 664
+    Top = 248
+  end
+end

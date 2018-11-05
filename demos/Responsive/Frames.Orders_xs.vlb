@@ -1,0 +1,17 @@
+﻿[ListView1]
+Coordinates=196,10,89,159
+Visible=True
+
+[]
+Coordinates=108,1,82,33
+
+[BindingsList1]
+Coordinates=29,170,82,33
+
+[OrdersData.OrdersTable]
+Visible=False
+Coordinates=243,1,133,33
+
+[OrdersBS]
+Coordinates=10,10,119,465
+

@@ -27,6 +27,9 @@
         <Projects Include="BottomSheet\BottomSheetProject.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Responsive\ResponsiveProject.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -107,14 +110,23 @@
     <Target Name="BottomSheetProject:Make">
         <MSBuild Projects="BottomSheet\BottomSheetProject.dproj" Targets="Make"/>
     </Target>
+    <Target Name="ResponsiveProject">
+        <MSBuild Projects="Responsive\ResponsiveProject.dproj"/>
+    </Target>
+    <Target Name="ResponsiveProject:Clean">
+        <MSBuild Projects="Responsive\ResponsiveProject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ResponsiveProject:Make">
+        <MSBuild Projects="Responsive\ResponsiveProject.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="WaitFrameStand;LightBoxFrameStand;MaterialButtonFrameStand;ViewAndDialogsFrameStand;PictureWallFrameStand;ButtonSetTFrameStand;EditHelperTFrameStand;BottomSheetProject"/>
+        <CallTarget Targets="WaitFrameStand;LightBoxFrameStand;MaterialButtonFrameStand;ViewAndDialogsFrameStand;PictureWallFrameStand;ButtonSetTFrameStand;EditHelperTFrameStand;BottomSheetProject;ResponsiveProject"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="WaitFrameStand:Clean;LightBoxFrameStand:Clean;MaterialButtonFrameStand:Clean;ViewAndDialogsFrameStand:Clean;PictureWallFrameStand:Clean;ButtonSetTFrameStand:Clean;EditHelperTFrameStand:Clean;BottomSheetProject:Clean"/>
+        <CallTarget Targets="WaitFrameStand:Clean;LightBoxFrameStand:Clean;MaterialButtonFrameStand:Clean;ViewAndDialogsFrameStand:Clean;PictureWallFrameStand:Clean;ButtonSetTFrameStand:Clean;EditHelperTFrameStand:Clean;BottomSheetProject:Clean;ResponsiveProject:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="WaitFrameStand:Make;LightBoxFrameStand:Make;MaterialButtonFrameStand:Make;ViewAndDialogsFrameStand:Make;PictureWallFrameStand:Make;ButtonSetTFrameStand:Make;EditHelperTFrameStand:Make;BottomSheetProject:Make"/>
+        <CallTarget Targets="WaitFrameStand:Make;LightBoxFrameStand:Make;MaterialButtonFrameStand:Make;ViewAndDialogsFrameStand:Make;PictureWallFrameStand:Make;ButtonSetTFrameStand:Make;EditHelperTFrameStand:Make;BottomSheetProject:Make;ResponsiveProject:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

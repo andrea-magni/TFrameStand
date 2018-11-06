@@ -17,6 +17,8 @@ type
     function ToString: string;
     function IsEmpty: Boolean;
     constructor Create(const AName: string; const AMaxWidth: Single);
+    class operator Implicit(const AString: string): TBreakpoint;
+    class operator Implicit(const ABreakpoint: TBreakpoint): string;
     procedure Clear;
   end;
 
@@ -24,7 +26,7 @@ type
   private
   protected
   public
-    constructor Create; virtual;
+    constructor Create(const ABreakpoints: TArray<TBreakpoint> = []); virtual;
     function ToString: string; override;
     function IndexOfBP(const AName: string): Integer;
     function ByName(const AName: string): TBreakpoint;
@@ -88,6 +90,24 @@ constructor TBreakpoint.Create(const AName: string; const AMaxWidth: Single);
 begin
   Name := AName;
   MaxWidth := AMaxWidth;
+end;
+
+class operator TBreakpoint.Implicit(const AString: string): TBreakpoint;
+var
+  LTokens: TArray<string>;
+begin
+  Result.Clear;
+  LTokens := AString.Split([' ']);
+  if Length(LTokens) = 2 then
+  begin
+    Result.Name := LTokens[0].Trim;
+    Result.MaxWidth := LTokens[1].Substring(1, Length(LTokens[1])-2).ToSingle;
+  end;
+end;
+
+class operator TBreakpoint.Implicit(const ABreakpoint: TBreakpoint): string;
+begin
+  Result := ABreakpoint.ToString;
 end;
 
 function TBreakpoint.IsEmpty: Boolean;
@@ -159,13 +179,7 @@ end;
 constructor TResponsiveContainer.Create;
 begin
   inherited Create;
-  FBreakpoints := TBreakpoints.Create;
-
-  AddBreakpoint(400, 'xs');
-  AddBreakpoint(768, 'sm');
-  AddBreakpoint(992, 'md');
-  AddBreakpoint(1200, 'lg');
-
+  FBreakpoints := TBreakpoints.Create(['xs (400)', 'sm (768)', 'md (992)', 'lg (1200)']);
   FOptions := TList<TResponsiveOption>.Create;
 end;
 
@@ -265,7 +279,7 @@ begin
     Result := Items[LIndex];
 end;
 
-constructor TBreakpoints.Create;
+constructor TBreakpoints.Create(const ABreakpoints: TArray<TBreakpoint>);
 begin
   inherited Create(
     TComparer<TBreakpoint>.Construct(
@@ -279,6 +293,7 @@ begin
       end
     )
   );
+  AddRange(ABreakpoints);
 end;
 
 function TBreakpoints.IndexOfBP(const AName: string): Integer;

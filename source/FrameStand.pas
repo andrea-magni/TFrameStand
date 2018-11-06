@@ -153,13 +153,16 @@ type
     FDefaultParent: TFmxObject;
     FVisibleFrames : TList<TFrame>;
     FResponsive: TResponsiveContainer;
-    function GetCount: Integer;
+    function GetResponsiveBreakpoint(const AName: string): TBreakpoint;
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
     function GetDefaultParent: TFmxObject; virtual;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetStandStyleName(AStandStyleName: string): string;
     function GetFrameClass<T: TFrame>(var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
+    function GetCount: Integer;
+    function GetResponsiveBreakpoints: TArray<TBreakpoint>;
+    procedure SetResponsiveBreakpoints(const ABreakpoints: TArray<TBreakpoint>);
     procedure DoAfterShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoBeforeShow(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
     procedure DoAfterHide(const ASender: TFrameStand; const AFrameInfo: TFrameInfo<TFrame>);
@@ -185,6 +188,10 @@ type
     property CommonActions: TCommonActionDictionary read FCommonActions;
     property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
     property VisibleFrames: TList<TFrame> read FVisibleFrames;
+    property Responsive: TResponsiveContainer read FResponsive;
+    property ResponsiveBreakpoints: TArray<TBreakpoint> read GetResponsiveBreakpoints
+      write SetResponsiveBreakpoints;
+    property ResponsiveBreakpoint[const AName: string]: TBreakpoint read GetResponsiveBreakpoint;
   published
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
@@ -193,7 +200,6 @@ type
     property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property DefaultParent: TFmxObject read FDefaultParent write FDefaultParent;
     property StyleBook: TStyleBook read FStyleBook write FStyleBook;
-    property Responsive: TResponsiveContainer read FResponsive;
 
     // Events
     property OnAfterHide: TOnAfterHideEvent read FOnAfterHide write FOnAfterHide;
@@ -286,14 +292,11 @@ var
   FTarget: TResponsiveDefinition;
   LWidth: Single;
 begin
-  if Assigned(AParent) then
-  begin
-    if (AParent is TControl) then
-      LWidth := TControl(AParent).Width
-    else if (AParent is TForm) then
-      LWidth := TForm(AParent).Width;
-  end
-  else
+  if (AParent is TControl) then
+    LWidth := TControl(AParent).Width
+  else if (AParent is TForm) then
+    LWidth := TForm(AParent).Width
+ else
     raise Exception.Create('Error in DoResponsiveLookup: cannot determine parent Width');
 
   FTarget := FResponsive.Lookup(
@@ -330,6 +333,16 @@ begin
   DoResponsiveLookup(Result, AStandStyleName, AParent);
   if Assigned(FOnGetFrameClass) then
     FOnGetFrameClass(Self, AParent, AStandStyleName, Result);
+end;
+
+function TFrameStand.GetResponsiveBreakpoint(const AName: string): TBreakpoint;
+begin
+  Result := Responsive.Breakpoints.ByName(AName);
+end;
+
+function TFrameStand.GetResponsiveBreakpoints: TArray<TBreakpoint>;
+begin
+  Result := Responsive.Breakpoints.ToArray;
 end;
 
 function TFrameStand.GetStandStyleName(AStandStyleName: string): string;
@@ -410,6 +423,13 @@ begin
       LInfo.Free;
     {$ENDIF}
   end;
+end;
+
+procedure TFrameStand.SetResponsiveBreakpoints(
+  const ABreakpoints: TArray<TBreakpoint>);
+begin
+  Responsive.Breakpoints.Clear;
+  Responsive.Breakpoints.AddRange(ABreakpoints);
 end;
 
 function TFrameStand.LastShownFrame: TFrame;

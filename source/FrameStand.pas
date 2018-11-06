@@ -286,8 +286,13 @@ var
   FTarget: TResponsiveDefinition;
   LWidth: Single;
 begin
-  if Assigned(AParent) and (AParent is TControl) then
-    LWidth := TControl(AParent).Width
+  if Assigned(AParent) then
+  begin
+    if (AParent is TControl) then
+      LWidth := TControl(AParent).Width
+    else if (AParent is TForm) then
+      LWidth := TForm(AParent).Width;
+  end
   else
     raise Exception.Create('Error in DoResponsiveLookup: cannot determine parent Width');
 

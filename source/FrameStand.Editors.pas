@@ -47,7 +47,7 @@ begin
     LForm.FrameStand := CurrentObj;
     LForm.ShowModal;
   finally
-    LForm.Release;
+    LForm.Free;
   end;
 end;
 

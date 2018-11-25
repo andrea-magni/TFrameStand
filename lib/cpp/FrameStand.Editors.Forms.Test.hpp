@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2017 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FrameStand.Editors.Forms.Test.pas' rev: 32.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FrameStand.Editors.Forms.Test.pas' rev: 33.00 (Windows)
 
 #ifndef Framestand_Editors_Forms_TestHPP
 #define Framestand_Editors_Forms_TestHPP
@@ -84,20 +84,21 @@ __published:
 	void __fastcall HideActionUpdate(System::TObject* Sender);
 	void __fastcall ShowActionUpdate(System::TObject* Sender);
 	void __fastcall FormCreate(System::TObject* Sender);
+	void __fastcall FormDestroy(System::TObject* Sender);
 	
 private:
 	Framestand::TFrameStand* FFrameStand;
 	Framestand::TFrameInfo__1<Frames::Test::TTestFrame*>* FFrameInfo;
 	void __fastcall SetFrameStand(Framestand::TFrameStand* const Value);
-	HIDESBASE Fmx::Controls::TStyleBook* __fastcall GetStyleBook(void);
-	System::UnicodeString __fastcall GetSelectedStyleName(void);
-	Fmx::Types::TAlignLayout __fastcall GetSelectedFrameAlign(void);
+	HIDESBASE Fmx::Controls::TStyleBook* __fastcall GetStyleBook();
+	System::UnicodeString __fastcall GetSelectedStyleName();
+	Fmx::Types::TAlignLayout __fastcall GetSelectedFrameAlign();
 	
 protected:
-	virtual void __fastcall Init(void);
-	virtual void __fastcall DoFrameStandChanged(void);
-	void __fastcall SetupTestBed(void);
-	void __fastcall SetupTestFrameAndTestBed(void);
+	virtual void __fastcall Init();
+	virtual void __fastcall DoFrameStandChanged();
+	void __fastcall SetupTestBed();
+	void __fastcall SetupTestFrameAndTestBed();
 	__property System::UnicodeString SelectedStyleName = {read=GetSelectedStyleName};
 	__property Fmx::Types::TAlignLayout SelectedFrameAlign = {read=GetSelectedFrameAlign, nodefault};
 	
@@ -107,7 +108,7 @@ public:
 public:
 	/* TCustomForm.Create */ inline __fastcall virtual TTestForm(System::Classes::TComponent* AOwner) : Fmx::Forms::TForm(AOwner) { }
 	/* TCustomForm.CreateNew */ inline __fastcall virtual TTestForm(System::Classes::TComponent* AOwner, NativeInt Dummy) : Fmx::Forms::TForm(AOwner, Dummy) { }
-	/* TCustomForm.Destroy */ inline __fastcall virtual ~TTestForm(void) { }
+	/* TCustomForm.Destroy */ inline __fastcall virtual ~TTestForm() { }
 	
 };
 

@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2017 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FrameStand.Editors.pas' rev: 32.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FrameStand.Editors.pas' rev: 33.00 (Windows)
 
 #ifndef Framestand_EditorsHPP
 #define Framestand_EditorsHPP
@@ -34,15 +34,15 @@ class PASCALIMPLEMENTATION TFrameStandEditor : public Designeditors::TComponentE
 	typedef Designeditors::TComponentEditor inherited;
 	
 private:
-	Framestand::TFrameStand* __fastcall CurrentObj(void);
+	Framestand::TFrameStand* __fastcall CurrentObj();
 	
 public:
-	virtual void __fastcall Edit(void);
+	virtual void __fastcall Edit();
 public:
 	/* TComponentEditor.Create */ inline __fastcall virtual TFrameStandEditor(System::Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Designeditors::TComponentEditor(AComponent, ADesigner) { }
 	
 public:
-	/* TObject.Destroy */ inline __fastcall virtual ~TFrameStandEditor(void) { }
+	/* TObject.Destroy */ inline __fastcall virtual ~TFrameStandEditor() { }
 	
 };
 

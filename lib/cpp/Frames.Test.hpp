@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2017 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Frames.Test.pas' rev: 32.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Frames.Test.pas' rev: 33.00 (Windows)
 
 #ifndef Frames_TestHPP
 #define Frames_TestHPP
@@ -48,7 +48,7 @@ public:
 	/* TFrame.Create */ inline __fastcall virtual TTestFrame(System::Classes::TComponent* AOwner) : Fmx::Forms::TFrame(AOwner) { }
 	
 public:
-	/* TControl.Destroy */ inline __fastcall virtual ~TTestFrame(void) { }
+	/* TControl.Destroy */ inline __fastcall virtual ~TTestFrame() { }
 	
 };
 

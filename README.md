@@ -2,12 +2,12 @@
 #TFrameStand component (FMX)
 Easily use TFrame(s) in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 
-_All code and demos tested on Delphi XE8 and Delphi 10.2 Tokyo._
+_All code and demos tested on Delphi XE8 and Delphi 10.3 Rio._
 
 ##Installation - GetIt!
 **TFrameStand is [now available on GetIt](http://www.andreamagni.eu/wp/2015/10/tframestand-is-now-available-through-getit/) (Embarcadero's Package Manager)**
 
-_Current version on GetIt: 1.3_
+_Current version on GetIt: 1.4_
 
 ##Installation - Manual
 1. Compile “packages\FrameStandPackage.dproj”
@@ -21,6 +21,7 @@ _Installing manually you get the latest updates (beware! :-) )_
 * Add a common visual layer between the TFrame and its parent (either a TForm or any TControl)
 * Add animations and effects to provide a modern looking UI
 * Share CommonActions through different UI combinations
+* Responsive frame substitution
 
 ##Get started
 * Have a look at [my blog posts about TFrameStand](http://www.andreamagni.eu/wp/tag/tframestand/)

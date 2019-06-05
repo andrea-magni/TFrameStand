@@ -41,7 +41,7 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     FFrameStand: TFrameStand;
-    FFrameInfo: TFrameInfo<TTestFrame>;
+    FFrameInfo: TSubjectInfo;
     procedure SetFrameStand(const Value: TFrameStand);
     function GetStyleBook: TStyleBook;
     function GetSelectedStyleName: string;
@@ -174,7 +174,7 @@ end;
 
 procedure TTestForm.ShowActionExecute(Sender: TObject);
 begin
-  FFrameInfo := FrameStand.New<TTestFrame>(TestBed, SelectedStyleName);
+  FFrameInfo := FrameStand.New(TTestFrame, TestBed, SelectedStyleName);
   SetupTestFrameAndTestBed;
   FFrameInfo.Show();
 end;

@@ -34,9 +34,6 @@
 #include <FMX.ActnList.hpp>
 #include <FMX.Objects.hpp>
 #include <FMX.Edit.hpp>
-#include <System.Rtti.hpp>
-#include <FMX.Ani.hpp>
-#include <System.Threading.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -88,7 +85,7 @@ __published:
 	
 private:
 	Framestand::TFrameStand* FFrameStand;
-	Framestand::TFrameInfo__1<Frames::Test::TTestFrame*>* FFrameInfo;
+	Framestand::TSubjectInfo* FFrameInfo;
 	void __fastcall SetFrameStand(Framestand::TFrameStand* const Value);
 	HIDESBASE Fmx::Controls::TStyleBook* __fastcall GetStyleBook();
 	System::UnicodeString __fastcall GetSelectedStyleName();

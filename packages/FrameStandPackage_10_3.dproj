@@ -144,7 +144,7 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\source\Frames.Test.pas">
-            <Form>TestFrame</Form>
+            <Form>TestSubject</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>

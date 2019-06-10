@@ -36,14 +36,14 @@
 namespace Framestand
 {
 //-- forward type declarations -----------------------------------------------
-class DELPHICLASS FrameStandCustomAttribute;
+class DELPHICLASS SubjectStandCustomAttribute;
 class DELPHICLASS ContextAttribute;
-class DELPHICLASS FrameStandAttribute;
+class DELPHICLASS SubjectStandAttribute;
 class DELPHICLASS StandAttribute;
 class DELPHICLASS ContainerAttribute;
-class DELPHICLASS FrameInfoAttribute;
+class DELPHICLASS SubjectInfoAttribute;
 class DELPHICLASS ParentAttribute;
-class DELPHICLASS FrameIsOwnedAttribute;
+class DELPHICLASS SubjectIsOwnedAttribute;
 class DELPHICLASS BeforeShowAttribute;
 class DELPHICLASS AfterShowAttribute;
 class DELPHICLASS ShowAttribute;
@@ -51,28 +51,28 @@ class DELPHICLASS HideAttribute;
 class DELPHICLASS TDelayedAction;
 class DELPHICLASS TSubjectInfo;
 class DELPHICLASS TCommonActionDictionary;
-class DELPHICLASS TFrameStand;
+class DELPHICLASS TSubjectStand;
 //-- type declarations -------------------------------------------------------
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION FrameStandCustomAttribute : public System::TCustomAttribute
+class PASCALIMPLEMENTATION SubjectStandCustomAttribute : public System::TCustomAttribute
 {
 	typedef System::TCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall FrameStandCustomAttribute() : System::TCustomAttribute() { }
-	/* TObject.Destroy */ inline __fastcall virtual ~FrameStandCustomAttribute() { }
+	/* TObject.Create */ inline __fastcall SubjectStandCustomAttribute() : System::TCustomAttribute() { }
+	/* TObject.Destroy */ inline __fastcall virtual ~SubjectStandCustomAttribute() { }
 	
 };
 
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION ContextAttribute : public FrameStandCustomAttribute
+class PASCALIMPLEMENTATION ContextAttribute : public SubjectStandCustomAttribute
 {
-	typedef FrameStandCustomAttribute inherited;
+	typedef SubjectStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall ContextAttribute() : FrameStandCustomAttribute() { }
+	/* TObject.Create */ inline __fastcall ContextAttribute() : SubjectStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~ContextAttribute() { }
 	
 };
@@ -80,13 +80,13 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION FrameStandAttribute : public ContextAttribute
+class PASCALIMPLEMENTATION SubjectStandAttribute : public ContextAttribute
 {
 	typedef ContextAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall FrameStandAttribute() : ContextAttribute() { }
-	/* TObject.Destroy */ inline __fastcall virtual ~FrameStandAttribute() { }
+	/* TObject.Create */ inline __fastcall SubjectStandAttribute() : ContextAttribute() { }
+	/* TObject.Destroy */ inline __fastcall virtual ~SubjectStandAttribute() { }
 	
 };
 
@@ -119,13 +119,13 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION FrameInfoAttribute : public ContextAttribute
+class PASCALIMPLEMENTATION SubjectInfoAttribute : public ContextAttribute
 {
 	typedef ContextAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall FrameInfoAttribute() : ContextAttribute() { }
-	/* TObject.Destroy */ inline __fastcall virtual ~FrameInfoAttribute() { }
+	/* TObject.Create */ inline __fastcall SubjectInfoAttribute() : ContextAttribute() { }
+	/* TObject.Destroy */ inline __fastcall virtual ~SubjectInfoAttribute() { }
 	
 };
 
@@ -145,25 +145,25 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION FrameIsOwnedAttribute : public ContextAttribute
+class PASCALIMPLEMENTATION SubjectIsOwnedAttribute : public ContextAttribute
 {
 	typedef ContextAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall FrameIsOwnedAttribute() : ContextAttribute() { }
-	/* TObject.Destroy */ inline __fastcall virtual ~FrameIsOwnedAttribute() { }
+	/* TObject.Create */ inline __fastcall SubjectIsOwnedAttribute() : ContextAttribute() { }
+	/* TObject.Destroy */ inline __fastcall virtual ~SubjectIsOwnedAttribute() { }
 	
 };
 
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION BeforeShowAttribute : public FrameStandCustomAttribute
+class PASCALIMPLEMENTATION BeforeShowAttribute : public SubjectStandCustomAttribute
 {
-	typedef FrameStandCustomAttribute inherited;
+	typedef SubjectStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall BeforeShowAttribute() : FrameStandCustomAttribute() { }
+	/* TObject.Create */ inline __fastcall BeforeShowAttribute() : SubjectStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~BeforeShowAttribute() { }
 	
 };
@@ -171,12 +171,12 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION AfterShowAttribute : public FrameStandCustomAttribute
+class PASCALIMPLEMENTATION AfterShowAttribute : public SubjectStandCustomAttribute
 {
-	typedef FrameStandCustomAttribute inherited;
+	typedef SubjectStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall AfterShowAttribute() : FrameStandCustomAttribute() { }
+	/* TObject.Create */ inline __fastcall AfterShowAttribute() : SubjectStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~AfterShowAttribute() { }
 	
 };
@@ -184,12 +184,12 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION ShowAttribute : public FrameStandCustomAttribute
+class PASCALIMPLEMENTATION ShowAttribute : public SubjectStandCustomAttribute
 {
-	typedef FrameStandCustomAttribute inherited;
+	typedef SubjectStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall ShowAttribute() : FrameStandCustomAttribute() { }
+	/* TObject.Create */ inline __fastcall ShowAttribute() : SubjectStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~ShowAttribute() { }
 	
 };
@@ -197,19 +197,21 @@ public:
 #pragma pack(pop)
 
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION HideAttribute : public FrameStandCustomAttribute
+class PASCALIMPLEMENTATION HideAttribute : public SubjectStandCustomAttribute
 {
-	typedef FrameStandCustomAttribute inherited;
+	typedef SubjectStandCustomAttribute inherited;
 	
 public:
-	/* TObject.Create */ inline __fastcall HideAttribute() : FrameStandCustomAttribute() { }
+	/* TObject.Create */ inline __fastcall HideAttribute() : SubjectStandCustomAttribute() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~HideAttribute() { }
 	
 };
 
 #pragma pack(pop)
 
-typedef System::TMetaClass* TFrameClass;
+typedef Fmx::Forms::TFrame TSubject;
+
+typedef System::TMetaClass* TSubjectClass;
 
 #pragma pack(push,4)
 class PASCALIMPLEMENTATION TDelayedAction : public System::TObject
@@ -226,9 +228,9 @@ public:
 
 #pragma pack(pop)
 
-typedef void __fastcall (__closure *TOnGetFrameClassEvent)(TFrameStand* const ASender, Fmx::Types::TFmxObject* &AParent, System::UnicodeString &AStandStyleName, TFrameClass &AFrameClass);
+typedef void __fastcall (__closure *TOnGetSubjectClassEvent)(TSubjectStand* const ASender, Fmx::Types::TFmxObject* &AParent, System::UnicodeString &AStandStyleName, TSubjectClass &ASubjectClass);
 
-enum DECLSPEC_DENUM TFrameStatus : unsigned char { Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing };
+enum DECLSPEC_DENUM TSubjectStatus : unsigned char { Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing };
 
 #pragma pack(push,4)
 class PASCALIMPLEMENTATION TSubjectInfo : public System::TObject
@@ -236,9 +238,9 @@ class PASCALIMPLEMENTATION TSubjectInfo : public System::TObject
 	typedef System::TObject inherited;
 	
 private:
-	Fmx::Forms::TFrame* FFrame;
-	bool FFrameIsOwned;
-	TFrameStand* FFrameStand;
+	Fmx::Forms::TFrame* FSubject;
+	bool FSubjectIsOwned;
+	TSubjectStand* FSubjectStand;
 	Fmx::Controls::TControl* FStand;
 	Fmx::Types::TFmxObject* FParent;
 	System::DynamicArray<System::Rtti::TRttiMethod*> FCustomBeforeShowMethods;
@@ -248,7 +250,7 @@ private:
 	Fmx::Types::TFmxObject* FContainer;
 	System::UnicodeString FStandStyleName;
 	bool FHiding;
-	TFrameStatus FStatus;
+	TSubjectStatus FStatus;
 	bool __fastcall GetIsVisible();
 	
 protected:
@@ -277,31 +279,31 @@ public:
 	System::Threading::_di_ITask __fastcall Show(const System::DelphiInterface<System::Sysutils::TProc__1<TSubjectInfo*> > ABackgroundTask = System::DelphiInterface<System::Sysutils::TProc__1<TSubjectInfo*> >(), const System::DelphiInterface<System::Sysutils::TProc__1<TSubjectInfo*> > AOnTaskComplete = System::DelphiInterface<System::Sysutils::TProc__1<TSubjectInfo*> >(), const bool AOnTaskCompleteSynchronized = true);
 	bool __fastcall Hide(const int ADelay = 0x0, const System::Sysutils::_di_TProc AThen = System::Sysutils::_di_TProc());
 	void __fastcall Close();
-	__fastcall virtual TSubjectInfo(TFrameStand* const AFrameStand, Fmx::Forms::TFrame* const AFrame, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString AStandStyleName);
+	__fastcall virtual TSubjectInfo(TSubjectStand* const ASubjectStand, Fmx::Forms::TFrame* const ASubject, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString AStandStyleName);
 	__fastcall virtual ~TSubjectInfo();
-	__property Fmx::Forms::TFrame* Frame = {read=FFrame};
-	__property bool FrameIsOwned = {read=FFrameIsOwned, write=FFrameIsOwned, nodefault};
-	__property TFrameStand* FrameStand = {read=FFrameStand};
+	__property Fmx::Forms::TFrame* Subject = {read=FSubject};
+	__property bool SubjectIsOwned = {read=FSubjectIsOwned, write=FSubjectIsOwned, nodefault};
+	__property TSubjectStand* SubjectStand = {read=FSubjectStand};
 	__property Fmx::Controls::TControl* Stand = {read=FStand, write=FStand};
 	__property System::UnicodeString StandStyleName = {read=FStandStyleName};
 	__property Fmx::Types::TFmxObject* Container = {read=FContainer, write=FContainer};
 	__property Fmx::Types::TFmxObject* Parent = {read=FParent, write=FParent};
 	__property bool IsVisible = {read=GetIsVisible, nodefault};
 	__property bool Hiding = {read=FHiding, nodefault};
-	__property TFrameStatus Status = {read=FStatus, nodefault};
+	__property TSubjectStatus Status = {read=FStatus, nodefault};
 };
 
 #pragma pack(pop)
 
-typedef void __fastcall (__closure *TOnAfterShowEvent)(TFrameStand* const ASender, TSubjectInfo* const AFrameInfo);
+typedef void __fastcall (__closure *TOnAfterShowEvent)(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 
-typedef void __fastcall (__closure *TOnBeforeShowEvent)(TFrameStand* const ASender, TSubjectInfo* const AFrameInfo);
+typedef void __fastcall (__closure *TOnBeforeShowEvent)(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 
 typedef TOnBeforeShowEvent TOnAfterHideEvent;
 
-typedef void __fastcall (__closure *TOnBeforeStartAnimationEvent)(TFrameStand* const ASender, TSubjectInfo* const AFrameInfo, Fmx::Ani::TAnimation* const AAnimation);
+typedef void __fastcall (__closure *TOnBeforeStartAnimationEvent)(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo, Fmx::Ani::TAnimation* const AAnimation);
 
-typedef void __fastcall (__closure *TOnBindCommonActionList)(TFrameStand* ASender, TSubjectInfo* const AFrameInfo, Fmx::Types::TFmxObject* const AObject, System::UnicodeString &ACommonActionName);
+typedef void __fastcall (__closure *TOnBindCommonActionList)(TSubjectStand* ASender, TSubjectInfo* const ASubjectInfo, Fmx::Types::TFmxObject* const AObject, System::UnicodeString &ACommonActionName);
 
 #pragma pack(push,4)
 class PASCALIMPLEMENTATION TCommonActionDictionary : public System::TObject
@@ -324,7 +326,7 @@ public:
 
 #pragma pack(pop)
 
-class PASCALIMPLEMENTATION TFrameStand : public System::Classes::TComponent
+class PASCALIMPLEMENTATION TSubjectStand : public System::Classes::TComponent
 {
 	typedef System::Classes::TComponent inherited;
 	
@@ -333,7 +335,7 @@ private:
 	System::UnicodeString FDefaultStyleName;
 	System::UnicodeString FAnimationHide;
 	System::UnicodeString FAnimationShow;
-	TOnGetFrameClassEvent FOnGetFrameClass;
+	TOnGetSubjectClassEvent FOnGetSubjectClass;
 	TCommonActionDictionary* FCommonActions;
 	TOnBeforeShowEvent FOnAfterHide;
 	TOnAfterShowEvent FOnAfterShow;
@@ -343,38 +345,38 @@ private:
 	System::UnicodeString FCommonActionPrefix;
 	TOnBindCommonActionList FOnBindCommonActionList;
 	Fmx::Types::TFmxObject* FDefaultParent;
-	System::Generics::Collections::TList__1<Fmx::Forms::TFrame*>* FVisibleFrames;
+	System::Generics::Collections::TList__1<Fmx::Forms::TFrame*>* FVisibleSubjects;
 	Responsivecontainer::TResponsiveContainer* FResponsive;
 	Responsivecontainer::TBreakpoint __fastcall GetResponsiveBreakpoint(const System::UnicodeString AName);
 	
 protected:
-	System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TSubjectInfo*>* FFrameInfos;
+	System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TSubjectInfo*>* FSubjectInfos;
 	virtual Fmx::Types::TFmxObject* __fastcall GetDefaultParent();
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
 	System::UnicodeString __fastcall GetStandStyleName(System::UnicodeString AStandStyleName);
-	TFrameClass __fastcall GetFrameClass(const TFrameClass AFrameClass, Fmx::Types::TFmxObject* &AParent, System::UnicodeString &AStandStyleName);
+	TSubjectClass __fastcall GetSubjectClass(const TSubjectClass ASubjectClass, Fmx::Types::TFmxObject* &AParent, System::UnicodeString &AStandStyleName);
 	int __fastcall GetCount();
 	System::DynamicArray<Responsivecontainer::TBreakpoint> __fastcall GetResponsiveBreakpoints();
 	void __fastcall SetResponsiveBreakpoints(const System::DynamicArray<Responsivecontainer::TBreakpoint> ABreakpoints);
-	void __fastcall DoAfterShow(TFrameStand* const ASender, TSubjectInfo* const AFrameInfo);
-	void __fastcall DoBeforeShow(TFrameStand* const ASender, TSubjectInfo* const AFrameInfo);
-	void __fastcall DoAfterHide(TFrameStand* const ASender, TSubjectInfo* const AFrameInfo);
-	void __fastcall DoClose(Fmx::Forms::TFrame* const AFrame);
-	void __fastcall DoResponsiveLookup(TFrameClass &AFrameClass, System::UnicodeString &AStandStyleName, Fmx::Types::TFmxObject* &AParent);
+	void __fastcall DoAfterShow(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
+	void __fastcall DoBeforeShow(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
+	void __fastcall DoAfterHide(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
+	void __fastcall DoClose(Fmx::Forms::TFrame* const ASubject);
+	void __fastcall DoResponsiveLookup(TSubjectClass &ASubjectClass, System::UnicodeString &AStandStyleName, Fmx::Types::TFmxObject* &AParent);
 	
 public:
-	__fastcall virtual TFrameStand(System::Classes::TComponent* AOwner);
-	__fastcall virtual ~TFrameStand();
-	TSubjectInfo* __fastcall Use(Fmx::Forms::TFrame* const AFrame, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
-	TSubjectInfo* __fastcall New(const TFrameClass AFrameClass, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
-	HIDESBASE void __fastcall Remove(Fmx::Forms::TFrame* AFrame);
-	Fmx::Forms::TFrame* __fastcall LastShownFrame();
-	TSubjectInfo* __fastcall FrameInfo(Fmx::Forms::TFrame* const AFrame);
+	__fastcall virtual TSubjectStand(System::Classes::TComponent* AOwner);
+	__fastcall virtual ~TSubjectStand();
+	TSubjectInfo* __fastcall Use(Fmx::Forms::TFrame* const ASubject, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
+	TSubjectInfo* __fastcall New(const TSubjectClass ASubjectClass, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
+	HIDESBASE void __fastcall Remove(Fmx::Forms::TFrame* ASubject);
+	Fmx::Forms::TFrame* __fastcall LastShownSubject();
+	TSubjectInfo* __fastcall SubjectInfo(Fmx::Forms::TFrame* const ASubject);
 	Deviceandplatforminfo::TDeviceAndPlatformInfo __fastcall DeviceAndPlatformInfo(Fmx::Forms::TForm* const AForm = (Fmx::Forms::TForm*)(0x0));
 	__property int Count = {read=GetCount, nodefault};
 	__property TCommonActionDictionary* CommonActions = {read=FCommonActions};
-	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TSubjectInfo*>* FrameInfos = {read=FFrameInfos};
-	__property System::Generics::Collections::TList__1<Fmx::Forms::TFrame*>* VisibleFrames = {read=FVisibleFrames};
+	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TSubjectInfo*>* SubjectInfos = {read=FSubjectInfos};
+	__property System::Generics::Collections::TList__1<Fmx::Forms::TFrame*>* VisibleSubjects = {read=FVisibleSubjects};
 	__property Responsivecontainer::TResponsiveContainer* Responsive = {read=FResponsive};
 	__property System::DynamicArray<Responsivecontainer::TBreakpoint> ResponsiveBreakpoints = {read=GetResponsiveBreakpoints, write=SetResponsiveBreakpoints};
 	__property Responsivecontainer::TBreakpoint ResponsiveBreakpoint[const System::UnicodeString AName] = {read=GetResponsiveBreakpoint};
@@ -392,7 +394,7 @@ __published:
 	__property TOnBeforeShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
 	__property TOnBeforeStartAnimationEvent OnBeforeStartAnimation = {read=FOnBeforeStartAnimation, write=FOnBeforeStartAnimation};
 	__property TOnBindCommonActionList OnBindCommonActionList = {read=FOnBindCommonActionList, write=FOnBindCommonActionList};
-	__property TOnGetFrameClassEvent OnGetFrameClass = {read=FOnGetFrameClass, write=FOnGetFrameClass};
+	__property TOnGetSubjectClassEvent OnGetSubjectClass = {read=FOnGetSubjectClass, write=FOnGetSubjectClass};
 };
 
 

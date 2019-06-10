@@ -68,11 +68,11 @@ __published:
 	Fmx::Edit::TEdit* DelayEdit;
 	Fmx::Stdctrls::TLabel* Label2;
 	Fmx::Stdctrls::TLabel* Label3;
-	Fmx::Listbox::TComboBox* FrameAlignComboBox;
+	Fmx::Listbox::TComboBox* SubjectAlignComboBox;
 	Fmx::Stdctrls::TLabel* Label4;
-	Fmx::Edit::TEdit* FrameWidthEdit;
+	Fmx::Edit::TEdit* SubjectWidthEdit;
 	Fmx::Stdctrls::TLabel* Label5;
-	Fmx::Edit::TEdit* FrameHeightEdit;
+	Fmx::Edit::TEdit* SubjectHeightEdit;
 	Fmx::Stdctrls::TLabel* Label7;
 	Fmx::Stdctrls::TLabel* Label6;
 	Fmx::Stdctrls::TCheckBox* TestBedClipCheckBox;
@@ -84,23 +84,23 @@ __published:
 	void __fastcall FormDestroy(System::TObject* Sender);
 	
 private:
-	Framestand::TFrameStand* FFrameStand;
-	Framestand::TSubjectInfo* FFrameInfo;
-	void __fastcall SetFrameStand(Framestand::TFrameStand* const Value);
+	Framestand::TSubjectStand* FSubjectStand;
+	Framestand::TSubjectInfo* FSubjectInfo;
+	void __fastcall SetSubjectStand(Framestand::TSubjectStand* const Value);
 	HIDESBASE Fmx::Controls::TStyleBook* __fastcall GetStyleBook();
 	System::UnicodeString __fastcall GetSelectedStyleName();
-	Fmx::Types::TAlignLayout __fastcall GetSelectedFrameAlign();
+	Fmx::Types::TAlignLayout __fastcall GetSelectedSubjectAlign();
 	
 protected:
 	virtual void __fastcall Init();
-	virtual void __fastcall DoFrameStandChanged();
+	virtual void __fastcall DoSubjectStandChanged();
 	void __fastcall SetupTestBed();
-	void __fastcall SetupTestFrameAndTestBed();
+	void __fastcall SetupTestSubjectAndTestBed();
 	__property System::UnicodeString SelectedStyleName = {read=GetSelectedStyleName};
-	__property Fmx::Types::TAlignLayout SelectedFrameAlign = {read=GetSelectedFrameAlign, nodefault};
+	__property Fmx::Types::TAlignLayout SelectedSubjectAlign = {read=GetSelectedSubjectAlign, nodefault};
 	
 public:
-	__property Framestand::TFrameStand* FrameStand = {read=FFrameStand, write=SetFrameStand};
+	__property Framestand::TSubjectStand* SubjectStand = {read=FSubjectStand, write=SetSubjectStand};
 	__property Fmx::Controls::TStyleBook* StyleBook = {read=GetStyleBook};
 public:
 	/* TCustomForm.Create */ inline __fastcall virtual TTestForm(System::Classes::TComponent* AOwner) : Fmx::Forms::TForm(AOwner) { }

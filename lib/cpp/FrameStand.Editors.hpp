@@ -26,23 +26,23 @@ namespace Framestand
 namespace Editors
 {
 //-- forward type declarations -----------------------------------------------
-class DELPHICLASS TFrameStandEditor;
+class DELPHICLASS TSubjectStandEditor;
 //-- type declarations -------------------------------------------------------
 #pragma pack(push,4)
-class PASCALIMPLEMENTATION TFrameStandEditor : public Designeditors::TComponentEditor
+class PASCALIMPLEMENTATION TSubjectStandEditor : public Designeditors::TComponentEditor
 {
 	typedef Designeditors::TComponentEditor inherited;
 	
 private:
-	Framestand::TFrameStand* __fastcall CurrentObj();
+	Framestand::TSubjectStand* __fastcall CurrentObj();
 	
 public:
 	virtual void __fastcall Edit();
 public:
-	/* TComponentEditor.Create */ inline __fastcall virtual TFrameStandEditor(System::Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Designeditors::TComponentEditor(AComponent, ADesigner) { }
+	/* TComponentEditor.Create */ inline __fastcall virtual TSubjectStandEditor(System::Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Designeditors::TComponentEditor(AComponent, ADesigner) { }
 	
 public:
-	/* TObject.Destroy */ inline __fastcall virtual ~TFrameStandEditor() { }
+	/* TObject.Destroy */ inline __fastcall virtual ~TSubjectStandEditor() { }
 	
 };
 

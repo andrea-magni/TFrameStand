@@ -103,7 +103,7 @@ object TestForm: TTestForm
         Text = 'milliseconds (0 = auto)'
       end
     end
-    object FrameAlignComboBox: TComboBox
+    object SubjectAlignComboBox: TComboBox
       Anchors = [akTop, akRight]
       Position.X = 436.000000000000000000
       Position.Y = 8.000000000000000000
@@ -119,7 +119,7 @@ object TestForm: TTestForm
         Text = 'Frame.Align:'
       end
     end
-    object FrameWidthEdit: TEdit
+    object SubjectWidthEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Anchors = [akTop, akRight]
       TabOrder = 3
@@ -140,7 +140,7 @@ object TestForm: TTestForm
         Text = 'Frame.Width:'
       end
     end
-    object FrameHeightEdit: TEdit
+    object SubjectHeightEdit: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Anchors = [akTop, akRight]
       TabOrder = 2

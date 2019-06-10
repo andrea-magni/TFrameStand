@@ -34,9 +34,9 @@ namespace Frames
 namespace Test
 {
 //-- forward type declarations -----------------------------------------------
-class DELPHICLASS TTestFrame;
+class DELPHICLASS TTestSubject;
 //-- type declarations -------------------------------------------------------
-class PASCALIMPLEMENTATION TTestFrame : public Fmx::Forms::TFrame
+class PASCALIMPLEMENTATION TTestSubject : public Fmx::Forms::TFrame
 {
 	typedef Fmx::Forms::TFrame inherited;
 	
@@ -45,10 +45,10 @@ __published:
 	Fmx::Objects::TCircle* Circle1;
 	Fmx::Objects::TCircle* Circle2;
 public:
-	/* TFrame.Create */ inline __fastcall virtual TTestFrame(System::Classes::TComponent* AOwner) : Fmx::Forms::TFrame(AOwner) { }
+	/* TFrame.Create */ inline __fastcall virtual TTestSubject(System::Classes::TComponent* AOwner) : Fmx::Forms::TFrame(AOwner) { }
 	
 public:
-	/* TControl.Destroy */ inline __fastcall virtual ~TTestFrame() { }
+	/* TControl.Destroy */ inline __fastcall virtual ~TTestSubject() { }
 	
 };
 

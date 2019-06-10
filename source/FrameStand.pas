@@ -1,5 +1,5 @@
 (*
-  Copyright 2016, TFrameStand
+  Copyright 2019, TSubjectStand
 
   Author:
     Andrea Magni <andrea(dot)magni(at)gmail(dot)com>
@@ -17,40 +17,41 @@ uses
   ;
 
 type
-  FrameStandCustomAttribute = class(TCustomAttribute);
+  SubjectStandCustomAttribute = class(TCustomAttribute);
 
-  ContextAttribute = class(FrameStandCustomAttribute);
-  FrameStandAttribute = class(ContextAttribute);
+  ContextAttribute = class(SubjectStandCustomAttribute);
+  SubjectStandAttribute = class(ContextAttribute);
   StandAttribute = class(ContextAttribute);
   ContainerAttribute = class(ContextAttribute);
-  FrameInfoAttribute = class(ContextAttribute);
+  SubjectInfoAttribute = class(ContextAttribute);
   ParentAttribute = class(ContextAttribute);
-  FrameIsOwnedAttribute = class(ContextAttribute);
+  SubjectIsOwnedAttribute = class(ContextAttribute);
 
-  BeforeShowAttribute = class(FrameStandCustomAttribute);
-  AfterShowAttribute = class(FrameStandCustomAttribute);
-  ShowAttribute = class(FrameStandCustomAttribute);
-  HideAttribute = class(FrameStandCustomAttribute);
+  BeforeShowAttribute = class(SubjectStandCustomAttribute);
+  AfterShowAttribute = class(SubjectStandCustomAttribute);
+  ShowAttribute = class(SubjectStandCustomAttribute);
+  HideAttribute = class(SubjectStandCustomAttribute);
 
-  TFrameClass = class of TFrame;
+  TSubject = TFrame;
+  TSubjectClass = class of TSubject;
 
-  TFrameStand = class; //fwd
+  TSubjectStand = class; //fwd
 
   TDelayedAction = class
   public
     class procedure Execute(const ADelay: Integer; const AAction: TProc);
   end;
 
-  TOnGetFrameClassEvent = procedure (const ASender: TFrameStand; var AParent: TFmxObject;
-    var AStandStyleName: string; var AFrameClass: TFrameClass) of object;
+  TOnGetSubjectClassEvent = procedure (const ASender: TSubjectStand; var AParent: TFmxObject;
+    var AStandStyleName: string; var ASubjectClass: TSubjectClass) of object;
 
-  TFrameStatus = (Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing);
+  TSubjectStatus = (Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing);
 
   TSubjectInfo = class
   private
-    FFrame: TFrame;
-    FFrameIsOwned: Boolean;
-    FFrameStand: TFrameStand;
+    FSubject: TSubject;
+    FSubjectIsOwned: Boolean;
+    FSubjectStand: TSubjectStand;
     FStand: TControl;
     FParent: TFmxObject;
     FCustomBeforeShowMethods: TArray<TRttiMethod>;
@@ -60,7 +61,7 @@ type
     FContainer: TFmxObject;
     FStandStyleName: string;
     FHiding: Boolean;
-    FStatus: TFrameStatus;
+    FStatus: TSubjectStatus;
     function GetIsVisible: Boolean;
   protected
     function BindCommonActions(const AObject: TFmxObject): Boolean; virtual;
@@ -96,27 +97,27 @@ type
     function Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
     procedure Close();
 
-    constructor Create(const AFrameStand: TFrameStand; const AFrame: TFrame;
+    constructor Create(const ASubjectStand: TSubjectStand; const ASubject: TSubject;
       const AParent: TFmxObject; const AStandStyleName: string); virtual;
     destructor Destroy; override;
 
-    property Frame: TFrame read FFrame;
-    property FrameIsOwned: Boolean read FFrameIsOwned write FFrameIsOwned;
-    property FrameStand: TFrameStand read FFrameStand;
+    property Subject: TSubject read FSubject;
+    property SubjectIsOwned: Boolean read FSubjectIsOwned write FSubjectIsOwned;
+    property SubjectStand: TSubjectStand read FSubjectStand;
     property Stand: TControl read FStand write FStand;
     property StandStyleName: string read FStandStyleName;
     property Container: TFmxObject read FContainer write FContainer;
     property Parent: TFmxObject read FParent write FParent;
     property IsVisible: Boolean read GetIsVisible;
     property Hiding: Boolean read FHiding;
-    property Status: TFrameStatus read FStatus;
+    property Status: TSubjectStatus read FStatus;
   end;
 
-  TOnAfterShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TSubjectInfo) of object;
-  TOnBeforeShowEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TSubjectInfo) of object;
+  TOnAfterShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
+  TOnBeforeShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
   TOnAfterHideEvent = TOnBeforeShowEvent;
-  TOnBeforeStartAnimationEvent = procedure(const ASender: TFrameStand; const AFrameInfo: TSubjectInfo; const AAnimation: TAnimation) of object;
-  TOnBindCommonActionList = procedure(ASender: TFrameStand; const AFrameInfo: TSubjectInfo; const AObject: TFmxObject; var ACommonActionName: string) of object;
+  TOnBeforeStartAnimationEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo; const AAnimation: TAnimation) of object;
+  TOnBindCommonActionList = procedure(ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo; const AObject: TFmxObject; var ACommonActionName: string) of object;
 
   TCommonActionDictionary = class
   private
@@ -135,13 +136,13 @@ type
     property Keys: TArray<string> read GetKeys;
   end;
 
-  TFrameStand = class(TComponent)
+  TSubjectStand = class(TComponent)
   private
     FStyleBook: TStyleBook;
     FDefaultStyleName: string;
     FAnimationHide: string;
     FAnimationShow: string;
-    FOnGetFrameClass: TOnGetFrameClassEvent;
+    FOnGetSubjectClass: TOnGetSubjectClassEvent;
     FCommonActions: TCommonActionDictionary;
     FOnAfterHide: TOnAfterHideEvent;
     FOnAfterShow: TOnAfterShowEvent;
@@ -151,44 +152,44 @@ type
     FCommonActionPrefix: string;
     FOnBindCommonActionList: TOnBindCommonActionList;
     FDefaultParent: TFmxObject;
-    FVisibleFrames : TList<TFrame>;
+    FVisibleSubjects : TList<TSubject>;
     FResponsive: TResponsiveContainer;
     function GetResponsiveBreakpoint(const AName: string): TBreakpoint;
   protected
-    FFrameInfos: TObjectDictionary<TFrame, TSubjectInfo>;
+    FSubjectInfos: TObjectDictionary<TSubject, TSubjectInfo>;
     function GetDefaultParent: TFmxObject; virtual;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetStandStyleName(AStandStyleName: string): string;
-    function GetFrameClass(const AFrameClass: TFrameClass; var AParent: TFmxObject;
-      var AStandStyleName: string): TFrameClass;
+    function GetSubjectClass(const ASubjectClass: TSubjectClass; var AParent: TFmxObject;
+      var AStandStyleName: string): TSubjectClass;
     function GetCount: Integer;
     function GetResponsiveBreakpoints: TArray<TBreakpoint>;
     procedure SetResponsiveBreakpoints(const ABreakpoints: TArray<TBreakpoint>);
-    procedure DoAfterShow(const ASender: TFrameStand; const AFrameInfo: TSubjectInfo);
-    procedure DoBeforeShow(const ASender: TFrameStand; const AFrameInfo: TSubjectInfo);
-    procedure DoAfterHide(const ASender: TFrameStand; const AFrameInfo: TSubjectInfo);
-    procedure DoClose(const AFrame: TFrame);
-    procedure DoResponsiveLookup(var AFrameClass: TFrameClass; var AStandStyleName: string;
+    procedure DoAfterShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo);
+    procedure DoBeforeShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo);
+    procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo);
+    procedure DoClose(const ASubject: TSubject);
+    procedure DoResponsiveLookup(var ASubjectClass: TSubjectClass; var AStandStyleName: string;
       var AParent: TFmxObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    function Use(const AFrame: TFrame; const AParent: TFmxObject = nil;
+    function Use(const ASubject: TSubject; const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TSubjectInfo;
 
-    function New(const AFrameClass: TFrameClass; const AParent: TFmxObject = nil;
+    function New(const ASubjectClass: TSubjectClass; const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TSubjectInfo;
 
-    procedure Remove(AFrame: TFrame);
-    function LastShownFrame: TFrame;
-    function FrameInfo(const AFrame: TFrame): TSubjectInfo;
+    procedure Remove(ASubject: TSubject);
+    function LastShownSubject: TSubject;
+    function SubjectInfo(const ASubject: TSubject): TSubjectInfo;
     function DeviceAndPlatformInfo(const AForm: TForm = nil): TDeviceAndPlatformInfo;
 
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary read FCommonActions;
-    property FrameInfos: TObjectDictionary<TFrame, TSubjectInfo> read FFrameInfos;
-    property VisibleFrames: TList<TFrame> read FVisibleFrames;
+    property SubjectInfos: TObjectDictionary<TSubject, TSubjectInfo> read FSubjectInfos;
+    property VisibleSubjects: TList<TSubject> read FVisibleSubjects;
     property Responsive: TResponsiveContainer read FResponsive;
     property ResponsiveBreakpoints: TArray<TBreakpoint> read GetResponsiveBreakpoints
       write SetResponsiveBreakpoints;
@@ -208,7 +209,7 @@ type
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
     property OnBeforeStartAnimation: TOnBeforeStartAnimationEvent read FOnBeforeStartAnimation write FOnBeforeStartAnimation;
     property OnBindCommonActionList: TOnBindCommonActionList read FOnBindCommonActionList write FOnBindCommonActionList;
-    property OnGetFrameClass: TOnGetFrameClassEvent read FOnGetFrameClass write FOnGetFrameClass;
+    property OnGetSubjectClass: TOnGetSubjectClassEvent read FOnGetSubjectClass write FOnGetSubjectClass;
   end;
 
 procedure Register;
@@ -221,73 +222,73 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Andrea Magni', [TFrameStand]);
+  RegisterComponents('Andrea Magni', [TSubjectStand]);
 end;
 
-{ TFrameStand }
+{ TSubjectStand }
 
-constructor TFrameStand.Create(AOwner: TComponent);
+constructor TSubjectStand.Create(AOwner: TComponent);
 begin
   inherited;
-  FDefaultStyleName := 'framestand';
+  FDefaultStyleName := 'Subjectstand';
   FAnimationShow := 'OnShow*';
   FAnimationHide := 'OnHide*';
   FCommonActionPrefix := 'ca_';
-  FFrameInfos := TObjectDictionary<TFrame, TSubjectInfo>.Create();
+  FSubjectInfos := TObjectDictionary<TSubject, TSubjectInfo>.Create();
   FCommonActions := TCommonActionDictionary.Create;
-  FVisibleFrames := TList<TFrame>.Create;
+  FVisibleSubjects := TList<TSubject>.Create;
   FResponsive := TResponsiveContainer.Create;
 end;
 
-destructor TFrameStand.Destroy;
+destructor TSubjectStand.Destroy;
 var
-  LKey: TFrame;
+  LKey: TSubject;
 begin
-  for LKey in FFrameInfos.Keys.ToArray do
+  for LKey in FSubjectInfos.Keys.ToArray do
     Remove(LKey);
 
-  FreeAndNil(FFrameInfos);
+  FreeAndNil(FSubjectInfos);
   FreeAndNil(FCommonActions);
-  FreeAndNil(FVisibleFrames);
+  FreeAndNil(FVisibleSubjects);
   FreeAndNil(FResponsive);
   inherited;
 end;
 
-function TFrameStand.DeviceAndPlatformInfo(const AForm: TForm): TDeviceAndPlatformInfo;
+function TSubjectStand.DeviceAndPlatformInfo(const AForm: TForm): TDeviceAndPlatformInfo;
 begin
   Result := TDeviceAndPlatformInfo.Retrieve(AForm);
 end;
 
-procedure TFrameStand.DoAfterHide(const ASender: TFrameStand;
-  const AFrameInfo: TSubjectInfo);
+procedure TSubjectStand.DoAfterHide(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
 begin
   if Assigned(FOnAfterHide) then
-    FOnAfterHide(ASender, AFrameInfo);
-  FVisibleFrames.Remove(AFrameInfo.FFrame);
+    FOnAfterHide(ASender, ASubjectInfo);
+  FVisibleSubjects.Remove(ASubjectInfo.FSubject);
 end;
 
-procedure TFrameStand.DoAfterShow(const ASender: TFrameStand;
-  const AFrameInfo: TSubjectInfo);
+procedure TSubjectStand.DoAfterShow(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
 begin
    if Assigned(FOnAfterShow) then
-    FOnAfterShow(ASender, AFrameInfo);
+    FOnAfterShow(ASender, ASubjectInfo);
 end;
 
-procedure TFrameStand.DoBeforeShow(const ASender: TFrameStand;
-  const AFrameInfo: TSubjectInfo);
+procedure TSubjectStand.DoBeforeShow(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
 begin
    if Assigned(FOnBeforeShow) then
-    FOnBeforeShow(ASender, AFrameInfo);
-   FVisibleFrames.Add(AFrameInfo.FFrame);
+    FOnBeforeShow(ASender, ASubjectInfo);
+   FVisibleSubjects.Add(ASubjectInfo.FSubject);
 end;
 
-procedure TFrameStand.DoClose(const AFrame: TFrame);
+procedure TSubjectStand.DoClose(const ASubject: TSubject);
 begin
-  FVisibleFrames.Remove(AFrame);
-  Remove(AFrame);
+  FVisibleSubjects.Remove(ASubject);
+  Remove(ASubject);
 end;
 
-procedure TFrameStand.DoResponsiveLookup(var AFrameClass: TFrameClass;
+procedure TSubjectStand.DoResponsiveLookup(var ASubjectClass: TSubjectClass;
   var AStandStyleName: string; var AParent: TFmxObject);
 var
   FTarget: TResponsiveDefinition;
@@ -301,26 +302,26 @@ begin
     raise Exception.Create('Error in DoResponsiveLookup: cannot determine parent Width');
 
   FTarget := FResponsive.Lookup(
-    TResponsiveDefinition.Create(AFrameClass, AStandStyleName, AParent)
+    TResponsiveDefinition.Create(ASubjectClass, AStandStyleName, AParent)
   , FResponsive.CurrentBreakpoint(LWidth).Name);
 
-  AFrameClass := FTarget.FrameClass;
+  ASubjectClass := FTarget.SubjectClass;
   AStandStyleName := FTarget.StandName;
   AParent := FTarget.Parent;
 end;
 
-function TFrameStand.FrameInfo(const AFrame: TFrame): TSubjectInfo;
+function TSubjectStand.SubjectInfo(const ASubject: TSubject): TSubjectInfo;
 begin
   Result := nil;
-  FFrameInfos.TryGetValue(AFrame, Result);
+  FSubjectInfos.TryGetValue(ASubject, Result);
 end;
 
-function TFrameStand.GetCount: Integer;
+function TSubjectStand.GetCount: Integer;
 begin
-  Result := FFrameInfos.Count;
+  Result := FSubjectInfos.Count;
 end;
 
-function TFrameStand.GetDefaultParent: TFmxObject;
+function TSubjectStand.GetDefaultParent: TFmxObject;
 begin
   if Assigned(FDefaultParent) then
     Result := FDefaultParent
@@ -328,33 +329,33 @@ begin
     Result := Self.Owner as TFmxObject;
 end;
 
-function TFrameStand.GetFrameClass(const AFrameClass: TFrameClass;
-  var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
+function TSubjectStand.GetSubjectClass(const ASubjectClass: TSubjectClass;
+  var AParent: TFmxObject; var AStandStyleName: string): TSubjectClass;
 begin
-  Result := AFrameClass;
+  Result := ASubjectClass;
   DoResponsiveLookup(Result, AStandStyleName, AParent);
-  if Assigned(FOnGetFrameClass) then
-    FOnGetFrameClass(Self, AParent, AStandStyleName, Result);
+  if Assigned(FOnGetSubjectClass) then
+    FOnGetSubjectClass(Self, AParent, AStandStyleName, Result);
 end;
 
-function TFrameStand.GetResponsiveBreakpoint(const AName: string): TBreakpoint;
+function TSubjectStand.GetResponsiveBreakpoint(const AName: string): TBreakpoint;
 begin
   Result := Responsive.Breakpoints.ByName(AName);
 end;
 
-function TFrameStand.GetResponsiveBreakpoints: TArray<TBreakpoint>;
+function TSubjectStand.GetResponsiveBreakpoints: TArray<TBreakpoint>;
 begin
   Result := Responsive.Breakpoints.ToArray;
 end;
 
-function TFrameStand.GetStandStyleName(AStandStyleName: string): string;
+function TSubjectStand.GetStandStyleName(AStandStyleName: string): string;
 begin
   Result := DefaultStyleName;
   if AStandStyleName <> '' then
     Result := AStandStyleName;
 end;
 
-function TFrameStand.Use(const AFrame: TFrame; const AParent: TFmxObject; const AStandStyleName: string): TSubjectInfo;
+function TSubjectStand.Use(const ASubject: TSubject; const AParent: TFmxObject; const AStandStyleName: string): TSubjectInfo;
 var
   LStandStyleName: string;
   LParent: TFmxObject;
@@ -364,20 +365,20 @@ begin
   if not Assigned(LParent) then
     LParent := GetDefaultParent;
 
-  Result := TSubjectInfo.Create(Self, AFrame, LParent, LStandStyleName);
+  Result := TSubjectInfo.Create(Self, ASubject, LParent, LStandStyleName);
   try
     Result.InjectContext;
-    FFrameInfos.Add(Result.Frame, TSubjectInfo(Result));
+    FSubjectInfos.Add(Result.Subject, TSubjectInfo(Result));
   except
     Result.Free;
     raise;
   end;
 end;
 
-function TFrameStand.New(const AFrameClass: TFrameClass; const AParent: TFmxObject;
+function TSubjectStand.New(const ASubjectClass: TSubjectClass; const AParent: TFmxObject;
   const AStandStyleName: string): TSubjectInfo;
 var
-  LFrame: TFrame;
+  LSubject: TSubject;
   LParent: TFmxObject;
   LStandName: string;
 begin
@@ -385,18 +386,18 @@ begin
   if not Assigned(LParent) then
     LParent := GetDefaultParent;
   LStandName := AStandStyleName;
-  LFrame := GetFrameClass(AFrameClass, LParent, LStandName).Create(nil);
+  LSubject := GetSubjectClass(ASubjectClass, LParent, LStandName).Create(nil);
   try
-    LFrame.Name := '';
-    Result := Use(LFrame, LParent, LStandName);
-    Result.FrameIsOwned := True;
+    LSubject.Name := '';
+    Result := Use(LSubject, LParent, LStandName);
+    Result.SubjectIsOwned := True;
   except
-    LFrame.Free;
+    LSubject.Free;
     raise;
   end;
 end;
 
-procedure TFrameStand.Notification(AComponent: TComponent;
+procedure TSubjectStand.Notification(AComponent: TComponent;
   Operation: TOperation);
 begin
   inherited;
@@ -412,13 +413,13 @@ begin
   end;
 end;
 
-procedure TFrameStand.Remove(AFrame: TFrame);
+procedure TSubjectStand.Remove(ASubject: TSubject);
 var
   LInfo: TSubjectInfo;
 begin
-  if FFrameInfos.TryGetValue(AFrame, LInfo) then
+  if FSubjectInfos.TryGetValue(ASubject, LInfo) then
   begin
-    FFrameInfos.Remove(AFrame);
+    FSubjectInfos.Remove(ASubject);
     {$IFDEF AUTOREFCOUNT}
       LInfo.DisposeOf;
       LInfo := nil;
@@ -428,26 +429,26 @@ begin
   end;
 end;
 
-procedure TFrameStand.SetResponsiveBreakpoints(
+procedure TSubjectStand.SetResponsiveBreakpoints(
   const ABreakpoints: TArray<TBreakpoint>);
 begin
   Responsive.Breakpoints.Clear;
   Responsive.Breakpoints.AddRange(ABreakpoints);
 end;
 
-function TFrameStand.LastShownFrame: TFrame;
+function TSubjectStand.LastShownSubject: TSubject;
 begin
   Result := nil;
-  if FVisibleFrames.Count > 0 then
-    Result := FVisibleFrames.Last;
+  if FVisibleSubjects.Count > 0 then
+    Result := FVisibleSubjects.Last;
 end;
 
 { TSubjectInfo }
 
 procedure TSubjectInfo.DoBeforeStartAnimation(const AAnimation: TAnimation);
 begin
-  if Assigned(FFrameStand) and Assigned(FFrameStand.OnBeforeStartAnimation) then
-    FFrameStand.OnBeforeStartAnimation(FFrameStand, Self, AAnimation);
+  if Assigned(FSubjectStand) and Assigned(FSubjectStand.OnBeforeStartAnimation) then
+    FSubjectStand.OnBeforeStartAnimation(FSubjectStand, Self, AAnimation);
 end;
 
 function TSubjectInfo.BindCommonActionList(const AObject: TFmxObject): Boolean;
@@ -458,7 +459,7 @@ var
 
 begin
   Result := False;
-  if not Assigned(FFrameStand.CommonActionList) then
+  if not Assigned(FSubjectStand.CommonActionList) then
     Exit;
 
   LCommonActionName := '';
@@ -467,14 +468,14 @@ begin
   if LName = '' then
     LName := AObject.Name;
 
-  LCommonActionPrefix := FFrameStand.CommonActionPrefix;
+  LCommonActionPrefix := FSubjectStand.CommonActionPrefix;
   // stylename match
   if (LName.StartsWith(LCommonActionPrefix, True)) then
     LCommonActionName := LName.Substring(LCommonActionPrefix.Length);
 
   // allow custom matching
-  if Assigned(FFrameStand.OnBindCommonActionList) then
-    FFrameStand.OnBindCommonActionList(FFrameStand, Self, AObject, LCommonActionName);
+  if Assigned(FSubjectStand.OnBindCommonActionList) then
+    FSubjectStand.OnBindCommonActionList(FSubjectStand, Self, AObject, LCommonActionName);
 
   if LCommonActionName = '' then
     Exit;
@@ -485,7 +486,7 @@ begin
     Exit;
 
   // bind the corresponding Action, if any
-  for LAction in FFrameStand.CommonActionList do
+  for LAction in FSubjectStand.CommonActionList do
   begin
     if SameText(LAction.Name, LCommonActionName)  then
     begin
@@ -504,7 +505,7 @@ begin
   if not (AObject is TControl) then
     Exit;
 
-  for LCommonActionPattern in FrameStand.CommonActions.Keys do
+  for LCommonActionPattern in SubjectStand.CommonActions.Keys do
   begin
     if ( // matches StyleName or Name (if no StyleName is provided)
          ((AObject.StyleName <> '') and  MatchesMask(AObject.StyleName, LCommonActionPattern))
@@ -521,31 +522,31 @@ end;
 
 procedure TSubjectInfo.Close;
 begin
-  FStatus := TFrameStatus.Closing;
-  if Assigned(FFrameStand) then
-    FFrameStand.DoClose(FFrame);
+  FStatus := TSubjectStatus.Closing;
+  if Assigned(FSubjectStand) then
+    FSubjectStand.DoClose(FSubject);
 end;
 
-constructor TSubjectInfo.Create(const AFrameStand: TFrameStand;
-  const AFrame: TFrame; const AParent: TFmxObject; const AStandStyleName: string);
+constructor TSubjectInfo.Create(const ASubjectStand: TSubjectStand;
+  const ASubject: TSubject; const AParent: TFmxObject; const AStandStyleName: string);
 begin
-  Assert(Assigned(AFrameStand));
-  Assert(Assigned(AFrame));
+  Assert(Assigned(ASubjectStand));
+  Assert(Assigned(ASubject));
 
   inherited Create;
 
   FStatus := Initializing;
-  FFrameStand := AFrameStand;
-  FFrame := AFrame;
-  FFrameIsOwned := False;
+  FSubjectStand := ASubjectStand;
+  FSubject := ASubject;
+  FSubjectIsOwned := False;
   FStandStyleName := AStandStyleName;
 
   FindCustomMethods;
 
   // STAND
   FStand := nil;
-  if Assigned(FFrameStand.StyleBook) and Assigned(FFrameStand.StyleBook.Style) then
-    FStand := FFrameStand.StyleBook.Style.FindStyleResource(FStandStyleName, True) as TControl;
+  if Assigned(FSubjectStand.StyleBook) and Assigned(FSubjectStand.StyleBook.Style) then
+    FStand := FSubjectStand.StyleBook.Style.FindStyleResource(FStandStyleName, True) as TControl;
   if not Assigned(FStand) then
   begin
     FStand := TLayout.Create(nil);
@@ -554,7 +555,7 @@ begin
   end;
 {$if compilerversion >= 31}
   // 10.1 Berlin and later
-  // See https://github.com/andrea-magni/TFrameStand/issues/12
+  // See https://github.com/andrea-magni/TSubjectStand/issues/12
   // also see https://quality.embarcadero.com/browse/RSP-14806
   FStand.Align := TAlignLayout.Contents;
 {$ifend}
@@ -569,8 +570,8 @@ begin
   if not Assigned(FContainer) then
     FContainer := FStand;
 
-  // FRAME
-  FContainer.AddObject(FFrame);
+  // Subject
+  FContainer.AddObject(FSubject);
 
   // CommonActions
   FindCommonActions(FStand);
@@ -592,24 +593,24 @@ end;
 
 destructor TSubjectInfo.Destroy;
 begin
-  if FrameIsOwned and Assigned(FFrame) then
+  if SubjectIsOwned and Assigned(FSubject) then
   begin
-    if not (csDestroying in FFrameStand.ComponentState) then
+    if not (csDestroying in FSubjectStand.ComponentState) then
     begin
-      FFrame.DisposeOf;
-      FFrame := nil;
+      FSubject.DisposeOf;
+      FSubject := nil;
     end;
   end
   else
   begin
-    FContainer.RemoveObject(FFrame);
+    FContainer.RemoveObject(FSubject);
   end;
 
-  if not (csDestroying in FFrameStand.ComponentState) then
+  if not (csDestroying in FSubjectStand.ComponentState) then
     Parent.RemoveObject(Stand);
   Parent := nil;
 
-  if not (csDestroying in FFrameStand.ComponentState) then
+  if not (csDestroying in FSubjectStand.ComponentState) then
   begin
     Stand.DisposeOf;
     Stand := nil;
@@ -630,11 +631,11 @@ begin
   if LName = '' then
     LName := LObj.Name;
 
-  for LPattern in FrameStand.CommonActions.Keys do
+  for LPattern in SubjectStand.CommonActions.Keys do
   begin
     if MatchesMask(LName, LPattern) then
     begin
-      if FrameStand.CommonActions.TryGetValue(LPattern, LAction) then
+      if SubjectStand.CommonActions.TryGetValue(LPattern, LAction) then
         LAction(Self);
     end;
   end;
@@ -644,7 +645,7 @@ procedure TSubjectInfo.FindCommonActions(const AFmxObject: TFmxObject);
 var
   LChild: TFmxObject;
 begin
-  if (FrameStand.CommonActions.Count = 0) and not Assigned(FrameStand.CommonActionList) then
+  if (SubjectStand.CommonActions.Count = 0) and not Assigned(SubjectStand.CommonActionList) then
     Exit;
 
   if Assigned(AFmxObject.Children) then
@@ -667,7 +668,7 @@ var
   LMethod: TRttiMethod;
 begin
   LRttiContext := TRttiContext.Create;
-  LType := LRttiContext.GetType(Frame.ClassInfo);
+  LType := LRttiContext.GetType(Subject.ClassInfo);
 
   FCustomBeforeShowMethods := [];
   FCustomAfterShowMethods := [];
@@ -775,20 +776,20 @@ begin
 
         LAttribute := HasAttribute<ContextAttribute>(LParameter);
         // injection
-        if (LAttribute is FrameStandAttribute) and (LMetaClassType.InheritsFrom(TFrameStand)) then
-          LArguments := LArguments + [FrameStand]
+        if (LAttribute is SubjectStandAttribute) and (LMetaClassType.InheritsFrom(TSubjectStand)) then
+          LArguments := LArguments + [SubjectStand]
         else if (LAttribute is StandAttribute) and (LMetaClassType.InheritsFrom(TControl)) then
           LArguments := LArguments + [Stand]
         else if (LAttribute is ParentAttribute) and (LMetaClassType.InheritsFrom(TFmxObject)) then
           LArguments := LArguments + [Parent]
         else if (LAttribute is ContextAttribute) and (LMetaClassType.InheritsFrom(TFmxObject)) then
           LArguments := LArguments + [Container]
-        else if (LAttribute is FrameInfoAttribute) then
+        else if (LAttribute is SubjectInfoAttribute) then
           LArguments := LArguments + [Self];
       end;
     end;
 
-    LMethod.Invoke(FFrame, LArguments);
+    LMethod.Invoke(FSubject, LArguments);
   end;
 end;
 
@@ -802,7 +803,7 @@ var
   LHideDelay: Single;
 begin
   LHideDelay := 0;
-  Result := FireAnimations(FStand, FFrameStand.AnimationHide, True,
+  Result := FireAnimations(FStand, FSubjectStand.AnimationHide, True,
      procedure (AAnimation: TAnimation)
      var
        LThisAnimationTime: Single;
@@ -819,7 +820,7 @@ end;
 
 function TSubjectInfo.FireShowAnimations: Boolean;
 begin
-  Result := FireAnimations(FStand, FFrameStand.AnimationShow);
+  Result := FireAnimations(FStand, FSubjectStand.AnimationShow);
 end;
 
 
@@ -866,7 +867,7 @@ begin
   Result := False;
   if not FHiding then
   begin
-    FStatus := TFrameStatus.Hiding;
+    FStatus := TSubjectStatus.Hiding;
     Result := True;
     FHiding := True;
 
@@ -882,13 +883,13 @@ begin
           DefaultHide;
 
         FHiding := False;
-        FStatus := TFrameStatus.Hidden;
+        FStatus := TSubjectStatus.Hidden;
 
         if Assigned(AThen) then
           AThen();
 
-        if Assigned(FrameStand) {and Assigned(FrameStand.OnAfterHide)} then
-          FrameStand.DoAfterHide(FrameStand, Self);
+        if Assigned(SubjectStand) {and Assigned(SubjectStand.OnAfterHide)} then
+          SubjectStand.DoAfterHide(SubjectStand, Self);
       end
     );
   end;
@@ -903,7 +904,7 @@ var
   LFieldClassType: TClass;
 begin
   LRttiContext := TRttiContext.Create;
-  LType := LRttiContext.GetType(Frame.ClassInfo);
+  LType := LRttiContext.GetType(Subject.ClassInfo);
 
   // enumerate type's fields
   for LField in LType.GetFields do
@@ -917,16 +918,16 @@ begin
       LAttribute := HasAttribute<ContextAttribute>(LField);
 
       // injection
-      if (LAttribute is FrameStandAttribute) and (LFieldClassType.InheritsFrom(TFrameStand)) then
-          LField.SetValue(TObject(Frame), FrameStand)
+      if (LAttribute is SubjectStandAttribute) and (LFieldClassType.InheritsFrom(TSubjectStand)) then
+          LField.SetValue(TObject(Subject), SubjectStand)
       else if (LAttribute is StandAttribute) and (LFieldClassType.InheritsFrom(TControl)) then
-        LField.SetValue(TObject(Frame), Stand)
+        LField.SetValue(TObject(Subject), Stand)
       else if (LAttribute is ParentAttribute) and (LFieldClassType.InheritsFrom(TFmxObject)) then
-        LField.SetValue(TObject(Frame), Parent)
+        LField.SetValue(TObject(Subject), Parent)
       else if (LAttribute is ContextAttribute) and (LFieldClassType.InheritsFrom(TFmxObject)) then
-        LField.SetValue(TObject(Frame), Container)
-      else if (LAttribute is FrameInfoAttribute) then
-        LField.SetValue(TObject(Frame), Self);
+        LField.SetValue(TObject(Subject), Container)
+      else if (LAttribute is SubjectInfoAttribute) then
+        LField.SetValue(TObject(Subject), Self);
 
     end;
   end;
@@ -942,18 +943,18 @@ begin
 
   Result := nil;
   FireCustomBeforeShowMethods;
-  if Assigned(FrameStand) then
-    FrameStand.DoBeforeShow(FrameStand, Self);
+  if Assigned(SubjectStand) then
+    SubjectStand.DoBeforeShow(SubjectStand, Self);
 
   if not FireCustomShowMethods then
     DefaultShow;
   FireShowAnimations;
 
-  FStatus := TFrameStatus.Visible;
+  FStatus := TSubjectStatus.Visible;
 
   FireCustomAfterShowMethods;
-  if Assigned(FrameStand) then
-    FrameStand.DoAfterShow(FrameStand, Self);
+  if Assigned(SubjectStand) then
+    SubjectStand.DoAfterShow(SubjectStand, Self);
 
   if Assigned(ABackgroundTask) then
   begin
@@ -983,8 +984,8 @@ procedure TSubjectInfo.StopAnimations;
 begin
   // FMX does not like if you free an object when animation are still running,
   // so stop them all
-  FireAnimations(FStand, FFrameStand.AnimationHide, False);
-  FireAnimations(FStand, FFrameStand.AnimationShow, False);
+  FireAnimations(FStand, FSubjectStand.AnimationHide, False);
+  FireAnimations(FStand, FSubjectStand.AnimationShow, False);
 end;
 
 { TDelayedAction }

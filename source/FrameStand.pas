@@ -113,6 +113,9 @@ type
     property Status: TSubjectStatus read FStatus;
   end;
 
+  TFrameInfo<T: TFrame> = class(TSubjectInfo);
+  TFormInfo<T: TForm> = class(TSubjectInfo);
+
   TOnAfterShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
   TOnBeforeShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
   TOnAfterHideEvent = TOnBeforeShowEvent;
@@ -176,12 +179,12 @@ type
     destructor Destroy; override;
 
     function Use(const ASubject: TSubject; const AParent: TFmxObject = nil;
-      const AStandStyleName: string = ''): TSubjectInfo;
+      const AStandStyleName: string = ''): TSubjectInfo; overload;
 
     function New(const ASubjectClass: TSubjectClass; const AParent: TFmxObject = nil;
-      const AStandStyleName: string = ''): TSubjectInfo;
+      const AStandStyleName: string = ''): TSubjectInfo; overload;
 
-    procedure Remove(ASubject: TSubject);
+    procedure Remove(ASubject: TSubject); overload;
     function LastShownSubject: TSubject;
     function SubjectInfo(const ASubject: TSubject): TSubjectInfo;
     function DeviceAndPlatformInfo(const AForm: TForm = nil): TDeviceAndPlatformInfo;
@@ -212,6 +215,23 @@ type
     property OnGetSubjectClass: TOnGetSubjectClassEvent read FOnGetSubjectClass write FOnGetSubjectClass;
   end;
 
+  TFrameStand = class(TSubjectStand)
+  private
+  protected
+  public
+    function Use<T: TFrame>(const AFrame: T; const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''): TFrameInfo<T>; overload;
+
+    function New<T: TFrame>(const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''): TFrameInfo<T>; overload;
+  end;
+
+  TFormStand = class(TSubjectStand)
+  private
+  protected
+  public
+  end;
+
 procedure Register;
 
 implementation
@@ -222,7 +242,7 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Andrea Magni', [TSubjectStand]);
+  RegisterComponents('Andrea Magni', [TFrameStand, TFormStand]);
 end;
 
 { TSubjectStand }
@@ -1039,6 +1059,20 @@ function TCommonActionDictionary.TryGetValue(const APattern: string;
   out AAction: TProc<TSubjectInfo>): Boolean;
 begin
   Result := FDictionary.TryGetValue(APattern, AAction);
+end;
+
+{ TFrameStand }
+
+function TFrameStand.New<T>(const AParent: TFmxObject;
+  const AStandStyleName: string): TFrameInfo<T>;
+begin
+  Result := New(TSubjectClass(TFrame(T).ClassType), AParent, AStandStyleName) as TFrameInfo<T>;
+end;
+
+function TFrameStand.Use<T>(const AFrame: T; const AParent: TFmxObject;
+  const AStandStyleName: string): TFrameInfo<T>;
+begin
+
 end;
 
 end.

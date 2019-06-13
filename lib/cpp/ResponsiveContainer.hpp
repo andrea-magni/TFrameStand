@@ -33,7 +33,7 @@ struct TResponsiveDefinition;
 struct TResponsiveOption;
 class DELPHICLASS TResponsiveContainer;
 //-- type declarations -------------------------------------------------------
-typedef Fmx::Forms::TFrame TSubject;
+typedef Fmx::Types::TFmxObject TSubject;
 
 typedef System::TMetaClass* TSubjectClass;
 

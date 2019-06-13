@@ -35,6 +35,8 @@
 #include <FMX.Objects.hpp>
 #include <FMX.Edit.hpp>
 #include <SubjectStand.hpp>
+#include <System.Rtti.hpp>
+#include <System.Threading.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

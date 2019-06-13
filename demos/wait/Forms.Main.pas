@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Layouts, FMX.Controls.Presentation, FrameStand;
+  FMX.Layouts, FMX.Controls.Presentation, FrameStand, SubjectStand;
 
 type
   TMainForm = class(TForm)
@@ -32,21 +32,21 @@ uses Frames.Wait;
 
 procedure TMainForm.DoSomethingButtonClick(Sender: TObject);
 begin
-  FrameStand1.New(TWaitFrame, Layout1)
+  FrameStand1.New<TWaitFrame>(Layout1)
     .Show(
       // background task to execute
-      procedure(AFrameInfo: TFrameInfo)
+      procedure(AFrameInfo: TFrameInfo<TWaitFrame>)
       begin
         Sleep(1000); // using Sleep to simulate some computation
 
-        (AFrameInfo.Frame as TWaitFrame).UpdateMessageText('Phase 1...');
+        AFrameInfo.Frame.UpdateMessageText('Phase 1...');
         Sleep(2000);
 
-        (AFrameInfo.Frame as TWaitFrame).UpdateMessageText('Phase 2...');
+        AFrameInfo.Frame.UpdateMessageText('Phase 2...');
         Sleep(3000);
       end
       , // On background task completion, hide the wait frame
-      procedure(AFrameInfo: TFrameInfo)
+      procedure(AFrameInfo: TFrameInfo<TWaitFrame>)
       begin
         AFrameInfo.Hide;
         AFrameInfo.Close;

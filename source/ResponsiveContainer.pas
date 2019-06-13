@@ -8,7 +8,7 @@ uses
 
 
 type
-  TSubject = TFrame;
+  TSubject = TFmxObject;
   TSubjectClass = class of TSubject;
 
   TBreakpoint = record

@@ -165,9 +165,9 @@ end;
 
 procedure TTestForm.SetupTestSubjectAndTestBed;
 begin
-  FFrameInfo.Subject.Align := SelectedSubjectAlign;
-  FFrameInfo.Subject.Width := StrToFloat(SubjectWidthEdit.Text);
-  FFrameInfo.Subject.Height := StrToFloat(SubjectHeightEdit.Text);
+  FFrameInfo.Frame.Align := SelectedSubjectAlign;
+  FFrameInfo.Frame.Width := StrToFloat(SubjectWidthEdit.Text);
+  FFrameInfo.Frame.Height := StrToFloat(SubjectHeightEdit.Text);
 
   SetupTestBed;
 end;

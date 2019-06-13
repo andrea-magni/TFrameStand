@@ -36,11 +36,14 @@ requires
   fmx;
 
 contains
-  FrameStand in '..\source\FrameStand.pas',
+  SubjectStand in '..\source\SubjectStand.pas',
   FrameStand.Editors in '..\source\FrameStand.Editors.pas',
   FrameStand.Editors.Forms.Test in '..\source\FrameStand.Editors.Forms.Test.pas' {TestForm},
   Frames.Test in '..\source\Frames.Test.pas' {TestSubject: TFrame},
   DeviceAndPlatformInfo in '..\source\DeviceAndPlatformInfo.pas',
-  ResponsiveContainer in '..\source\ResponsiveContainer.pas';
+  ResponsiveContainer in '..\source\ResponsiveContainer.pas',
+  FrameStand in '..\source\FrameStand.pas',
+  FormStand in '..\source\FormStand.pas',
+  ComponentRegistration in '..\source\ComponentRegistration.pas';
 
 end.

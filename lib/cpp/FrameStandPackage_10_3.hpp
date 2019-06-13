@@ -14,12 +14,15 @@
 #pragma pack(push,8)
 #include <System.hpp>	// (rtl)
 #include <SysInit.hpp>
-#include <FrameStand.hpp>
+#include <SubjectStand.hpp>
 #include <FrameStand.Editors.hpp>
 #include <FrameStand.Editors.Forms.Test.hpp>
 #include <Frames.Test.hpp>
 #include <DeviceAndPlatformInfo.hpp>
 #include <ResponsiveContainer.hpp>
+#include <FrameStand.hpp>
+#include <FormStand.hpp>
+#include <ComponentRegistration.hpp>
 #include <System.UITypes.hpp>	// (rtl)
 #include <Winapi.Windows.hpp>	// (rtl)
 #include <Winapi.PsAPI.hpp>	// (rtl)

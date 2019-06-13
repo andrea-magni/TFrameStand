@@ -137,7 +137,7 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="fmx.dcp"/>
-        <DCCReference Include="..\source\FrameStand.pas"/>
+        <DCCReference Include="..\source\SubjectStand.pas"/>
         <DCCReference Include="..\source\FrameStand.Editors.pas"/>
         <DCCReference Include="..\source\FrameStand.Editors.Forms.Test.pas">
             <Form>TestForm</Form>
@@ -150,6 +150,9 @@
         </DCCReference>
         <DCCReference Include="..\source\DeviceAndPlatformInfo.pas"/>
         <DCCReference Include="..\source\ResponsiveContainer.pas"/>
+        <DCCReference Include="..\source\FrameStand.pas"/>
+        <DCCReference Include="..\source\FormStand.pas"/>
+        <DCCReference Include="..\source\ComponentRegistration.pas"/>
         <RcItem Include="..\media\frame_stand_mdpi.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>TFRAMESTAND</ResourceId>

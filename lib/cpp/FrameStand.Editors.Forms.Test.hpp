@@ -34,6 +34,7 @@
 #include <FMX.ActnList.hpp>
 #include <FMX.Objects.hpp>
 #include <FMX.Edit.hpp>
+#include <SubjectStand.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -84,23 +85,23 @@ __published:
 	void __fastcall FormDestroy(System::TObject* Sender);
 	
 private:
-	Framestand::TSubjectStand* FSubjectStand;
-	Framestand::TSubjectInfo* FSubjectInfo;
-	void __fastcall SetSubjectStand(Framestand::TSubjectStand* const Value);
+	Framestand::TFrameStand* FFrameStand;
+	Framestand::TFrameInfo__1<Frames::Test::TTestSubject*>* FFrameInfo;
+	void __fastcall SetFrameStand(Framestand::TFrameStand* const Value);
 	HIDESBASE Fmx::Controls::TStyleBook* __fastcall GetStyleBook();
 	System::UnicodeString __fastcall GetSelectedStyleName();
 	Fmx::Types::TAlignLayout __fastcall GetSelectedSubjectAlign();
 	
 protected:
 	virtual void __fastcall Init();
-	virtual void __fastcall DoSubjectStandChanged();
+	virtual void __fastcall DoFrameStandChanged();
 	void __fastcall SetupTestBed();
 	void __fastcall SetupTestSubjectAndTestBed();
 	__property System::UnicodeString SelectedStyleName = {read=GetSelectedStyleName};
 	__property Fmx::Types::TAlignLayout SelectedSubjectAlign = {read=GetSelectedSubjectAlign, nodefault};
 	
 public:
-	__property Framestand::TSubjectStand* SubjectStand = {read=FSubjectStand, write=SetSubjectStand};
+	__property Framestand::TFrameStand* FrameStand = {read=FFrameStand, write=SetFrameStand};
 	__property Fmx::Controls::TStyleBook* StyleBook = {read=GetStyleBook};
 public:
 	/* TCustomForm.Create */ inline __fastcall virtual TTestForm(System::Classes::TComponent* AOwner) : Fmx::Forms::TForm(AOwner) { }

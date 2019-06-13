@@ -9,9 +9,9 @@ uses
   ;
 
 type
-  TSubjectStandEditor = class(TComponentEditor)
+  TFrameStandEditor = class(TComponentEditor)
   private
-    function CurrentObj: TSubjectStand;
+    function CurrentObj: TFrameStand;
   protected
   public
     procedure Edit; override;
@@ -27,24 +27,24 @@ uses
 
 procedure Register;
 begin
-  RegisterComponentEditor(TSubjectStand, TSubjectStandEditor);
+  RegisterComponentEditor(TFrameStand, TFrameStandEditor);
 end;
 
-{ TSubjectStandEditor }
+{ TFrameStandEditor }
 
-function TSubjectStandEditor.CurrentObj: TSubjectStand;
+function TFrameStandEditor.CurrentObj: TFrameStand;
 begin
-  Result := Component as TSubjectStand;
+  Result := Component as TFrameStand;
 end;
 
-procedure TSubjectStandEditor.Edit;
+procedure TFrameStandEditor.Edit;
 var
   LForm: TTestForm;
 begin
   inherited;
   LForm := TTestForm.Create(nil);
   try
-    LForm.SubjectStand := CurrentObj;
+    LForm.FrameStand := CurrentObj;
     LForm.ShowModal;
   finally
     LForm.Free;

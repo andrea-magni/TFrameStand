@@ -65,6 +65,7 @@ type
     destructor Destroy; override;
 
     function FormInfo(const AForm: TForm): TFormInfo<TForm>;
+    property FormInfos: TObjectDictionary<TForm, TFormInfo<TForm>> read FFormInfos;
     function LastShownForm: TForm;
     procedure Remove(ASubject: TSubject); override;
 

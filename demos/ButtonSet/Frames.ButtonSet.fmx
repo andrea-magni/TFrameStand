@@ -17,6 +17,7 @@ object ButtonSetFrame: TButtonSetFrame
     inherited TextLabel: TLabel
       Size.Width = 309.000000000000000000
       Size.Height = 74.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
     end
     inherited OnShowSlideIn: TFloatAnimation
       Delay = 0.100000001490116100
@@ -38,6 +39,7 @@ object ButtonSetFrame: TButtonSetFrame
     inherited TextLabel: TLabel
       Size.Width = 309.000000000000000000
       Size.Height = 74.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
     end
     inherited OnShowSlideIn: TFloatAnimation
       Duration = 0.500000000000000000
@@ -58,9 +60,10 @@ object ButtonSetFrame: TButtonSetFrame
     inherited TextLabel: TLabel
       Size.Width = 309.000000000000000000
       Size.Height = 74.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
     end
     inherited OnShowSlideIn: TFloatAnimation
-      Delay = 0.400000005960464400
+      Delay = 0.400000005960464500
       Duration = 0.500000000000000000
     end
   end

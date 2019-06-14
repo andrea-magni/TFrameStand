@@ -8,7 +8,7 @@ uses
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects
   , FrameStand, ResponsiveContainer
   , Frames.Dashboard
-  , Frames.Orders_xs, Frames.Orders_sm, Frames.Orders_lg
+  , Frames.Orders_xs, Frames.Orders_sm, Frames.Orders_lg, SubjectStand
   {$IFDEF ANDROID}
   , Frames.Orders_sm_Android, Frames.Orders_lg_Android
   {$ENDIF}
@@ -32,12 +32,12 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
       Shift: TShiftState);
     procedure FormResize(Sender: TObject);
-    procedure FrameStand1BeforeShow(const ASender: TFrameStand;
-      const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
     procedure TextXSClick(Sender: TObject);
     procedure TextSMClick(Sender: TObject);
     procedure TextMDClick(Sender: TObject);
     procedure TextLGClick(Sender: TObject);
+    procedure FrameStand1BeforeShow(const ASender: TSubjectStand;
+      const ASubjectInfo: TSubjectInfo);
   private
     { Private declarations }
     FBreakpoint: TBreakpoint;
@@ -145,10 +145,10 @@ begin
   end;
 end;
 
-procedure TMainForm.FrameStand1BeforeShow(const ASender: TFrameStand;
-  const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
+procedure TMainForm.FrameStand1BeforeShow(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
 begin
-  Text1.Text := 'Class: ' + AFrameInfo.Frame.ClassName;
+  Text1.Text := 'Class: ' + ASubjectInfo.Subject.ClassName;
 end;
 
 function TMainForm.GetDashboardFI: TFrameInfo<TDashboardFrame>;

@@ -218,7 +218,7 @@ uses
 constructor TSubjectStand.Create(AOwner: TComponent);
 begin
   inherited;
-  FDefaultStyleName := 'Subjectstand';
+  FDefaultStyleName := ClassName.Substring(1).ToLower;
   FAnimationShow := 'OnShow*';
   FAnimationHide := 'OnHide*';
   FCommonActionPrefix := 'ca_';

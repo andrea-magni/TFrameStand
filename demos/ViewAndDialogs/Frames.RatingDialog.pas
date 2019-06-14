@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, FMX.Objects, FMX.Ani
-  , FrameStand, Data.Bind.EngExt, Fmx.Bind.DBEngExt, System.Rtti,
+  , SubjectStand, FrameStand, Data.Bind.EngExt, Fmx.Bind.DBEngExt, System.Rtti,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.Components;
 
 type

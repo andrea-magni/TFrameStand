@@ -63,6 +63,7 @@ type
     destructor Destroy; override;
 
     function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
+    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
     function LastShownFrame: TFrame;
     procedure Remove(ASubject: TSubject); override;
 

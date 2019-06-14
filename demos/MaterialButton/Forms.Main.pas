@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, FrameStand
-  , Frames.MaterialButton, FMX.Edit, FMX.ListBox, System.Actions, FMX.ActnList
+  , Frames.MaterialButton, FMX.Edit, FMX.ListBox, System.Actions, FMX.ActnList,
+  SubjectStand
   ;
 
 type

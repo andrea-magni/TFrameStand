@@ -54,10 +54,11 @@ object Form1: TForm1
     Top = 184
   end
   object FrameStand1: TFrameStand
-    StyleBook = StyleBook1
-    DefaultStyleName = 'framestand'
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
+    CommonActionPrefix = 'ca_'
+    DefaultStyleName = 'framestand'
+    StyleBook = StyleBook1
     Left = 32
     Top = 128
   end

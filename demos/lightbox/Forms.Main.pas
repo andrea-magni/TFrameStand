@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, FrameStand, FMX.ListBox, FMX.Objects,
-  System.ImageList, FMX.ImgList, Data.DB, Datasnap.DBClient;
+  System.ImageList, FMX.ImgList, Data.DB, Datasnap.DBClient, SubjectStand;
 
 type
   TMainForm = class(TForm)
@@ -24,8 +24,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure TextButtonClick(Sender: TObject);
     procedure DatasetButtonClick(Sender: TObject);
-    procedure FrameStand1BeforeShow(const ASender: TFrameStand;
-      const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
+    procedure FrameStand1BeforeShow(const ASender: TSubjectStand;
+      const ASubjectInfo: TSubjectInfo);
   private
     { Private declarations }
   public
@@ -62,26 +62,26 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   FrameStand1.CommonActions.Add('Close*',
-    procedure (AInfo: TFrameInfo<TFrame>)
+    procedure (AInfo: TSubjectInfo)
     begin
       AInfo.Hide();
     end
   );
 end;
 
-procedure TMainForm.FrameStand1BeforeShow(const ASender: TFrameStand;
-  const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
+procedure TMainForm.FrameStand1BeforeShow(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
 var
   LContentBackground: TRectangle;
   LTenPercent: Single;
 begin
   LTenPercent := 0;
-  if AFrameInfo.Parent is TCustomForm then
-    LTenPercent := TCustomForm(AFrameInfo.Parent).Width / 10
-  else if AFrameInfo.Parent is TControl then
-    LTenPercent := TControl(AFrameInfo.Parent).Width / 10;
+  if ASubjectInfo.Parent is TCustomForm then
+    LTenPercent := TCustomForm(ASubjectInfo.Parent).Width / 10
+  else if ASubjectInfo.Parent is TControl then
+    LTenPercent := TControl(ASubjectInfo.Parent).Width / 10;
 
-  LContentBackground := AFrameInfo.Stand.FindStyleResource('content_background') as TRectangle;
+  LContentBackground := ASubjectInfo.Stand.FindStyleResource('content_background') as TRectangle;
 
   if Assigned(LContentBackground) then
     LContentBackground.Margins.Rect := TRectF.Create(LTenPercent, LTenPercent

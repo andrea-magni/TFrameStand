@@ -15,11 +15,20 @@ type
   FormStandAttribute = class(ContextAttribute);
   FormInfoAttribute = class(ContextAttribute);
 //  FormIsOwnedAttribute = class(ContextAttribute);
+  AlignAttribute = class(ContextAttribute)
+  private
+    FAlign: TAlignLayout;
+  protected
+  public
+    constructor Create(const AAlign: TAlignLayout);
+    property Align: TAlignLayout read FAlign;
+  end;
 
   TFormInfo<T: TForm> = class(TSubjectInfo)
   private
     FForm: T;
     FFormIsOwned: Boolean;
+    FFormContainer: TLayout;
     function GetFormStand: TFormStand;
   protected
     function GetSubject: TSubject; override;
@@ -28,7 +37,9 @@ type
     procedure SetSubjectIsOwned(const Value: Boolean); override;
 
     procedure ParentAll(const AForm: TForm; const ANewParent: TFmxObject); virtual;
+    procedure UnparentAll(const AForm: TForm); virtual;
     procedure SetupSubjectContainer; override;
+    procedure TeardownSubjectContainer; override;
     procedure InjectContextAttribute(const AAttribute: ContextAttribute;
       const AField: TRttiField; const AFieldClassType: TClass); override;
   public
@@ -43,7 +54,7 @@ type
     property FormIsOwned: Boolean read FFormIsOwned write FFormIsOwned;
     property Form: T read FForm;
     property FormStand: TFormStand read GetFormStand;
-
+    property FormContainer: TLayout read FFormContainer;
   end;
 
   TOnGetFormClassEvent = procedure (const ASender: TFormStand; var AParent: TFmxObject;
@@ -221,6 +232,7 @@ begin
 
   FForm := AForm;
   FFormIsOwned := False;
+  FFormContainer := nil;
 
   inherited Create(AFormStand, AForm, AParent, AStandStyleName);
 end;
@@ -229,27 +241,36 @@ procedure TFormInfo<T>.ParentAll(const AForm: TForm; const ANewParent: TFmxObjec
 var
   LChild: TFmxObject;
   LChildren: TArray<TFmxObject>;
-  LSubContainer: TLayout;
+  LFormContainerAlign: TAlignLayout;
+  LFormType: TRttiType;
+  LAttribute: AlignAttribute;
 begin
+  Assert(not Assigned(FFormContainer));
   if not (Assigned(AForm) and Assigned(AForm.Children)) then
     Exit;
 
+  LFormContainerAlign := TAlignLayout.Client; // default
   LChildren := AForm.Children.ToArray;
   if Length(LChildren) > 0 then
   begin
-    LSubContainer := TLayout.Create(AForm);
+    FFormContainer := TLayout.Create(nil);
     try
-      LSubContainer.Parent := ANewParent;
-      LSubContainer.Align := TAlignLayout.Client;
+      FFormContainer.Parent := ANewParent;
+      LFormType := TRttiContext.Create.GetType(AForm.ClassType);
+      LAttribute := HasAttribute<AlignAttribute>(LFormType);
+      if Assigned(LAttribute) then
+        LFormContainerAlign := LAttribute.Align;
 
-      for LChild in LChildren do
-      begin
-        if LChild.Parent = AForm then
-          LChild.Parent := LSubContainer;
-      end;
+      FFormContainer.Align := LFormContainerAlign;
     except
-      LSubContainer.Free;
+      FreeAndNil(FFormContainer);
       raise;
+    end;
+
+    for LChild in LChildren do
+    begin
+      if LChild.Parent = AForm then
+        LChild.Parent := FFormContainer;
     end;
   end;
 end;
@@ -283,7 +304,10 @@ end;
 procedure TFormInfo<T>.SetSubject(const Value: TSubject);
 begin
   inherited;
-  FForm := T(Value);
+  if Assigned(Value) then
+    FForm := Value as T
+  else
+    FForm := nil;
 end;
 
 procedure TFormInfo<T>.SetSubjectIsOwned(const Value: Boolean);
@@ -305,6 +329,41 @@ begin
   SubjectShow();
 end;
 
+procedure TFormInfo<T>.TeardownSubjectContainer;
+begin
+//  inherited;
+  if FormIsOwned and Assigned(FForm) then
+  begin
+    if not (csDestroying in FormStand.ComponentState) then
+    begin
+      FForm.DisposeOf;
+      FForm := nil;
+    end;
+  end
+  else
+  begin
+    UnparentAll(FForm);
+    Container.RemoveObject(FFormContainer);
+  end;
+
+  if Assigned(FFormContainer) then
+    FreeAndNil(FFormContainer);
+end;
+
+procedure TFormInfo<T>.UnparentAll(const AForm: TForm);
+var
+  LChild: TFmxObject;
+begin
+  Assert(Assigned(AForm));
+  Assert(Assigned(FFormContainer));
+
+  for LChild in FFormContainer.Children do
+  begin
+    if LChild.Parent = FFormContainer then
+      LChild.Parent := AForm;
+  end;
+end;
+
 function TFormInfo<T>.Show(const ABackgroundTask,
   AOnTaskComplete: TProc<TFormInfo<T>>;
   const AOnTaskCompleteSynchronized: Boolean): ITask;
@@ -316,6 +375,14 @@ begin
   , AOnTaskCompleteSynchronized
   );
 {$WARN SYMBOL_DEPRECATED ON}
+end;
+
+{ AlignAttribute }
+
+constructor AlignAttribute.Create(const AAlign: TAlignLayout);
+begin
+  inherited Create;
+  FAlign := AAlign;
 end;
 
 end.

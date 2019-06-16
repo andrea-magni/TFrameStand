@@ -86,13 +86,17 @@ type
     function FireShowAnimations: Boolean; virtual;
     function FireHideAnimations(out AHideDelay: Single): Boolean; virtual;
     procedure DoCommonActionClick(Sender: TObject);
-
+    // setup
     procedure SetupStand; virtual;
     procedure SetupStandParent(const AParent: TFmxObject); virtual;
     procedure SetupContainer; virtual;
     procedure SetupSubjectContainer; virtual;
     procedure SetupCommonActions(const AFmxObject: TFmxObject); virtual;
     procedure SetupCustomMethods; virtual;
+    // teardown
+    procedure TeardownSubjectContainer; virtual;
+    procedure TeardownStandParent; virtual;
+    procedure TeardownStand; virtual;
   public
     procedure DefaultShow; virtual;
     procedure DefaultHide; virtual;
@@ -457,29 +461,9 @@ end;
 
 destructor TSubjectInfo.Destroy;
 begin
-  if SubjectIsOwned and Assigned(Subject) then
-  begin
-    if not (csDestroying in FSubjectStand.ComponentState) then
-    begin
-      Subject.DisposeOf;
-      Subject := nil;
-    end;
-  end
-  else
-  begin
-    FContainer.RemoveObject(Subject);
-  end;
-
-  if not (csDestroying in FSubjectStand.ComponentState) then
-    Parent.RemoveObject(Stand);
-  Parent := nil;
-
-  if not (csDestroying in FSubjectStand.ComponentState) then
-  begin
-    Stand.DisposeOf;
-    Stand := nil;
-  end;
-
+  TeardownSubjectContainer;
+  TeardownStandParent;
+  TeardownStand;
   inherited;
 end;
 
@@ -641,6 +625,8 @@ begin
         LMetaClassType := TRttiInstanceType(LParameter.ParamType).MetaclassType;
 
         LAttribute := HasAttribute<ContextAttribute>(LParameter);
+        if not Assigned(LAttribute) then
+          Continue;
         // injection
         if (LAttribute is SubjectStandAttribute) and (LMetaClassType.InheritsFrom(TSubjectStand)) then
           LArguments := LArguments + [SubjectStand]
@@ -778,7 +764,8 @@ begin
     begin
       LFieldClassType := TRttiInstanceType(LField.FieldType).MetaclassType;
       LAttribute := HasAttribute<ContextAttribute>(LField);
-      InjectContextAttribute(LAttribute, LField, LFieldClassType);
+      if Assigned(LAttribute) then
+        InjectContextAttribute(LAttribute, LField, LFieldClassType);
     end;
   end;
 end;
@@ -896,6 +883,38 @@ begin
   FireCustomAfterShowMethods;
   if Assigned(SubjectStand) then
     SubjectStand.DoAfterShow(SubjectStand, Self);
+end;
+
+procedure TSubjectInfo.TeardownStand;
+begin
+  if not (csDestroying in FSubjectStand.ComponentState) then
+  begin
+    Stand.DisposeOf;
+    Stand := nil;
+  end;
+end;
+
+procedure TSubjectInfo.TeardownStandParent;
+begin
+  if not (csDestroying in FSubjectStand.ComponentState) then
+    Parent.RemoveObject(Stand);
+  Parent := nil;
+end;
+
+procedure TSubjectInfo.TeardownSubjectContainer;
+begin
+  if SubjectIsOwned and Assigned(Subject) then
+  begin
+    if not (csDestroying in FSubjectStand.ComponentState) then
+    begin
+      Subject.DisposeOf;
+      Subject := nil;
+    end;
+  end
+  else
+  begin
+    FContainer.RemoveObject(Subject);
+  end;
 end;
 
 { TDelayedAction }

@@ -24,6 +24,16 @@ type
     property Align: TAlignLayout read FAlign;
   end;
 
+  ClipChildrenAttribute = class(ContextAttribute)
+  private
+    FClipChildren: Boolean;
+  protected
+  public
+    constructor Create(const AClipChildren: Boolean);
+    property ClipChildren: Boolean read FClipChildren;
+  end;
+
+
   TFormInfo<T: TForm> = class(TSubjectInfo)
   private
     FForm: T;
@@ -36,7 +46,7 @@ type
     function GetSubjectIsOwned: Boolean; override;
     procedure SetSubjectIsOwned(const Value: Boolean); override;
 
-    procedure ParentAll(const AForm: TForm; const ANewParent: TFmxObject); virtual;
+    procedure ParentAll(const AForm: TForm; const AContainer: TFmxObject); virtual;
     procedure UnparentAll(const AForm: TForm); virtual;
     procedure SetupSubjectContainer; override;
     procedure TeardownSubjectContainer; override;
@@ -92,6 +102,9 @@ type
   end;
 
 implementation
+
+uses
+  System.Types;
 
 { TFormStand }
 
@@ -237,41 +250,57 @@ begin
   inherited Create(AFormStand, AForm, AParent, AStandStyleName);
 end;
 
-procedure TFormInfo<T>.ParentAll(const AForm: TForm; const ANewParent: TFmxObject);
+procedure TFormInfo<T>.ParentAll(const AForm: TForm; const AContainer: TFmxObject);
 var
   LChild: TFmxObject;
   LChildren: TArray<TFmxObject>;
   LFormContainerAlign: TAlignLayout;
   LFormType: TRttiType;
-  LAttribute: AlignAttribute;
+  LAlignAttribute: AlignAttribute;
+  LClipChildrenAttribute: ClipChildrenAttribute;
+  LFormBounds: TRect;
 begin
   Assert(not Assigned(FFormContainer));
   if not (Assigned(AForm) and Assigned(AForm.Children)) then
     Exit;
 
-  LFormContainerAlign := TAlignLayout.Client; // default
   LChildren := AForm.Children.ToArray;
   if Length(LChildren) > 0 then
   begin
     FFormContainer := TLayout.Create(nil);
     try
-      FFormContainer.Parent := ANewParent;
+      LFormBounds := AForm.Bounds;
+      // make FormContainer same size of the form
+      FFormContainer.SetBounds(LFormBounds.Left, LFormBounds.Top, LFormBounds.Width, LFormBounds.Height);
+
+      // determine alignment of the FormContainer
+      LFormContainerAlign := TAlignLayout.Client; // default
       LFormType := TRttiContext.Create.GetType(AForm.ClassType);
-      LAttribute := HasAttribute<AlignAttribute>(LFormType);
-      if Assigned(LAttribute) then
-        LFormContainerAlign := LAttribute.Align;
+      LAlignAttribute := HasAttribute<AlignAttribute>(LFormType);
+      if Assigned(LAlignAttribute) then
+        LFormContainerAlign := LAlignAttribute.Align;
 
       FFormContainer.Align := LFormContainerAlign;
+
+      FFormContainer.ClipChildren := False; // default
+      LClipChildrenAttribute := HasAttribute<ClipChildrenAttribute>(LFormType);
+      if Assigned(LClipChildrenAttribute) then
+        FFormContainer.ClipChildren := LClipChildrenAttribute.ClipChildren;
+
     except
       FreeAndNil(FFormContainer);
       raise;
     end;
 
+    // parent all form's children to the FormContainer
     for LChild in LChildren do
     begin
       if LChild.Parent = AForm then
         LChild.Parent := FFormContainer;
     end;
+
+    // parent the FormContainer to the actual Container
+    FFormContainer.Parent := AContainer;
   end;
 end;
 
@@ -383,6 +412,14 @@ constructor AlignAttribute.Create(const AAlign: TAlignLayout);
 begin
   inherited Create;
   FAlign := AAlign;
+end;
+
+{ ClipChildrenAttribute }
+
+constructor ClipChildrenAttribute.Create(const AClipChildren: Boolean);
+begin
+  inherited Create;
+  FClipChildren := AClipChildren;
 end;
 
 end.

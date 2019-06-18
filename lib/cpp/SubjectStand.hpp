@@ -261,6 +261,9 @@ protected:
 	virtual void __fastcall SetupSubjectContainer();
 	virtual void __fastcall SetupCommonActions(Fmx::Types::TFmxObject* const AFmxObject);
 	virtual void __fastcall SetupCustomMethods();
+	virtual void __fastcall TeardownSubjectContainer();
+	virtual void __fastcall TeardownStandParent();
+	virtual void __fastcall TeardownStand();
 	
 public:
 	virtual void __fastcall DefaultShow();
@@ -288,9 +291,11 @@ public:
 
 typedef void __fastcall (__closure *TOnAfterShowEvent)(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 
-typedef void __fastcall (__closure *TOnBeforeShowEvent)(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
+typedef TOnAfterShowEvent TOnBeforeShowEvent;
 
-typedef TOnBeforeShowEvent TOnAfterHideEvent;
+typedef TOnAfterShowEvent TOnAfterHideEvent;
+
+typedef TOnAfterShowEvent TOnBeforeHideEvent;
 
 typedef void __fastcall (__closure *TOnBeforeStartAnimationEvent)(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo, Fmx::Ani::TAnimation* const AAnimation);
 
@@ -330,9 +335,10 @@ private:
 	System::UnicodeString FAnimationHide;
 	System::UnicodeString FAnimationShow;
 	TCommonActionDictionary__1<TSubjectInfo*>* FCommonActions;
-	TOnBeforeShowEvent FOnAfterHide;
+	TOnAfterShowEvent FOnAfterHide;
+	TOnAfterShowEvent FOnBeforeHide;
 	TOnAfterShowEvent FOnAfterShow;
-	TOnBeforeShowEvent FOnBeforeShow;
+	TOnAfterShowEvent FOnBeforeShow;
 	TOnBeforeStartAnimationEvent FOnBeforeStartAnimation;
 	Fmx::Actnlist::TActionList* FCommonActionList;
 	System::UnicodeString FCommonActionPrefix;
@@ -352,6 +358,7 @@ protected:
 	virtual void __fastcall DoAfterShow(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 	virtual void __fastcall DoBeforeShow(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 	virtual void __fastcall DoAfterHide(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
+	virtual void __fastcall DoBeforeHide(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 	virtual void __fastcall DoClose(Fmx::Types::TFmxObject* const ASubject);
 	
 public:
@@ -373,9 +380,10 @@ __published:
 	__property System::UnicodeString DefaultStyleName = {read=FDefaultStyleName, write=FDefaultStyleName};
 	__property Fmx::Types::TFmxObject* DefaultParent = {read=FDefaultParent, write=FDefaultParent};
 	__property Fmx::Controls::TStyleBook* StyleBook = {read=FStyleBook, write=FStyleBook};
-	__property TOnBeforeShowEvent OnAfterHide = {read=FOnAfterHide, write=FOnAfterHide};
+	__property TOnAfterShowEvent OnAfterHide = {read=FOnAfterHide, write=FOnAfterHide};
+	__property TOnAfterShowEvent OnBeforeHide = {read=FOnBeforeHide, write=FOnBeforeHide};
 	__property TOnAfterShowEvent OnAfterShow = {read=FOnAfterShow, write=FOnAfterShow};
-	__property TOnBeforeShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
+	__property TOnAfterShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
 	__property TOnBeforeStartAnimationEvent OnBeforeStartAnimation = {read=FOnBeforeStartAnimation, write=FOnBeforeStartAnimation};
 	__property TOnBindCommonActionList OnBindCommonActionList = {read=FOnBindCommonActionList, write=FOnBindCommonActionList};
 };

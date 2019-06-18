@@ -129,8 +129,9 @@ type
   end;
 
   TOnAfterShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
-  TOnBeforeShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
+  TOnBeforeShowEvent = TOnAfterShowEvent;
   TOnAfterHideEvent = TOnBeforeShowEvent;
+  TOnBeforeHideEvent = TOnBeforeShowEvent;
   TOnBeforeStartAnimationEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo; const AAnimation: TAnimation) of object;
   TOnBindCommonActionList = procedure(ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo; const AObject: TFmxObject; var ACommonActionName: string) of object;
 
@@ -159,6 +160,7 @@ type
     FAnimationShow: string;
     FCommonActions: TCommonActionDictionary<TSubjectInfo>;
     FOnAfterHide: TOnAfterHideEvent;
+    FOnBeforeHide: TOnBeforeHideEvent;
     FOnAfterShow: TOnAfterShowEvent;
     FOnBeforeShow: TOnBeforeShowEvent;
     FOnBeforeStartAnimation: TOnBeforeStartAnimationEvent;
@@ -180,6 +182,7 @@ type
     procedure DoAfterShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); virtual;
     procedure DoBeforeShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); virtual;
     procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); virtual;
+    procedure DoBeforeHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); virtual;
     procedure DoClose(const ASubject: TSubject); virtual;
   public
     constructor Create(AOwner: TComponent); override;
@@ -205,6 +208,7 @@ type
 
     // Events
     property OnAfterHide: TOnAfterHideEvent read FOnAfterHide write FOnAfterHide;
+    property OnBeforeHide: TOnBeforeHideEvent read FOnBeforeHide write FOnBeforeHide;
     property OnAfterShow: TOnAfterShowEvent read FOnAfterShow write FOnAfterShow;
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
     property OnBeforeStartAnimation: TOnBeforeStartAnimationEvent read FOnBeforeStartAnimation write FOnBeforeStartAnimation;
@@ -256,10 +260,17 @@ begin
     FOnAfterShow(ASender, ASubjectInfo);
 end;
 
+procedure TSubjectStand.DoBeforeHide(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
+begin
+  if Assigned(FOnBeforeHide) then
+    FOnBeforeHide(ASender, ASubjectInfo);
+end;
+
 procedure TSubjectStand.DoBeforeShow(const ASender: TSubjectStand;
   const ASubjectInfo: TSubjectInfo);
 begin
-   if Assigned(FOnBeforeShow) then
+  if Assigned(FOnBeforeShow) then
     FOnBeforeShow(ASender, ASubjectInfo);
 end;
 
@@ -719,6 +730,9 @@ begin
   Result := False;
   if not FHiding then
   begin
+    if Assigned(SubjectStand) then
+      SubjectStand.DoBeforeHide(SubjectStand, Self);
+
     FStatus := TSubjectStatus.Hiding;
     Result := True;
     FHiding := True;

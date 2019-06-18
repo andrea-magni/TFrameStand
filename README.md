@@ -5,7 +5,7 @@ Easily use TFrame(s) in your FireMonkey (FMX) applications to gain visual consis
 _All code and demos tested on Delphi XE8 and Delphi 10.3 Rio._
 
 ##Installation - GetIt!
-**TFrameStand is [now available on GetIt](http://www.andreamagni.eu/wp/2015/10/tframestand-is-now-available-through-getit/) (Embarcadero's Package Manager)**
+**TFrameStand is [now available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
 
 _Current version on GetIt: 1.4_
 
@@ -24,7 +24,7 @@ _Installing manually you get the latest updates (beware! :-) )_
 * Responsive frame substitution
 
 ##Get started
-* Have a look at [my blog posts about TFrameStand](http://www.andreamagni.eu/wp/tag/tframestand/)
+* Have a look at [my blog posts about TFrameStand](https://blog.andreamagni.eu/tag/tframestand/)
 * [My CodeRage X session (50 min video covering all the basic functionalities)](https://www.youtube.com/watch?v=Z6_ZvnCmFCw)
 
 ##Demo projects
@@ -35,6 +35,8 @@ _Installing manually you get the latest updates (beware! :-) )_
 * **PictureWall**: show pictures in a TFlowLayout with a fading in transition
 * **ButtonSet**: mimics Android's Camera toolbuttons laying over your content.
 * **EditHelper**: adds easy to customize buttons or controls to any TEdit.
+* **BottomSheet**: implementation of a bottom sheet UI element with TFrameStand
+* **ResponsiveProject**: implementation of responsive application with FMX and TFrameStand
 
 # Contributions
 This is an open source project, so obviously every contribution/help/suggestion will be very appreciated.

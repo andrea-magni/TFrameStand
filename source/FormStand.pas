@@ -52,6 +52,7 @@ type
     procedure TeardownSubjectContainer; override;
     procedure InjectContextAttribute(const AAttribute: ContextAttribute;
       const AField: TRttiField; const AFieldClassType: TClass); override;
+    procedure FreeFormContainer;
   public
     constructor Create(const AFormStand: TFormStand; const AForm: T;
       const AParent: TFmxObject; const AStandStyleName: string); reintroduce; virtual;
@@ -358,6 +359,20 @@ begin
   SubjectShow();
 end;
 
+procedure TFormInfo<T>.FreeFormContainer;
+begin
+  if Assigned(FFormContainer) then
+  begin
+    {$IFDEF AUTOREFCOUNT}
+      FFormContainer.DisposeOf;
+      FFormContainer := nil;
+    {$ELSE}
+      FreeAndNil(FFormContainer);
+    {$ENDIF}
+  end;
+end;
+
+
 procedure TFormInfo<T>.TeardownSubjectContainer;
 begin
 //  inherited;
@@ -365,18 +380,21 @@ begin
   begin
     if not (csDestroying in FormStand.ComponentState) then
     begin
+    {$IFDEF AUTOREFCOUNT}
       FForm.DisposeOf;
       FForm := nil;
+    {$ELSE}
+      FreeAndNil(FForm);
+    {$ENDIF}
+      FreeFormContainer;
     end;
   end
   else
   begin
     UnparentAll(FForm);
     Container.RemoveObject(FFormContainer);
+    FreeFormContainer;
   end;
-
-  if Assigned(FFormContainer) then
-    FreeAndNil(FFormContainer);
 end;
 
 procedure TFormInfo<T>.UnparentAll(const AForm: TForm);

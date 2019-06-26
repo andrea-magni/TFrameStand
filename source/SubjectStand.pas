@@ -110,6 +110,7 @@ type
     procedure SubjectShow; overload;
 
     function Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
+    procedure HideAndClose(const ADeferExecutionMS: Integer = 100; const AThen: TProc = nil);
     procedure Close();
 
     constructor Create(const ASubjectStand: TSubjectStand; const ASubject: TSubject;
@@ -759,6 +760,23 @@ begin
       end
     );
   end;
+end;
+
+procedure TSubjectInfo.HideAndClose(const ADeferExecutionMS: Integer; const AThen: TProc);
+begin
+  TDelayedAction.Execute(ADeferExecutionMS
+  , procedure
+    begin
+      Hide(0
+      , procedure
+        begin
+          Close;
+          if Assigned(AThen) then
+            AThen();
+        end
+      );
+    end
+  );
 end;
 
 procedure TSubjectInfo.InjectContext;

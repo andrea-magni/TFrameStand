@@ -61,11 +61,14 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-
-    function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
-    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
     function LastShownFrame: TFrame;
     procedure Remove(ASubject: TSubject); override;
+
+    function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>; overload;
+    function FrameInfo(const AFrameClass: TFrameClass): TFrameInfo<TFrame>; overload;
+    function FrameInfo<T: TFrame>: TFrameInfo<T>; overload;
+    function GetFrameInfo<T: TFrame>(const ANewIfNotFound: Boolean = True;
+      const AParent: TFmxObject = nil; const AStandStyleName: string = ''): TFrameInfo<T>;
 
     function Use<T: TFrame>(const AFrame: T; const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFrameInfo<T>;
@@ -73,6 +76,7 @@ type
     function New<T: TFrame>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFrameInfo<T>;
 
+    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
     property VisibleFrames: TList<TFrame> read FVisibleFrames;
   published
     property OnGetSubjectClass: TOnGetFrameClassEvent read FOnGetFrameClass write FOnGetFrameClass;
@@ -121,6 +125,27 @@ begin
   inherited;
 end;
 
+function TFrameStand.FrameInfo(
+  const AFrameClass: TFrameClass): TFrameInfo<TFrame>;
+var
+  LPair: TPair<TFrame, TFrameInfo<TFrame>>;
+begin
+  Result := nil;
+  for LPair in FFrameInfos do
+  begin
+    if LPair.Key is AFrameClass then
+    begin
+      Result := LPair.Value;
+      Break;
+    end;
+  end;
+end;
+
+function TFrameStand.FrameInfo<T>: TFrameInfo<T>;
+begin
+  Result := TFrameInfo<T>(FrameInfo(TFrameClass(TFrame(T).ClassType)));
+end;
+
 function TFrameStand.FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
 begin
   Result := nil;
@@ -139,6 +164,14 @@ begin
   DoResponsiveLookup(TSubjectClass(Result), AStandStyleName, AParent);
   if Assigned(FOnGetFrameClass) then
     FOnGetFrameClass(Self, AParent, AStandStyleName, Result);
+end;
+
+function TFrameStand.GetFrameInfo<T>(const ANewIfNotFound: Boolean = True;
+  const AParent: TFmxObject = nil; const AStandStyleName: string = ''): TFrameInfo<T>;
+begin
+  Result := FrameInfo<T>;
+  if ANewIfNotFound and not Assigned(Result) then
+    Result := New<T>(AParent, AStandStyleName);
 end;
 
 function TFrameStand.LastShownFrame: TFrame;

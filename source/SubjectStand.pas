@@ -110,7 +110,7 @@ type
     procedure SubjectShow; overload;
 
     function Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
-    procedure HideAndClose(const ADeferExecutionMS: Integer = 100; const AThen: TProc = nil);
+    procedure HideAndClose(const ADeferExecutionMS: Integer = 0; const AThen: TProc = nil);
     procedure Close();
 
     constructor Create(const ASubjectStand: TSubjectStand; const ASubject: TSubject;
@@ -170,6 +170,7 @@ type
     FOnBindCommonActionList: TOnBindCommonActionList;
     FDefaultParent: TFmxObject;
     FResponsive: TResponsiveContainer;
+    FDefaultHideAndCloseDeferTimeMS: Integer;
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetDefaultParent: TFmxObject; virtual;
@@ -191,6 +192,9 @@ type
 
     procedure Remove(ASubject: TSubject); virtual; abstract;
     function DeviceAndPlatformInfo(const AForm: TForm = nil): TDeviceAndPlatformInfo;
+    procedure CloseAll; overload; virtual; abstract;
+    procedure CloseAll(const AExceptions: TArray<TClass>); overload; virtual; abstract;
+    procedure CloseAll(const AException: TClass); overload; virtual;
 
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary<TSubjectInfo> read FCommonActions;
@@ -203,6 +207,7 @@ type
     property AnimationHide: string read FAnimationHide write FAnimationHide;
     property CommonActionList: TActionList read FCommonActionList write FCommonActionList;
     property CommonActionPrefix: string read FCommonActionPrefix write FCommonActionPrefix;
+    property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
     property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
     property DefaultParent: TFmxObject read FDefaultParent write FDefaultParent;
     property StyleBook: TStyleBook read FStyleBook write FStyleBook;
@@ -224,10 +229,16 @@ uses
 
 { TSubjectStand }
 
+procedure TSubjectStand.CloseAll(const AException: TClass);
+begin
+  CloseAll([AException]);
+end;
+
 constructor TSubjectStand.Create(AOwner: TComponent);
 begin
   inherited;
   FDefaultStyleName := ClassName.Substring(1).ToLower;
+  DefaultHideAndCloseDeferTimeMS := 100;
   FAnimationShow := 'OnShow*';
   FAnimationHide := 'OnHide*';
   FCommonActionPrefix := 'ca_';
@@ -763,11 +774,19 @@ begin
 end;
 
 procedure TSubjectInfo.HideAndClose(const ADeferExecutionMS: Integer; const AThen: TProc);
+var
+  LDeferExecutionMS: Integer;
 begin
-  TDelayedAction.Execute(ADeferExecutionMS
+  LDeferExecutionMS := 100;
+  if Assigned(SubjectStand) then
+    LDeferExecutionMS := SubjectStand.DefaultHideAndCloseDeferTimeMS;
+  if ADeferExecutionMS <> 0 then
+    LDeferExecutionMS := ADeferExecutionMS;
+
+  Hide(0
   , procedure
     begin
-      Hide(0
+      TDelayedAction.Execute(LDeferExecutionMS
       , procedure
         begin
           Close;
@@ -868,12 +887,12 @@ begin
     FStand.Align := TAlignLayout.Contents;
     FStand.StyleName := 'container';
   end;
-{$if compilerversion >= 31}
+{$IF compilerversion >= 31}
   // 10.1 Berlin and later
   // See https://github.com/andrea-magni/TSubjectStand/issues/12
   // also see https://quality.embarcadero.com/browse/RSP-14806
   FStand.Align := TAlignLayout.Contents;
-{$ifend}
+{$ENDIF}
   FStand.Visible := False;
 end;
 

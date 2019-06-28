@@ -63,6 +63,8 @@ type
     destructor Destroy; override;
     function LastShownFrame: TFrame;
     procedure Remove(ASubject: TSubject); override;
+    procedure CloseAll; overload; override;
+    procedure CloseAll(const AExceptions: TArray<TClass>); overload; override;
 
     function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>; overload;
     function FrameInfo(const AFrameClass: TFrameClass): TFrameInfo<TFrame>; overload;
@@ -85,6 +87,41 @@ type
 implementation
 
 { TFrameStand }
+
+procedure TFrameStand.CloseAll;
+begin
+  CloseAll(nil);
+end;
+
+procedure TFrameStand.CloseAll(const AExceptions: TArray<TClass>);
+
+  function IsException(const ASubject: TObject): Boolean;
+  var
+    LClass: TClass;
+  begin
+    Result := False;
+    for LClass in AExceptions do
+      if ASubject is LClass then
+      begin
+        Result := True;
+        Break;
+      end;
+  end;
+
+var
+  LFrameInfo: TFrameInfo<TFrame>;
+  LFrameInfos: TArray<TFrameInfo<TFrame>>;
+  LConsiderExceptions: Boolean;
+begin
+  LFrameInfos := FFrameInfos.Values.ToArray;
+  LConsiderExceptions := Length(AExceptions) > 0;
+
+  for LFrameInfo in LFrameInfos do
+  begin
+    if LConsiderExceptions and not IsException(LFrameInfo.Frame) then
+      LFrameInfo.HideAndClose;
+  end;
+end;
 
 constructor TFrameStand.Create(AOwner: TComponent);
 begin
@@ -143,7 +180,7 @@ end;
 
 function TFrameStand.FrameInfo<T>: TFrameInfo<T>;
 begin
-  Result := TFrameInfo<T>(FrameInfo(TFrameClass(TFrame(T).ClassType)));
+  Result := TFrameInfo<T>(FrameInfo(TFrameClass(T)));
 end;
 
 function TFrameStand.FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;

@@ -272,6 +272,7 @@ public:
 	System::Threading::_di_ITask __fastcall SubjectShow _DEPRECATED_ATTRIBUTE0 (const System::DelphiInterface<System::Sysutils::TProc__1<TSubjectInfo*> > ABackgroundTask, const System::DelphiInterface<System::Sysutils::TProc__1<TSubjectInfo*> > AOnTaskComplete = System::DelphiInterface<System::Sysutils::TProc__1<TSubjectInfo*> >(), const bool AOnTaskCompleteSynchronized = true)/* overload */;
 	void __fastcall SubjectShow()/* overload */;
 	bool __fastcall Hide(const int ADelay = 0x0, const System::Sysutils::_di_TProc AThen = System::Sysutils::_di_TProc());
+	void __fastcall HideAndClose(const int ADeferExecutionMS = 0x0, const System::Sysutils::_di_TProc AThen = System::Sysutils::_di_TProc());
 	void __fastcall Close();
 	__fastcall virtual TSubjectInfo(TSubjectStand* const ASubjectStand, Fmx::Types::TFmxObject* const ASubject, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString AStandStyleName);
 	__fastcall virtual ~TSubjectInfo();
@@ -345,6 +346,7 @@ private:
 	TOnBindCommonActionList FOnBindCommonActionList;
 	Fmx::Types::TFmxObject* FDefaultParent;
 	Responsivecontainer::TResponsiveContainer* FResponsive;
+	int FDefaultHideAndCloseDeferTimeMS;
 	
 protected:
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
@@ -366,6 +368,9 @@ public:
 	__fastcall virtual ~TSubjectStand();
 	HIDESBASE virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject) = 0 ;
 	Deviceandplatforminfo::TDeviceAndPlatformInfo __fastcall DeviceAndPlatformInfo(Fmx::Forms::TForm* const AForm = (Fmx::Forms::TForm*)(0x0));
+	virtual void __fastcall CloseAll() = 0 /* overload */;
+	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> AExceptions) = 0 /* overload */;
+	virtual void __fastcall CloseAll(const System::TClass AException)/* overload */;
 	__property int Count = {read=GetCount, nodefault};
 	__property TCommonActionDictionary__1<TSubjectInfo*>* CommonActions = {read=FCommonActions};
 	__property Responsivecontainer::TResponsiveContainer* Responsive = {read=FResponsive};
@@ -377,6 +382,7 @@ __published:
 	__property System::UnicodeString AnimationHide = {read=FAnimationHide, write=FAnimationHide};
 	__property Fmx::Actnlist::TActionList* CommonActionList = {read=FCommonActionList, write=FCommonActionList};
 	__property System::UnicodeString CommonActionPrefix = {read=FCommonActionPrefix, write=FCommonActionPrefix};
+	__property int DefaultHideAndCloseDeferTimeMS = {read=FDefaultHideAndCloseDeferTimeMS, write=FDefaultHideAndCloseDeferTimeMS, nodefault};
 	__property System::UnicodeString DefaultStyleName = {read=FDefaultStyleName, write=FDefaultStyleName};
 	__property Fmx::Types::TFmxObject* DefaultParent = {read=FDefaultParent, write=FDefaultParent};
 	__property Fmx::Controls::TStyleBook* StyleBook = {read=FStyleBook, write=FStyleBook};

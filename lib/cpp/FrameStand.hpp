@@ -119,16 +119,26 @@ protected:
 public:
 	__fastcall virtual TFrameStand(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TFrameStand();
-	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall FrameInfo(Fmx::Forms::TFrame* const AFrame);
-	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TFrameInfo__1<Fmx::Forms::TFrame*>*>* FrameInfos = {read=FFrameInfos};
 	Fmx::Forms::TFrame* __fastcall LastShownFrame();
 	virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject);
+	virtual void __fastcall CloseAll()/* overload */;
+	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> AExceptions)/* overload */;
+	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall FrameInfo(Fmx::Forms::TFrame* const AFrame)/* overload */;
+	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall FrameInfo(const TFrameClass AFrameClass)/* overload */;
+	template<typename T> TFrameInfo__1<T>* __fastcall FrameInfo()/* overload */;
+	template<typename T> TFrameInfo__1<T>* __fastcall GetFrameInfo(const bool ANewIfNotFound = true, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFrameInfo__1<T>* __fastcall Use(const T AFrame, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFrameInfo__1<T>* __fastcall New(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
+	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TFrameInfo__1<Fmx::Forms::TFrame*>*>* FrameInfos = {read=FFrameInfos};
 	__property System::Generics::Collections::TList__1<Fmx::Forms::TFrame*>* VisibleFrames = {read=FVisibleFrames};
 	
 __published:
 	__property TOnGetFrameClassEvent OnGetSubjectClass = {read=FOnGetFrameClass, write=FOnGetFrameClass};
+	/* Hoisted overloads: */
+	
+public:
+	inline void __fastcall  CloseAll(const System::TClass AException){ Subjectstand::TSubjectStand::CloseAll(AException); }
+	
 };
 
 

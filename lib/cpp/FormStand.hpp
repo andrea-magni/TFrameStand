@@ -127,6 +127,7 @@ protected:
 	virtual void __fastcall SetupSubjectContainer();
 	virtual void __fastcall TeardownSubjectContainer();
 	virtual void __fastcall InjectContextAttribute(Subjectstand::ContextAttribute* const AAttribute, System::Rtti::TRttiField* const AField, const System::TClass AFieldClassType);
+	void __fastcall FreeFormContainer();
 	
 public:
 	__fastcall virtual TFormInfo__1(TFormStand* const AFormStand, const T AForm, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString AStandStyleName);

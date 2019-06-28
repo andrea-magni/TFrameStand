@@ -192,7 +192,9 @@ type
 
     procedure Remove(ASubject: TSubject); virtual; abstract;
     function DeviceAndPlatformInfo(const AForm: TForm = nil): TDeviceAndPlatformInfo;
-    procedure CloseAll; overload; virtual; abstract;
+    procedure CloseAll; overload; virtual;
+    procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; virtual; abstract;
+    procedure CloseAll(const ARestrictTo: TClass); overload; virtual;
     procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual; abstract;
     procedure CloseAllExcept(const AException: TClass); overload; virtual;
 
@@ -228,6 +230,16 @@ uses
   ;
 
 { TSubjectStand }
+
+procedure TSubjectStand.CloseAll(const ARestrictTo: TClass);
+begin
+  CloseAll([ARestrictTo]);
+end;
+
+procedure TSubjectStand.CloseAll;
+begin
+  CloseAllExcept(nil);
+end;
 
 procedure TSubjectStand.CloseAllExcept(const AException: TClass);
 begin

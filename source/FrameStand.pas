@@ -63,7 +63,7 @@ type
     destructor Destroy; override;
     function LastShownFrame: TFrame;
     procedure Remove(ASubject: TSubject); override;
-    procedure CloseAll; overload; override;
+    procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
     procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
 
     function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>; overload;
@@ -88,9 +88,34 @@ implementation
 
 { TFrameStand }
 
-procedure TFrameStand.CloseAll;
+procedure TFrameStand.CloseAll(const ARestrictTo: TArray<TClass>);
+
+  function AppliesTo(const ASubject: TObject): Boolean;
+  var
+    LClass: TClass;
+  begin
+    Result := False;
+    for LClass in ARestrictTo do
+      if ASubject is LClass then
+      begin
+        Result := True;
+        Break;
+      end;
+  end;
+
+var
+  LFrameInfo: TFrameInfo<TFrame>;
+  LFrameInfos: TArray<TFrameInfo<TFrame>>;
+  LConsiderRestrictions: Boolean;
 begin
-  CloseAllExcept(nil);
+  LFrameInfos := FFrameInfos.Values.ToArray;
+  LConsiderRestrictions := Length(ARestrictTo) > 0;
+
+  for LFrameInfo in LFrameInfos do
+  begin
+    if LConsiderRestrictions and AppliesTo(LFrameInfo.Frame) then
+      LFrameInfo.HideAndClose;
+  end;
 end;
 
 procedure TFrameStand.CloseAllExcept(const AExceptions: TArray<TClass>);

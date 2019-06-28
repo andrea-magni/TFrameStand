@@ -193,8 +193,8 @@ type
     procedure Remove(ASubject: TSubject); virtual; abstract;
     function DeviceAndPlatformInfo(const AForm: TForm = nil): TDeviceAndPlatformInfo;
     procedure CloseAll; overload; virtual; abstract;
-    procedure CloseAll(const AExceptions: TArray<TClass>); overload; virtual; abstract;
-    procedure CloseAll(const AException: TClass); overload; virtual;
+    procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual; abstract;
+    procedure CloseAllExcept(const AException: TClass); overload; virtual;
 
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary<TSubjectInfo> read FCommonActions;
@@ -229,9 +229,9 @@ uses
 
 { TSubjectStand }
 
-procedure TSubjectStand.CloseAll(const AException: TClass);
+procedure TSubjectStand.CloseAllExcept(const AException: TClass);
 begin
-  CloseAll([AException]);
+  CloseAllExcept([AException]);
 end;
 
 constructor TSubjectStand.Create(AOwner: TComponent);

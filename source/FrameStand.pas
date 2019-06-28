@@ -64,7 +64,7 @@ type
     function LastShownFrame: TFrame;
     procedure Remove(ASubject: TSubject); override;
     procedure CloseAll; overload; override;
-    procedure CloseAll(const AExceptions: TArray<TClass>); overload; override;
+    procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
 
     function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>; overload;
     function FrameInfo(const AFrameClass: TFrameClass): TFrameInfo<TFrame>; overload;
@@ -90,10 +90,10 @@ implementation
 
 procedure TFrameStand.CloseAll;
 begin
-  CloseAll(nil);
+  CloseAllExcept(nil);
 end;
 
-procedure TFrameStand.CloseAll(const AExceptions: TArray<TClass>);
+procedure TFrameStand.CloseAllExcept(const AExceptions: TArray<TClass>);
 
   function IsException(const ASubject: TObject): Boolean;
   var

@@ -15,6 +15,7 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
+    Label1: TLabel;
     procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
@@ -29,6 +30,7 @@ var
 implementation
 
 {$R *.fmx}
+{$R *.LgXhdpiPh.fmx ANDROID}
 
 procedure TSecondForm.Button1Click(Sender: TObject);
 begin

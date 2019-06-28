@@ -50,7 +50,7 @@ object MainForm: TMainForm
     OnClick = CloseButtonClick
   end
   object Rectangle1: TRectangle
-    Align = Scale
+    Anchors = [akLeft, akTop, akRight, akBottom]
     Fill.Color = xFFCCECD5
     Position.X = 16.000000000000000000
     Position.Y = 48.000000000000000000
@@ -62,6 +62,7 @@ object MainForm: TMainForm
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
     CommonActionPrefix = 'ca_'
+    DefaultHideAndCloseDeferTimeMS = 100
     DefaultStyleName = 'formstand'
     StyleBook = StyleBook1
     Left = 440

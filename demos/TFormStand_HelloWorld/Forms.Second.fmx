@@ -48,4 +48,14 @@ object SecondForm: TSecondForm
     TabOrder = 0
     Text = 'Button4'
   end
+  object Label1: TLabel
+    Align = Center
+    AutoSize = True
+    Size.Width = 64.000000000000000000
+    Size.Height = 16.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.WordWrap = False
+    Text = 'Master view'
+    TabOrder = 4
+  end
 end

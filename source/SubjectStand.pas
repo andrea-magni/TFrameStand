@@ -223,11 +223,35 @@ type
     property OnBindCommonActionList: TOnBindCommonActionList read FOnBindCommonActionList write FOnBindCommonActionList;
   end;
 
+  function ClassInArray(const AObject: TObject; const AArray: TArray<TClass>): Boolean; overload;
+  function ClassInArray(const AClass: TClass; const AArray: TArray<TClass>): Boolean; overload;
+
 implementation
 
 uses
     FMX.Layouts, FMX.StdCtrls
   ;
+
+function ClassInArray(const AObject: TObject; const AArray: TArray<TClass>): Boolean;
+begin
+  Result := False;
+  if Assigned(AObject) then
+    Result := ClassInArray(AObject.ClassType, AArray);
+end;
+
+
+function ClassInArray(const AClass: TClass; const AArray: TArray<TClass>): Boolean;
+var
+  LClass: TClass;
+begin
+  Result := False;
+  for LClass in AArray do
+    if AClass.InheritsFrom(LClass) then
+    begin
+      Result := True;
+      Break;
+    end;
+end;
 
 { TSubjectStand }
 

@@ -368,9 +368,11 @@ public:
 	__fastcall virtual ~TSubjectStand();
 	HIDESBASE virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject) = 0 ;
 	Deviceandplatforminfo::TDeviceAndPlatformInfo __fastcall DeviceAndPlatformInfo(Fmx::Forms::TForm* const AForm = (Fmx::Forms::TForm*)(0x0));
-	virtual void __fastcall CloseAll() = 0 /* overload */;
-	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> AExceptions) = 0 /* overload */;
-	virtual void __fastcall CloseAll(const System::TClass AException)/* overload */;
+	virtual void __fastcall CloseAll()/* overload */;
+	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> ARestrictTo) = 0 /* overload */;
+	virtual void __fastcall CloseAll(const System::TClass ARestrictTo)/* overload */;
+	virtual void __fastcall CloseAllExcept(const System::DynamicArray<System::TClass> AExceptions) = 0 /* overload */;
+	virtual void __fastcall CloseAllExcept(const System::TClass AException)/* overload */;
 	__property int Count = {read=GetCount, nodefault};
 	__property TCommonActionDictionary__1<TSubjectInfo*>* CommonActions = {read=FCommonActions};
 	__property Responsivecontainer::TResponsiveContainer* Responsive = {read=FResponsive};
@@ -396,6 +398,8 @@ __published:
 
 
 //-- var, const, procedure ---------------------------------------------------
+extern DELPHI_PACKAGE bool __fastcall ClassInArray(System::TObject* const AObject, const System::DynamicArray<System::TClass> AArray)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall ClassInArray(const System::TClass AClass, const System::DynamicArray<System::TClass> AArray)/* overload */;
 }	/* namespace Subjectstand */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_SUBJECTSTAND)
 using namespace Subjectstand;

@@ -61,6 +61,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
     function LastShownFrame: TFrame;
     procedure Remove(ASubject: TSubject); override;
     procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
@@ -89,20 +90,6 @@ implementation
 { TFrameStand }
 
 procedure TFrameStand.CloseAll(const ARestrictTo: TArray<TClass>);
-
-  function AppliesTo(const ASubject: TObject): Boolean;
-  var
-    LClass: TClass;
-  begin
-    Result := False;
-    for LClass in ARestrictTo do
-      if ASubject is LClass then
-      begin
-        Result := True;
-        Break;
-      end;
-  end;
-
 var
   LFrameInfo: TFrameInfo<TFrame>;
   LFrameInfos: TArray<TFrameInfo<TFrame>>;
@@ -113,26 +100,12 @@ begin
 
   for LFrameInfo in LFrameInfos do
   begin
-    if LConsiderRestrictions and AppliesTo(LFrameInfo.Frame) then
+    if LConsiderRestrictions and ClassInArray(LFrameInfo.Frame, ARestrictTo) then
       LFrameInfo.HideAndClose;
   end;
 end;
 
 procedure TFrameStand.CloseAllExcept(const AExceptions: TArray<TClass>);
-
-  function IsException(const ASubject: TObject): Boolean;
-  var
-    LClass: TClass;
-  begin
-    Result := False;
-    for LClass in AExceptions do
-      if ASubject is LClass then
-      begin
-        Result := True;
-        Break;
-      end;
-  end;
-
 var
   LFrameInfo: TFrameInfo<TFrame>;
   LFrameInfos: TArray<TFrameInfo<TFrame>>;
@@ -143,7 +116,7 @@ begin
 
   for LFrameInfo in LFrameInfos do
   begin
-    if LConsiderExceptions and not IsException(LFrameInfo.Frame) then
+    if LConsiderExceptions and not ClassInArray(LFrameInfo.Frame, AExceptions) then
       LFrameInfo.HideAndClose;
   end;
 end;

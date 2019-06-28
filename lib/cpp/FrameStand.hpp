@@ -121,8 +121,8 @@ public:
 	__fastcall virtual ~TFrameStand();
 	Fmx::Forms::TFrame* __fastcall LastShownFrame();
 	virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject);
-	virtual void __fastcall CloseAll()/* overload */;
-	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> AExceptions)/* overload */;
+	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> ARestrictTo)/* overload */;
+	virtual void __fastcall CloseAllExcept(const System::DynamicArray<System::TClass> AExceptions)/* overload */;
 	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall FrameInfo(Fmx::Forms::TFrame* const AFrame)/* overload */;
 	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall FrameInfo(const TFrameClass AFrameClass)/* overload */;
 	template<typename T> TFrameInfo__1<T>* __fastcall FrameInfo()/* overload */;
@@ -137,7 +137,9 @@ __published:
 	/* Hoisted overloads: */
 	
 public:
-	inline void __fastcall  CloseAll(const System::TClass AException){ Subjectstand::TSubjectStand::CloseAll(AException); }
+	inline void __fastcall  CloseAll(){ Subjectstand::TSubjectStand::CloseAll(); }
+	inline void __fastcall  CloseAll(const System::TClass ARestrictTo){ Subjectstand::TSubjectStand::CloseAll(ARestrictTo); }
+	inline void __fastcall  CloseAllExcept(const System::TClass AException){ Subjectstand::TSubjectStand::CloseAllExcept(AException); }
 	
 };
 

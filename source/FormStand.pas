@@ -86,10 +86,16 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    function FormInfo(const AForm: TForm): TFormInfo<TForm>;
-    property FormInfos: TObjectDictionary<TForm, TFormInfo<TForm>> read FFormInfos;
     function LastShownForm: TForm;
     procedure Remove(ASubject: TSubject); override;
+    procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
+    procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
+
+    function FormInfo(const AForm: TForm): TFormInfo<TForm>; overload;
+    function FormInfo(const AFormClass: TFormClass): TFormInfo<TForm>; overload;
+    function FormInfo<T: TForm>: TFormInfo<T>; overload;
+    function GetFormInfo<T: TForm>(const ANewIfNotFound: Boolean = True;
+      const AParent: TFmxObject = nil; const AStandStyleName: string = ''): TFormInfo<T>;
 
     function Use<T: TForm>(const AForm: T; const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFormInfo<T>;
@@ -97,6 +103,7 @@ type
     function New<T: TForm>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFormInfo<T>;
 
+    property FormInfos: TObjectDictionary<TForm, TFormInfo<TForm>> read FFormInfos;
     property VisibleForms: TList<TForm> read FVisibleForms;
   published
     property OnGetSubjectClass: TOnGetFormClassEvent read FOnGetFormClass write FOnGetFormClass;
@@ -108,6 +115,38 @@ uses
   System.Types;
 
 { TFormStand }
+
+procedure TFormStand.CloseAll(const ARestrictTo: TArray<TClass>);
+var
+  LFormInfo: TFormInfo<TForm>;
+  LFormInfos: TArray<TFormInfo<TForm>>;
+  LConsiderRestrictions: Boolean;
+begin
+  LFormInfos := FFormInfos.Values.ToArray;
+  LConsiderRestrictions := Length(ARestrictTo) > 0;
+
+  for LFormInfo in LFormInfos do
+  begin
+    if LConsiderRestrictions and ClassInArray(LFormInfo.Form, ARestrictTo) then
+      LFormInfo.HideAndClose;
+  end;
+end;
+
+procedure TFormStand.CloseAllExcept(const AExceptions: TArray<TClass>);
+var
+  LFormInfo: TFormInfo<TForm>;
+  LFormInfos: TArray<TFormInfo<TForm>>;
+  LConsiderExceptions: Boolean;
+begin
+  LFormInfos := FFormInfos.Values.ToArray;
+  LConsiderExceptions := Length(AExceptions) > 0;
+
+  for LFormInfo in LFormInfos do
+  begin
+    if LConsiderExceptions and not ClassInArray(LFormInfo.Form, AExceptions) then
+      LFormInfo.HideAndClose;
+  end;
+end;
 
 constructor TFormStand.Create(AOwner: TComponent);
 begin
@@ -148,6 +187,21 @@ begin
   inherited;
 end;
 
+function TFormStand.FormInfo(const AFormClass: TFormClass): TFormInfo<TForm>;
+var
+  LPair: TPair<TForm, TFormInfo<TForm>>;
+begin
+  Result := nil;
+  for LPair in FFormInfos do
+  begin
+    if LPair.Key is AFormClass then
+    begin
+      Result := LPair.Value;
+      Break;
+    end;
+  end;
+end;
+
 function TFormStand.FormInfo(const AForm: TForm): TFormInfo<TForm>;
 begin
   Result := nil;
@@ -166,6 +220,14 @@ begin
   DoResponsiveLookup(TSubjectClass(Result), AStandStyleName, AParent);
   if Assigned(FOnGetFormClass) then
     FOnGetFormClass(Self, AParent, AStandStyleName, Result);
+end;
+
+function TFormStand.GetFormInfo<T>(const ANewIfNotFound: Boolean;
+  const AParent: TFmxObject; const AStandStyleName: string): TFormInfo<T>;
+begin
+  Result := FormInfo<T>;
+  if ANewIfNotFound and not Assigned(Result) then
+    Result := New<T>(AParent, AStandStyleName);
 end;
 
 function TFormStand.LastShownForm: TForm;
@@ -234,6 +296,11 @@ begin
     Result.Free;
     raise;
   end;
+end;
+
+function TFormStand.FormInfo<T>: TFormInfo<T>;
+begin
+  Result := TFormInfo<T>(FormInfo(TFormClass(T)));
 end;
 
 { TFormInfo<T> }

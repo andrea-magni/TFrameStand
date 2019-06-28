@@ -165,16 +165,28 @@ protected:
 public:
 	__fastcall virtual TFormStand(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TFormStand();
-	TFormInfo__1<Fmx::Forms::TForm*>* __fastcall FormInfo(Fmx::Forms::TForm* const AForm);
-	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TForm*,TFormInfo__1<Fmx::Forms::TForm*>*>* FormInfos = {read=FFormInfos};
 	Fmx::Forms::TForm* __fastcall LastShownForm();
 	virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject);
+	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> ARestrictTo)/* overload */;
+	virtual void __fastcall CloseAllExcept(const System::DynamicArray<System::TClass> AExceptions)/* overload */;
+	TFormInfo__1<Fmx::Forms::TForm*>* __fastcall FormInfo(Fmx::Forms::TForm* const AForm)/* overload */;
+	TFormInfo__1<Fmx::Forms::TForm*>* __fastcall FormInfo(const TFormClass AFormClass)/* overload */;
+	template<typename T> TFormInfo__1<T>* __fastcall FormInfo()/* overload */;
+	template<typename T> TFormInfo__1<T>* __fastcall GetFormInfo(const bool ANewIfNotFound = true, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFormInfo__1<T>* __fastcall Use(const T AForm, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFormInfo__1<T>* __fastcall New(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
+	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TForm*,TFormInfo__1<Fmx::Forms::TForm*>*>* FormInfos = {read=FFormInfos};
 	__property System::Generics::Collections::TList__1<Fmx::Forms::TForm*>* VisibleForms = {read=FVisibleForms};
 	
 __published:
 	__property TOnGetFormClassEvent OnGetSubjectClass = {read=FOnGetFormClass, write=FOnGetFormClass};
+	/* Hoisted overloads: */
+	
+public:
+	inline void __fastcall  CloseAll(){ Subjectstand::TSubjectStand::CloseAll(); }
+	inline void __fastcall  CloseAll(const System::TClass ARestrictTo){ Subjectstand::TSubjectStand::CloseAll(ARestrictTo); }
+	inline void __fastcall  CloseAllExcept(const System::TClass AException){ Subjectstand::TSubjectStand::CloseAllExcept(AException); }
+	
 };
 
 

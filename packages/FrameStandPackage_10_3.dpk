@@ -1,7 +1,6 @@
 package FrameStandPackage_10_3;
 
 {$R *.res}
-{$R *.dres}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
@@ -26,9 +25,9 @@ package FrameStandPackage_10_3;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'FrameStand Package'}
+{$DESCRIPTION 'TFrameStand and TFormStand Runtime Package'}
 {$LIBSUFFIX '_260'}
-{$DESIGNONLY}
+{$RUNONLY}
 {$IMPLICITBUILD ON}
 
 requires
@@ -37,16 +36,9 @@ requires
 
 contains
   SubjectStand in '..\source\SubjectStand.pas',
-  FrameStand.Editors in '..\source\FrameStand.Editors.pas',
-  FormStand.Editors.Forms.Test in '..\source\FormStand.Editors.Forms.Test.pas' {FormStandTestForm},
-  Frames.Test in '..\source\Frames.Test.pas' {TestFrame: TFrame},
   DeviceAndPlatformInfo in '..\source\DeviceAndPlatformInfo.pas',
   ResponsiveContainer in '..\source\ResponsiveContainer.pas',
   FrameStand in '..\source\FrameStand.pas',
-  FormStand in '..\source\FormStand.pas',
-  ComponentRegistration in '..\source\ComponentRegistration.pas',
-  FrameStand.Editors.Forms.Test in '..\source\FrameStand.Editors.Forms.Test.pas' {FrameStandTestForm},
-  Forms.Test in '..\source\Forms.Test.pas' {TestForm},
-  FormStand.Editors in '..\source\FormStand.Editors.pas';
+  FormStand in '..\source\FormStand.pas';
 
 end.

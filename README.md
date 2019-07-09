@@ -1,4 +1,5 @@
 ![TFrameStand](media/frame_stand_xhdpi.png)
+![TFormStand](media/form_stand_xhdpi.png)
 #TFrameStand and TFormStand components (FMX)
 Easily use TFrame or TForm descendants in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 

@@ -1,0 +1,219 @@
+object FormStandTestForm: TFormStandTestForm
+  Left = 0
+  Top = 0
+  Caption = 'FrameStand - Test Form'
+  ClientHeight = 480
+  ClientWidth = 652
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object TopLayout: TLayout
+    Align = Top
+    Size.Width = 652.000000000000000000
+    Size.Height = 100.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object StandComboBox: TComboBox
+      Anchors = [akLeft, akTop, akRight]
+      Position.X = 96.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 229.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Label1: TLabel
+        Position.X = -100.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        TextSettings.WordWrap = False
+        Text = 'Stand:'
+      end
+    end
+    object TopButtonLayout: TLayout
+      Align = Right
+      Position.X = 552.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 100.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object FlowLayout1: TFlowLayout
+        Align = Client
+        Margins.Top = 5.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 90.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Justify = Center
+        JustifyLastLine = Center
+        FlowDirection = LeftToRight
+        HorizontalGap = 5.000000000000000000
+        VerticalGap = 5.000000000000000000
+        object ShowButton: TButton
+          Action = ShowAction
+          Enabled = True
+          ImageIndex = -1
+          Position.X = 10.000000000000000000
+          TabOrder = 1
+        end
+        object HideButton: TButton
+          Action = HideAction
+          Enabled = True
+          ImageIndex = -1
+          Position.X = 10.000000000000000000
+          Position.Y = 27.000000000000000000
+          TabOrder = 0
+        end
+      end
+    end
+    object DelayEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 4
+      Text = '0'
+      Position.X = 96.000000000000000000
+      Position.Y = 38.000000000000000000
+      Size.Width = 60.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      object Label2: TLabel
+        Position.X = -100.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 95.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        TextSettings.WordWrap = False
+        Text = 'Hide delay:'
+      end
+      object Label3: TLabel
+        AutoSize = True
+        Position.X = 70.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 121.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.WordWrap = False
+        Text = 'milliseconds (0 = auto)'
+      end
+    end
+    object FormAlignComboBox: TComboBox
+      Anchors = [akTop, akRight]
+      Position.X = 436.000000000000000000
+      Position.Y = 8.000000000000000000
+      TabOrder = 5
+      object Label4: TLabel
+        Position.X = -100.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 90.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        TextSettings.WordWrap = False
+        Text = 'Form.Align:'
+      end
+    end
+    object FormWidthEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Anchors = [akTop, akRight]
+      TabOrder = 3
+      Text = '100'
+      Position.X = 436.000000000000000000
+      Position.Y = 38.000000000000000000
+      Size.Width = 60.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      object Label5: TLabel
+        Position.X = -100.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 95.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        TextSettings.WordWrap = False
+        Text = 'Form.Width:'
+      end
+    end
+    object FormHeightEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Anchors = [akTop, akRight]
+      TabOrder = 2
+      Text = '100'
+      Position.X = 436.000000000000000000
+      Position.Y = 62.000000000000000000
+      Size.Width = 60.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      object Label7: TLabel
+        Position.X = -100.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 95.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        TextSettings.WordWrap = False
+        Text = 'Form.Height:'
+      end
+    end
+    object TestBedClipCheckBox: TCheckBox
+      Position.X = 96.000000000000000000
+      Position.Y = 66.000000000000000000
+      Size.Width = 153.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      Text = 'TestBed.ClipChildren'
+    end
+  end
+  object TestBedLayout: TLayout
+    Align = Client
+    Size.Width = 652.000000000000000000
+    Size.Height = 380.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object TestBed: TRectangle
+      Align = Client
+      Fill.Color = claCornsilk
+      Margins.Left = 20.000000000000000000
+      Margins.Top = 20.000000000000000000
+      Margins.Right = 20.000000000000000000
+      Margins.Bottom = 20.000000000000000000
+      Size.Width = 612.000000000000000000
+      Size.Height = 340.000000000000000000
+      Size.PlatformDefault = False
+      object Label6: TLabel
+        Align = Contents
+        AutoSize = True
+        StyledSettings = [Family, Style]
+        Size.Width = 612.000000000000000000
+        Size.Height = 340.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 28.000000000000000000
+        TextSettings.FontColor = claSilver
+        TextSettings.HorzAlign = Center
+        TextSettings.WordWrap = False
+        Text = 'TestBed'
+      end
+    end
+  end
+  object MainActionList: TActionList
+    Left = 304
+    Top = 224
+    object ShowAction: TAction
+      Text = 'Show'
+      OnExecute = ShowActionExecute
+      OnUpdate = ShowActionUpdate
+    end
+    object HideAction: TAction
+      Text = 'Hide'
+      OnExecute = HideActionExecute
+      OnUpdate = HideActionUpdate
+    end
+  end
+end

@@ -139,12 +139,12 @@
         <DCCReference Include="fmx.dcp"/>
         <DCCReference Include="..\source\SubjectStand.pas"/>
         <DCCReference Include="..\source\FrameStand.Editors.pas"/>
-        <DCCReference Include="..\source\FrameStand.Editors.Forms.Test.pas">
-            <Form>TestForm</Form>
+        <DCCReference Include="..\source\FormStand.Editors.Forms.Test.pas">
+            <Form>FormStandTestForm</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\source\Frames.Test.pas">
-            <Form>TestSubject</Form>
+            <Form>TestFrame</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -153,6 +153,15 @@
         <DCCReference Include="..\source\FrameStand.pas"/>
         <DCCReference Include="..\source\FormStand.pas"/>
         <DCCReference Include="..\source\ComponentRegistration.pas"/>
+        <DCCReference Include="..\source\FrameStand.Editors.Forms.Test.pas">
+            <Form>FrameStandTestForm</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="..\source\Forms.Test.pas">
+            <Form>TestForm</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
+        <DCCReference Include="..\source\FormStand.Editors.pas"/>
         <RcItem Include="..\media\frame_stand_mdpi.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>TFRAMESTAND</ResourceId>

@@ -49,9 +49,9 @@ namespace Forms
 namespace Test
 {
 //-- forward type declarations -----------------------------------------------
-class DELPHICLASS TTestForm;
+class DELPHICLASS TFrameStandTestForm;
 //-- type declarations -------------------------------------------------------
-class PASCALIMPLEMENTATION TTestForm : public Fmx::Forms::TForm
+class PASCALIMPLEMENTATION TFrameStandTestForm : public Fmx::Forms::TForm
 {
 	typedef Fmx::Forms::TForm inherited;
 	
@@ -71,11 +71,11 @@ __published:
 	Fmx::Edit::TEdit* DelayEdit;
 	Fmx::Stdctrls::TLabel* Label2;
 	Fmx::Stdctrls::TLabel* Label3;
-	Fmx::Listbox::TComboBox* SubjectAlignComboBox;
+	Fmx::Listbox::TComboBox* FrameAlignComboBox;
 	Fmx::Stdctrls::TLabel* Label4;
-	Fmx::Edit::TEdit* SubjectWidthEdit;
+	Fmx::Edit::TEdit* FrameWidthEdit;
 	Fmx::Stdctrls::TLabel* Label5;
-	Fmx::Edit::TEdit* SubjectHeightEdit;
+	Fmx::Edit::TEdit* FrameHeightEdit;
 	Fmx::Stdctrls::TLabel* Label7;
 	Fmx::Stdctrls::TLabel* Label6;
 	Fmx::Stdctrls::TCheckBox* TestBedClipCheckBox;
@@ -88,27 +88,27 @@ __published:
 	
 private:
 	Framestand::TFrameStand* FFrameStand;
-	Framestand::TFrameInfo__1<Frames::Test::TTestSubject*>* FFrameInfo;
+	Framestand::TFrameInfo__1<Frames::Test::TTestFrame*>* FFrameInfo;
+	
+protected:
 	void __fastcall SetFrameStand(Framestand::TFrameStand* const Value);
 	HIDESBASE Fmx::Controls::TStyleBook* __fastcall GetStyleBook();
 	System::UnicodeString __fastcall GetSelectedStyleName();
-	Fmx::Types::TAlignLayout __fastcall GetSelectedSubjectAlign();
-	
-protected:
+	Fmx::Types::TAlignLayout __fastcall GetSelectedFrameAlign();
 	virtual void __fastcall Init();
 	virtual void __fastcall DoFrameStandChanged();
 	void __fastcall SetupTestBed();
-	void __fastcall SetupTestSubjectAndTestBed();
+	void __fastcall SetupTestFrameAndTestBed();
 	__property System::UnicodeString SelectedStyleName = {read=GetSelectedStyleName};
-	__property Fmx::Types::TAlignLayout SelectedSubjectAlign = {read=GetSelectedSubjectAlign, nodefault};
+	__property Fmx::Types::TAlignLayout SelectedFrameAlign = {read=GetSelectedFrameAlign, nodefault};
 	
 public:
 	__property Framestand::TFrameStand* FrameStand = {read=FFrameStand, write=SetFrameStand};
 	__property Fmx::Controls::TStyleBook* StyleBook = {read=GetStyleBook};
 public:
-	/* TCustomForm.Create */ inline __fastcall virtual TTestForm(System::Classes::TComponent* AOwner) : Fmx::Forms::TForm(AOwner) { }
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TTestForm(System::Classes::TComponent* AOwner, NativeInt Dummy) : Fmx::Forms::TForm(AOwner, Dummy) { }
-	/* TCustomForm.Destroy */ inline __fastcall virtual ~TTestForm() { }
+	/* TCustomForm.Create */ inline __fastcall virtual TFrameStandTestForm(System::Classes::TComponent* AOwner) : Fmx::Forms::TForm(AOwner) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TFrameStandTestForm(System::Classes::TComponent* AOwner, NativeInt Dummy) : Fmx::Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.Destroy */ inline __fastcall virtual ~TFrameStandTestForm() { }
 	
 };
 

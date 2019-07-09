@@ -16,13 +16,16 @@
 #include <SysInit.hpp>
 #include <SubjectStand.hpp>
 #include <FrameStand.Editors.hpp>
-#include <FrameStand.Editors.Forms.Test.hpp>
+#include <FormStand.Editors.Forms.Test.hpp>
 #include <Frames.Test.hpp>
 #include <DeviceAndPlatformInfo.hpp>
 #include <ResponsiveContainer.hpp>
 #include <FrameStand.hpp>
 #include <FormStand.hpp>
 #include <ComponentRegistration.hpp>
+#include <FrameStand.Editors.Forms.Test.hpp>
+#include <Forms.Test.hpp>
+#include <FormStand.Editors.hpp>
 #include <System.UITypes.hpp>	// (rtl)
 #include <Winapi.Windows.hpp>	// (rtl)
 #include <Winapi.PsAPI.hpp>	// (rtl)

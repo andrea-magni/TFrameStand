@@ -38,12 +38,15 @@ requires
 contains
   SubjectStand in '..\source\SubjectStand.pas',
   FrameStand.Editors in '..\source\FrameStand.Editors.pas',
-  FrameStand.Editors.Forms.Test in '..\source\FrameStand.Editors.Forms.Test.pas' {TestForm},
-  Frames.Test in '..\source\Frames.Test.pas' {TestSubject: TFrame},
+  FormStand.Editors.Forms.Test in '..\source\FormStand.Editors.Forms.Test.pas' {FormStandTestForm},
+  Frames.Test in '..\source\Frames.Test.pas' {TestFrame: TFrame},
   DeviceAndPlatformInfo in '..\source\DeviceAndPlatformInfo.pas',
   ResponsiveContainer in '..\source\ResponsiveContainer.pas',
   FrameStand in '..\source\FrameStand.pas',
   FormStand in '..\source\FormStand.pas',
-  ComponentRegistration in '..\source\ComponentRegistration.pas';
+  ComponentRegistration in '..\source\ComponentRegistration.pas',
+  FrameStand.Editors.Forms.Test in '..\source\FrameStand.Editors.Forms.Test.pas' {FrameStandTestForm},
+  Forms.Test in '..\source\Forms.Test.pas' {TestForm},
+  FormStand.Editors in '..\source\FormStand.Editors.pas';
 
 end.

@@ -331,8 +331,8 @@ class PASCALIMPLEMENTATION TSubjectStand : public System::Classes::TComponent
 	typedef System::Classes::TComponent inherited;
 	
 private:
-	Fmx::Controls::TStyleBook* FStyleBook;
-	System::UnicodeString FDefaultStyleName;
+	Fmx::Controls::TStyleBook* FStandBook;
+	System::UnicodeString FDefaultStandName;
 	System::UnicodeString FAnimationHide;
 	System::UnicodeString FAnimationShow;
 	TCommonActionDictionary__1<TSubjectInfo*>* FCommonActions;
@@ -385,9 +385,11 @@ __published:
 	__property Fmx::Actnlist::TActionList* CommonActionList = {read=FCommonActionList, write=FCommonActionList};
 	__property System::UnicodeString CommonActionPrefix = {read=FCommonActionPrefix, write=FCommonActionPrefix};
 	__property int DefaultHideAndCloseDeferTimeMS = {read=FDefaultHideAndCloseDeferTimeMS, write=FDefaultHideAndCloseDeferTimeMS, nodefault};
-	__property System::UnicodeString DefaultStyleName = {read=FDefaultStyleName, write=FDefaultStyleName};
+	__property System::UnicodeString DefaultStyleName = {read=FDefaultStandName, write=FDefaultStandName};
+	__property System::UnicodeString DefaultStandName = {read=FDefaultStandName, write=FDefaultStandName};
 	__property Fmx::Types::TFmxObject* DefaultParent = {read=FDefaultParent, write=FDefaultParent};
-	__property Fmx::Controls::TStyleBook* StyleBook = {read=FStyleBook, write=FStyleBook};
+	__property Fmx::Controls::TStyleBook* StyleBook = {read=FStandBook, write=FStandBook};
+	__property Fmx::Controls::TStyleBook* StandBook = {read=FStandBook, write=FStandBook};
 	__property TOnAfterShowEvent OnAfterHide = {read=FOnAfterHide, write=FOnAfterHide};
 	__property TOnAfterShowEvent OnBeforeHide = {read=FOnBeforeHide, write=FOnBeforeHide};
 	__property TOnAfterShowEvent OnAfterShow = {read=FOnAfterShow, write=FOnAfterShow};

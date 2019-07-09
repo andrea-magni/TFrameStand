@@ -9,7 +9,7 @@ uses
   System.Actions, FMX.ActnList, FMX.Objects, FMX.Edit;
 
 type
-  TTestForm = class(TForm)
+  TFrameStandTestForm = class(TForm)
     TopLayout: TLayout;
     TestBedLayout: TLayout;
     StandComboBox: TComboBox;
@@ -25,11 +25,11 @@ type
     DelayEdit: TEdit;
     Label2: TLabel;
     Label3: TLabel;
-    SubjectAlignComboBox: TComboBox;
+    FrameAlignComboBox: TComboBox;
     Label4: TLabel;
-    SubjectWidthEdit: TEdit;
+    FrameWidthEdit: TEdit;
     Label5: TLabel;
-    SubjectHeightEdit: TEdit;
+    FrameHeightEdit: TEdit;
     Label7: TLabel;
     Label6: TLabel;
     TestBedClipCheckBox: TCheckBox;
@@ -41,18 +41,18 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     FFrameStand: TFrameStand;
-    FFrameInfo: TFrameInfo<TTestSubject>;
+    FFrameInfo: TFrameInfo<TTestFrame>;
+  protected
     procedure SetFrameStand(const Value: TFrameStand);
     function GetStyleBook: TStyleBook;
     function GetSelectedStyleName: string;
-    function GetSelectedSubjectAlign: TAlignLayout;
-  protected
+    function GetSelectedFrameAlign: TAlignLayout;
     procedure Init; virtual;
     procedure DoFrameStandChanged; virtual;
     procedure SetupTestBed;
-    procedure SetupTestSubjectAndTestBed;
+    procedure SetupTestFrameAndTestBed;
     property SelectedStyleName: string read GetSelectedStyleName;
-    property SelectedSubjectAlign: TAlignLayout read GetSelectedSubjectAlign;
+    property SelectedFrameAlign: TAlignLayout read GetSelectedFrameAlign;
   public
     property FrameStand: TFrameStand read FFrameStand write SetFrameStand;
     property StyleBook: TStyleBook read GetStyleBook;
@@ -67,7 +67,7 @@ uses FMX.Ani
   , System.TypInfo
   ;
 
-procedure TTestForm.DoFrameStandChanged;
+procedure TFrameStandTestForm.DoFrameStandChanged;
 var
   LChild: TObject;
 begin
@@ -87,39 +87,39 @@ begin
   end;
 end;
 
-procedure TTestForm.FormCreate(Sender: TObject);
+procedure TFrameStandTestForm.FormCreate(Sender: TObject);
 begin
   Init;
 end;
 
-procedure TTestForm.FormDestroy(Sender: TObject);
+procedure TFrameStandTestForm.FormDestroy(Sender: TObject);
 begin
   if Assigned(FFrameInfo) then
     FFrameInfo.Close;
 end;
 
-function TTestForm.GetSelectedSubjectAlign: TAlignLayout;
+function TFrameStandTestForm.GetSelectedFrameAlign: TAlignLayout;
 begin
   Result := TAlignLayout.Client;
-  if Assigned(SubjectAlignComboBox.Selected) then
-    Result := TRttiEnumerationType.GetValue<TAlignLayout>(SubjectAlignComboBox.Selected.Text);
+  if Assigned(FrameAlignComboBox.Selected) then
+    Result := TRttiEnumerationType.GetValue<TAlignLayout>(FrameAlignComboBox.Selected.Text);
 end;
 
-function TTestForm.GetSelectedStyleName: string;
+function TFrameStandTestForm.GetSelectedStyleName: string;
 begin
   Result := '';
   if Assigned(StandComboBox.Selected) then
     Result := StandComboBox.Selected.Text;
 end;
 
-function TTestForm.GetStyleBook: TStyleBook;
+function TFrameStandTestForm.GetStyleBook: TStyleBook;
 begin
   Result := nil;
   if Assigned(FFrameStand) then
     Result := FFrameStand.StyleBook;
 end;
 
-procedure TTestForm.HideActionExecute(Sender: TObject);
+procedure TFrameStandTestForm.HideActionExecute(Sender: TObject);
 begin
   SetupTestBed;
 
@@ -132,23 +132,23 @@ begin
   );
 end;
 
-procedure TTestForm.HideActionUpdate(Sender: TObject);
+procedure TFrameStandTestForm.HideActionUpdate(Sender: TObject);
 begin
   HideAction.Enabled := Assigned(FFrameInfo) and FFrameInfo.IsVisible;
 end;
 
-procedure TTestForm.Init;
+procedure TFrameStandTestForm.Init;
 var
   LAlignment: TAlignLayout;
 begin
-  SubjectAlignComboBox.Items.Clear;
+  FrameAlignComboBox.Items.Clear;
   for LAlignment := Low(TAlignLayout) to High(TAlignLayout) do
-    SubjectAlignComboBox.Items.Add( TRttiEnumerationType.GetName<TAlignLayout>(LAlignment) );
+    FrameAlignComboBox.Items.Add( TRttiEnumerationType.GetName<TAlignLayout>(LAlignment) );
 
-  SubjectAlignComboBox.ItemIndex := SubjectAlignComboBox.Items.IndexOf('Client');
+  FrameAlignComboBox.ItemIndex := FrameAlignComboBox.Items.IndexOf('Client');
 end;
 
-procedure TTestForm.SetFrameStand(const Value: TFrameStand);
+procedure TFrameStandTestForm.SetFrameStand(const Value: TFrameStand);
 begin
   if FFrameStand <> Value then
   begin
@@ -158,28 +158,28 @@ begin
 end;
 
 
-procedure TTestForm.SetupTestBed;
+procedure TFrameStandTestForm.SetupTestBed;
 begin
   TestBed.ClipChildren := TestBedClipCheckBox.IsChecked;
 end;
 
-procedure TTestForm.SetupTestSubjectAndTestBed;
+procedure TFrameStandTestForm.SetupTestFrameAndTestBed;
 begin
-  FFrameInfo.Frame.Align := SelectedSubjectAlign;
-  FFrameInfo.Frame.Width := StrToFloat(SubjectWidthEdit.Text);
-  FFrameInfo.Frame.Height := StrToFloat(SubjectHeightEdit.Text);
+  FFrameInfo.Frame.Align := SelectedFrameAlign;
+  FFrameInfo.Frame.Width := StrToFloat(FrameWidthEdit.Text);
+  FFrameInfo.Frame.Height := StrToFloat(FrameHeightEdit.Text);
 
   SetupTestBed;
 end;
 
-procedure TTestForm.ShowActionExecute(Sender: TObject);
+procedure TFrameStandTestForm.ShowActionExecute(Sender: TObject);
 begin
-  FFrameInfo := FrameStand.New<TTestSubject>(TestBed, SelectedStyleName);
-  SetupTestSubjectAndTestBed;
+  FFrameInfo := FrameStand.New<TTestFrame>(TestBed, SelectedStyleName);
+  SetupTestFrameAndTestBed;
   FFrameInfo.Show();
 end;
 
-procedure TTestForm.ShowActionUpdate(Sender: TObject);
+procedure TFrameStandTestForm.ShowActionUpdate(Sender: TObject);
 begin
   ShowAction.Enabled := not (Assigned(FFrameInfo) and FFrameInfo.IsVisible);
 end;

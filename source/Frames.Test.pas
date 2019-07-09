@@ -8,7 +8,7 @@ uses
   FMX.Objects;
 
 type
-  TTestSubject = class(TFrame)
+  TTestFrame = class(TFrame)
     Rectangle1: TRectangle;
     Circle1: TCircle;
     Circle2: TCircle;

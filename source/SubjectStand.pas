@@ -155,8 +155,8 @@ type
 
   TSubjectStand = class(TComponent)
   private
-    FStyleBook: TStyleBook;
-    FDefaultStyleName: string;
+    FStandBook: TStyleBook;
+    FDefaultStandName: string;
     FAnimationHide: string;
     FAnimationShow: string;
     FCommonActions: TCommonActionDictionary<TSubjectInfo>;
@@ -210,9 +210,11 @@ type
     property CommonActionList: TActionList read FCommonActionList write FCommonActionList;
     property CommonActionPrefix: string read FCommonActionPrefix write FCommonActionPrefix;
     property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
-    property DefaultStyleName: string read FDefaultStyleName write FDefaultStyleName;
+    property DefaultStyleName: string read FDefaultStandName write FDefaultStandName; // deprecated;
+    property DefaultStandName: string read FDefaultStandName write FDefaultStandName;
     property DefaultParent: TFmxObject read FDefaultParent write FDefaultParent;
-    property StyleBook: TStyleBook read FStyleBook write FStyleBook;
+    property StyleBook: TStyleBook read FStandBook write FStandBook; // deprecated
+    property StandBook: TStyleBook read FStandBook write FStandBook;
 
     // Events
     property OnAfterHide: TOnAfterHideEvent read FOnAfterHide write FOnAfterHide;
@@ -273,7 +275,7 @@ end;
 constructor TSubjectStand.Create(AOwner: TComponent);
 begin
   inherited;
-  FDefaultStyleName := ClassName.Substring(1).ToLower;
+  FDefaultStandName := ClassName.Substring(1).ToLower;
   DefaultHideAndCloseDeferTimeMS := 100;
   FAnimationShow := 'OnShow*';
   FAnimationHide := 'OnHide*';
@@ -369,7 +371,7 @@ end;
 
 function TSubjectStand.GetStandStyleName(AStandStyleName: string): string;
 begin
-  Result := DefaultStyleName;
+  Result := DefaultStandName;
   if AStandStyleName <> '' then
     Result := AStandStyleName;
 end;
@@ -381,8 +383,8 @@ begin
 
   if (Operation = TOperation.opRemove) then
   begin
-    if (AComponent = FStyleBook) then
-      FStyleBook := nil
+    if (AComponent = FStandBook) then
+      FStandBook := nil
     else if (AComponent = FCommonActionList) then
       FCommonActionList := nil
     else if (AComponent = FDefaultParent) then
@@ -915,8 +917,8 @@ end;
 procedure TSubjectInfo.SetupStand;
 begin
   FStand := nil;
-  if Assigned(FSubjectStand.StyleBook) and Assigned(FSubjectStand.StyleBook.Style) then
-    FStand := FSubjectStand.StyleBook.Style.FindStyleResource(FStandStyleName, True) as TControl;
+  if Assigned(FSubjectStand.StandBook) and Assigned(FSubjectStand.StandBook.Style) then
+    FStand := FSubjectStand.StandBook.Style.FindStyleResource(FStandStyleName, True) as TControl;
   if not Assigned(FStand) then
   begin
     FStand := TLayout.Create(nil);

@@ -1,0 +1,30 @@
+inherited MainForm_LgXhdpiPh: TMainForm_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 0
+  inherited OpenButton: TButton
+    Position.X = 8.000000000000000000
+    Size.Width = 121.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+  end
+  inherited CloseButton: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 321.000000000000000000
+    Size.Width = 121.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+  end
+  inherited Rectangle1: TRectangle
+    Position.X = 8.000000000000000000
+    Position.Y = 64.000000000000000000
+    Size.Width = 435.000000000000000000
+    Size.Height = 624.000000000000000000
+  end
+  inherited Label1: TLabel
+    Position.X = 134.000000000000000000
+    Size.Width = 179.000000000000000000
+    Size.Height = 33.000000000000000000
+    TextSettings.HorzAlign = Center
+  end
+end

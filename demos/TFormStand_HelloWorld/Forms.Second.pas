@@ -34,12 +34,7 @@ implementation
 
 procedure TSecondForm.Button1Click(Sender: TObject);
 begin
-  FI.Hide(0
-  , procedure
-    begin
-      FI.Close;
-    end
-  );
+  FI.HideAndClose;
 end;
 
 end.

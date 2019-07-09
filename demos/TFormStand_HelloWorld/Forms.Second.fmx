@@ -15,7 +15,7 @@ object SecondForm: TSecondForm
     Size.Height = 22.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
-    Text = 'Button1'
+    Text = 'Close Me'
     OnClick = Button1Click
   end
   object Button2: TButton

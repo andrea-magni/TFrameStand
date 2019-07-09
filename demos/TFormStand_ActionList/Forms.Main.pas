@@ -15,8 +15,11 @@ type
     FormStand1: TFormStand;
     CloseButton: TButton;
     Rectangle1: TRectangle;
+    Timer1: TTimer;
+    Label1: TLabel;
     procedure OpenButtonClick(Sender: TObject);
     procedure CloseButtonClick(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
@@ -50,6 +53,11 @@ begin
   LFormInfo := FormStand1.GetFormInfo<TSecondForm>(True, Rectangle1);
   if not LFormInfo.IsVisible then
     LFormInfo.Show;
+end;
+
+procedure TMainForm.Timer1Timer(Sender: TObject);
+begin
+  Label1.Text := TimeToStr(Now);
 end;
 
 procedure TMainForm.CloseButtonClick(Sender: TObject);

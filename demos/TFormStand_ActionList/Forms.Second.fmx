@@ -1,0 +1,128 @@
+object SecondForm: TSecondForm
+  Left = 0
+  Top = 0
+  Caption = 'Form2'
+  ClientHeight = 300
+  ClientWidth = 400
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Button1: TButton
+    Action = CloseMeAction
+    Enabled = True
+    ImageIndex = -1
+    Position.X = 10.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+  end
+  object Button2: TButton
+    Action = Action2
+    Anchors = [akTop, akRight]
+    Enabled = True
+    ImageIndex = -1
+    Position.X = 290.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+  end
+  object Button3: TButton
+    Action = Action3
+    Anchors = [akLeft, akBottom]
+    Enabled = True
+    ImageIndex = -1
+    Position.X = 10.000000000000000000
+    Position.Y = 268.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+  end
+  object Button4: TButton
+    Action = Action4
+    Anchors = [akRight, akBottom]
+    Enabled = True
+    ImageIndex = -1
+    Position.X = 290.000000000000000000
+    Position.Y = 268.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+  end
+  object Label1: TLabel
+    Align = Center
+    AutoSize = True
+    Size.Width = 64.000000000000000000
+    Size.Height = 16.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.WordWrap = False
+    Text = 'Master view'
+    TabOrder = 4
+  end
+  object Label2: TLabel
+    Anchors = [akTop, akRight]
+    Position.X = 288.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 105.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Trailing
+    TextSettings.VertAlign = Leading
+    Text = 'Action2 is enabled on Odd seconds'
+    TabOrder = 8
+  end
+  object Label3: TLabel
+    Anchors = [akRight, akBottom]
+    Position.X = 272.000000000000000000
+    Position.Y = 184.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 81.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Trailing
+    TextSettings.VertAlign = Trailing
+    Text = 'Action4 (F4) is enabled on Even seconds'
+    TabOrder = 7
+  end
+  object Label4: TLabel
+    Anchors = [akLeft, akBottom]
+    Position.X = 7.000000000000000000
+    Position.Y = 184.000000000000000000
+    Size.Width = 114.000000000000000000
+    Size.Height = 81.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.VertAlign = Trailing
+    Text = 'Action3 (F3) is enabled on Odd minutes'
+    TabOrder = 6
+  end
+  object ActionList1: TActionList
+    Left = 280
+    Top = 104
+    object CloseMeAction: TAction
+      Text = 'Close Me'
+      OnExecute = CloseMeActionExecute
+    end
+    object Action2: TAction
+      Text = 'Action2'
+      OnExecute = Action2Execute
+      OnUpdate = Action2Update
+    end
+    object Action3: TAction
+      Text = 'Action3'
+      ShortCut = 114
+      OnExecute = Action3Execute
+      OnUpdate = Action3Update
+    end
+    object Action4: TAction
+      Text = 'Action4'
+      ShortCut = 115
+      OnExecute = Action4Execute
+      OnUpdate = Action4Update
+    end
+  end
+end

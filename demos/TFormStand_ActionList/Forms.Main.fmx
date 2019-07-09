@@ -1,7 +1,7 @@
 object MainForm: TMainForm
   Left = 0
   Top = 0
-  Caption = 'FormStandHelloWorld'
+  Caption = 'FormStandActionList'
   ClientHeight = 480
   ClientWidth = 640
   FormFactor.Width = 320
@@ -58,6 +58,23 @@ object MainForm: TMainForm
     Size.Width = 617.000000000000000000
     Size.Height = 425.000000000000000000
     Size.PlatformDefault = False
+  end
+  object Label1: TLabel
+    Anchors = [akLeft, akTop, akRight]
+    Position.X = 488.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 136.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.HorzAlign = Trailing
+    Text = 'Label1'
+    TabOrder = 8
+  end
+  object Timer1: TTimer
+    Interval = 300
+    OnTimer = Timer1Timer
+    Left = 248
+    Top = 96
   end
   object FormStand1: TFormStand
     AnimationShow = 'OnShow*'

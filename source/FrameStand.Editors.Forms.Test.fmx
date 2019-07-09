@@ -1,7 +1,7 @@
 object FrameStandTestForm: TFrameStandTestForm
   Left = 0
   Top = 0
-  Caption = 'FrameStand - Test Form'
+  Caption = 'TFrameStand - Test Form'
   ClientHeight = 480
   ClientWidth = 652
   Position = ScreenCenter

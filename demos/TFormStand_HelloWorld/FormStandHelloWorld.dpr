@@ -12,6 +12,5 @@ begin
   ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
-  Application.CreateForm(TSecondForm, SecondForm);
   Application.Run;
 end.

@@ -38,12 +38,8 @@ implementation
 uses Forms.Second;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
-var
-  LFormInfo: TFormInfo<TSecondForm>;
 begin
-  LFormInfo := FormStand1.GetFormInfo<TSecondForm>(False);
-  if Assigned(LFormInfo) then
-    LFormInfo.Close;
+  FormStand1.CloseAll<TSecondForm>;
 end;
 
 procedure TMainForm.OpenButtonClick(Sender: TObject);
@@ -61,12 +57,8 @@ begin
 end;
 
 procedure TMainForm.CloseButtonClick(Sender: TObject);
-var
-  LFormInfo: TFormInfo<TSecondForm>;
 begin
-  LFormInfo := FormStand1.FormInfo<TSecondForm>;
-  if Assigned(LFormInfo) then
-    LFormInfo.HideAndClose;
+  FormStand1.HideAndCloseAll<TSecondForm>;
 end;
 
 end.

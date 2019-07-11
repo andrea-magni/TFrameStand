@@ -32,25 +32,25 @@ implementation
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 
-uses Forms.Second;
+uses Forms.Orders;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  FormStand1.CloseAll<TSecondForm>;
+  FormStand1.CloseAll<TOrdersForm>;
 end;
 
 procedure TMainForm.OpenButtonClick(Sender: TObject);
 var
-  LFormInfo: TFormInfo<TSecondForm>;
+  LFormInfo: TFormInfo<TOrdersForm>;
 begin
-  LFormInfo := FormStand1.GetFormInfo<TSecondForm>(True, Rectangle1);
+  LFormInfo := FormStand1.GetFormInfo<TOrdersForm>(True, Rectangle1);
   if not LFormInfo.IsVisible then
     LFormInfo.Show;
 end;
 
 procedure TMainForm.CloseButtonClick(Sender: TObject);
 begin
-  FormStand1.HideAndCloseAll<TSecondForm>;
+  FormStand1.HideAndCloseAll<TOrdersForm>;
 end;
 
 end.

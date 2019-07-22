@@ -373,6 +373,11 @@ public:
 	virtual void __fastcall CloseAll(const System::TClass ARestrictTo)/* overload */;
 	virtual void __fastcall CloseAllExcept(const System::DynamicArray<System::TClass> AExceptions) = 0 /* overload */;
 	virtual void __fastcall CloseAllExcept(const System::TClass AException)/* overload */;
+	virtual void __fastcall HideAndCloseAll()/* overload */;
+	virtual void __fastcall HideAndCloseAll(const System::DynamicArray<System::TClass> ARestrictTo) = 0 /* overload */;
+	virtual void __fastcall HideAndCloseAll(const System::TClass ARestrictTo)/* overload */;
+	virtual void __fastcall HideAndCloseAllExcept(const System::DynamicArray<System::TClass> AExceptions) = 0 /* overload */;
+	virtual void __fastcall HideAndCloseAllExcept(const System::TClass AException)/* overload */;
 	__property int Count = {read=GetCount, nodefault};
 	__property TCommonActionDictionary__1<TSubjectInfo*>* CommonActions = {read=FCommonActions};
 	__property Responsivecontainer::TResponsiveContainer* Responsive = {read=FResponsive};

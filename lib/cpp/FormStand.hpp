@@ -167,8 +167,12 @@ public:
 	__fastcall virtual ~TFormStand();
 	Fmx::Forms::TForm* __fastcall LastShownForm();
 	virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject);
+	template<typename T> HIDESBASE void __fastcall CloseAll()/* overload */;
 	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> ARestrictTo)/* overload */;
 	virtual void __fastcall CloseAllExcept(const System::DynamicArray<System::TClass> AExceptions)/* overload */;
+	template<typename T> HIDESBASE void __fastcall HideAndCloseAll()/* overload */;
+	virtual void __fastcall HideAndCloseAll(const System::DynamicArray<System::TClass> ARestrictTo)/* overload */;
+	virtual void __fastcall HideAndCloseAllExcept(const System::DynamicArray<System::TClass> AExceptions)/* overload */;
 	TFormInfo__1<Fmx::Forms::TForm*>* __fastcall FormInfo(Fmx::Forms::TForm* const AForm)/* overload */;
 	TFormInfo__1<Fmx::Forms::TForm*>* __fastcall FormInfo(const TFormClass AFormClass)/* overload */;
 	template<typename T> TFormInfo__1<T>* __fastcall FormInfo()/* overload */;
@@ -186,6 +190,9 @@ public:
 	inline void __fastcall  CloseAll(){ Subjectstand::TSubjectStand::CloseAll(); }
 	inline void __fastcall  CloseAll(const System::TClass ARestrictTo){ Subjectstand::TSubjectStand::CloseAll(ARestrictTo); }
 	inline void __fastcall  CloseAllExcept(const System::TClass AException){ Subjectstand::TSubjectStand::CloseAllExcept(AException); }
+	inline void __fastcall  HideAndCloseAll(){ Subjectstand::TSubjectStand::HideAndCloseAll(); }
+	inline void __fastcall  HideAndCloseAll(const System::TClass ARestrictTo){ Subjectstand::TSubjectStand::HideAndCloseAll(ARestrictTo); }
+	inline void __fastcall  HideAndCloseAllExcept(const System::TClass AException){ Subjectstand::TSubjectStand::HideAndCloseAllExcept(AException); }
 	
 };
 

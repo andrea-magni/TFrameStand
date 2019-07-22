@@ -197,6 +197,11 @@ type
     procedure CloseAll(const ARestrictTo: TClass); overload; virtual;
     procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual; abstract;
     procedure CloseAllExcept(const AException: TClass); overload; virtual;
+    procedure HideAndCloseAll; overload; virtual;
+    procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; virtual; abstract;
+    procedure HideAndCloseAll(const ARestrictTo: TClass); overload; virtual;
+    procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual; abstract;
+    procedure HideAndCloseAllExcept(const AException: TClass); overload; virtual;
 
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary<TSubjectInfo> read FCommonActions;
@@ -374,6 +379,21 @@ begin
   Result := DefaultStandName;
   if AStandStyleName <> '' then
     Result := AStandStyleName;
+end;
+
+procedure TSubjectStand.HideAndCloseAll;
+begin
+  HideAndCloseAllExcept(nil);
+end;
+
+procedure TSubjectStand.HideAndCloseAll(const ARestrictTo: TClass);
+begin
+  HideAndCloseAll([ARestrictTo]);
+end;
+
+procedure TSubjectStand.HideAndCloseAllExcept(const AException: TClass);
+begin
+  HideAndCloseAllExcept([AException]);
 end;
 
 procedure TSubjectStand.Notification(AComponent: TComponent;

@@ -38,9 +38,6 @@ type
     { Public declarations }
   end;
 
-var
-  SecondForm: TSecondForm;
-
 implementation
 
 {$R *.fmx}

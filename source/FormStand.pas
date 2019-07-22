@@ -88,8 +88,12 @@ type
 
     function LastShownForm: TForm;
     procedure Remove(ASubject: TSubject); override;
+    procedure CloseAll<T: TForm>; overload;
     procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
     procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
+    procedure HideAndCloseAll<T: TForm>; overload;
+    procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; override;
+    procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
 
     function FormInfo(const AForm: TForm): TFormInfo<TForm>; overload;
     function FormInfo(const AFormClass: TFormClass): TFormInfo<TForm>; overload;
@@ -128,8 +132,13 @@ begin
   for LFormInfo in LFormInfos do
   begin
     if LConsiderRestrictions and ClassInArray(LFormInfo.Form, ARestrictTo) then
-      LFormInfo.HideAndClose;
+      LFormInfo.Close;
   end;
+end;
+
+procedure TFormStand.CloseAll<T>;
+begin
+  CloseAll([TFormClass(T)]);
 end;
 
 procedure TFormStand.CloseAllExcept(const AExceptions: TArray<TClass>);
@@ -144,7 +153,7 @@ begin
   for LFormInfo in LFormInfos do
   begin
     if LConsiderExceptions and not ClassInArray(LFormInfo.Form, AExceptions) then
-      LFormInfo.HideAndClose;
+      LFormInfo.Close;
   end;
 end;
 
@@ -228,6 +237,43 @@ begin
   Result := FormInfo<T>;
   if ANewIfNotFound and not Assigned(Result) then
     Result := New<T>(AParent, AStandStyleName);
+end;
+
+procedure TFormStand.HideAndCloseAll(const ARestrictTo: TArray<TClass>);
+var
+  LFormInfo: TFormInfo<TForm>;
+  LFormInfos: TArray<TFormInfo<TForm>>;
+  LConsiderRestrictions: Boolean;
+begin
+  LFormInfos := FFormInfos.Values.ToArray;
+  LConsiderRestrictions := Length(ARestrictTo) > 0;
+
+  for LFormInfo in LFormInfos do
+  begin
+    if LConsiderRestrictions and ClassInArray(LFormInfo.Form, ARestrictTo) then
+      LFormInfo.HideAndClose;
+  end;
+end;
+
+procedure TFormStand.HideAndCloseAll<T>;
+begin
+  HideAndCloseAll([TFormClass(T)]);
+end;
+
+procedure TFormStand.HideAndCloseAllExcept(const AExceptions: TArray<TClass>);
+var
+  LFormInfo: TFormInfo<TForm>;
+  LFormInfos: TArray<TFormInfo<TForm>>;
+  LConsiderExceptions: Boolean;
+begin
+  LFormInfos := FFormInfos.Values.ToArray;
+  LConsiderExceptions := Length(AExceptions) > 0;
+
+  for LFormInfo in LFormInfos do
+  begin
+    if LConsiderExceptions and not ClassInArray(LFormInfo.Form, AExceptions) then
+      LFormInfo.HideAndClose;
+  end;
 end;
 
 function TFormStand.LastShownForm: TForm;

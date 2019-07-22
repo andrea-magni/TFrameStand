@@ -23,13 +23,6 @@ object OrdersForm: TOrdersForm
       Text = 'Close Me'
       OnClick = CloseMeActionExecute
     end
-    object Button1: TButton
-      Position.X = 248.000000000000000000
-      Position.Y = 16.000000000000000000
-      TabOrder = 2
-      Text = 'Button1'
-      OnClick = Button1Click
-    end
   end
   object OrdersListView: TListView
     ItemAppearanceClassName = 'TListItemAppearance'

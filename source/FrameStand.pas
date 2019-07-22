@@ -66,6 +66,8 @@ type
     procedure Remove(ASubject: TSubject); override;
     procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
     procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
+    procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; override;
+    procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
 
     function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>; overload;
     function FrameInfo(const AFrameClass: TFrameClass): TFrameInfo<TFrame>; overload;
@@ -101,7 +103,7 @@ begin
   for LFrameInfo in LFrameInfos do
   begin
     if LConsiderRestrictions and ClassInArray(LFrameInfo.Frame, ARestrictTo) then
-      LFrameInfo.HideAndClose;
+      LFrameInfo.Close;
   end;
 end;
 
@@ -117,7 +119,7 @@ begin
   for LFrameInfo in LFrameInfos do
   begin
     if LConsiderExceptions and not ClassInArray(LFrameInfo.Frame, AExceptions) then
-      LFrameInfo.HideAndClose;
+      LFrameInfo.Close;
   end;
 end;
 
@@ -207,6 +209,38 @@ begin
   Result := FrameInfo<T>;
   if ANewIfNotFound and not Assigned(Result) then
     Result := New<T>(AParent, AStandStyleName);
+end;
+
+procedure TFrameStand.HideAndCloseAll(const ARestrictTo: TArray<TClass>);
+var
+  LFrameInfo: TFrameInfo<TFrame>;
+  LFrameInfos: TArray<TFrameInfo<TFrame>>;
+  LConsiderRestrictions: Boolean;
+begin
+  LFrameInfos := FFrameInfos.Values.ToArray;
+  LConsiderRestrictions := Length(ARestrictTo) > 0;
+
+  for LFrameInfo in LFrameInfos do
+  begin
+    if LConsiderRestrictions and ClassInArray(LFrameInfo.Frame, ARestrictTo) then
+      LFrameInfo.HideAndClose;
+  end;
+end;
+
+procedure TFrameStand.HideAndCloseAllExcept(const AExceptions: TArray<TClass>);
+var
+  LFrameInfo: TFrameInfo<TFrame>;
+  LFrameInfos: TArray<TFrameInfo<TFrame>>;
+  LConsiderExceptions: Boolean;
+begin
+  LFrameInfos := FFrameInfos.Values.ToArray;
+  LConsiderExceptions := Length(AExceptions) > 0;
+
+  for LFrameInfo in LFrameInfos do
+  begin
+    if LConsiderExceptions and not ClassInArray(LFrameInfo.Frame, AExceptions) then
+      LFrameInfo.HideAndClose;
+  end;
 end;
 
 function TFrameStand.LastShownFrame: TFrame;

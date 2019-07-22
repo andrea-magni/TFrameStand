@@ -20,28 +20,28 @@ type
     BindSourceDB1: TBindSourceDB;
     BindingsList1: TBindingsList;
     LinkListControlToField1: TLinkListControlToField;
-    Button1: TButton;
     procedure CloseMeActionExecute(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
   private
-    { Private declarations }
     [FormInfoAttribute] FI: TFormInfo<TOrdersForm>;
   public
-    { Public declarations }
+    [AfterShow]
+    procedure AfterShow;
   end;
-
-var
-  OrdersForm: TOrdersForm;
 
 implementation
 
 {$R *.fmx}
 
-uses DateUtils, Data.Local;
+uses DateUtils, Data.Local, Data.DB;
 
-procedure TOrdersForm.Button1Click(Sender: TObject);
+procedure TOrdersForm.AfterShow;
 begin
-  ShowMessage(LocalData.OrdersTable.RecNo.ToString);
+  TDelayedAction.Execute(100
+  , procedure
+    begin
+      LocalData.OrdersTable.Resync([rmExact]);
+    end
+  );
 end;
 
 procedure TOrdersForm.CloseMeActionExecute(Sender: TObject);

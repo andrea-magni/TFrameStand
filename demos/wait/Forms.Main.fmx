@@ -43,7 +43,9 @@ object MainForm: TMainForm
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
     CommonActionPrefix = 'ca_'
+    DefaultHideAndCloseDeferTimeMS = 100
     DefaultStyleName = 'framestand'
+    DefaultStandName = 'framestand'
     Left = 72
     Top = 112
   end

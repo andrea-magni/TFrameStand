@@ -27,7 +27,6 @@ object MainForm: TMainForm
         Position.X = 178.000000000000000000
         Position.Y = 8.000000000000000000
         TabOrder = 1
-        Visible = True
       end
       object HideButton: TButton
         Action = HideAction
@@ -36,7 +35,6 @@ object MainForm: TMainForm
         Position.X = 264.000000000000000000
         Position.Y = 8.000000000000000000
         TabOrder = 0
-        Visible = True
       end
       object StyleNameComboBox: TComboBox
         Items.Strings = (
@@ -62,8 +60,8 @@ object MainForm: TMainForm
       DefaultItemStyles.ItemStyle = ''
       DefaultItemStyles.GroupHeaderStyle = ''
       DefaultItemStyles.GroupFooterStyle = ''
-      Viewport.Width = 359.000000000000000000
-      Viewport.Height = 387.000000000000000000
+      Viewport.Width = 363.000000000000000000
+      Viewport.Height = 391.000000000000000000
       object ListBoxItem1: TListBoxItem
         TabOrder = 0
         Text = 'ListBoxItem1'
@@ -143,7 +141,7 @@ object MainForm: TMainForm
     object Label1: TLabel
       Align = Center
       AutoSize = True
-      Size.Width = 197.000000000000000000
+      Size.Width = 194.000000000000000000
       Size.Height = 16.000000000000000000
       Size.PlatformDefault = False
       TextSettings.WordWrap = False
@@ -254,10 +252,11 @@ object MainForm: TMainForm
     Top = 384
   end
   object FrameStand1: TFrameStand
-    StyleBook = StyleBook1
-    DefaultStyleName = 'framestand'
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
+    CommonActionPrefix = 'ca_'
+    DefaultStyleName = 'framestand'
+    StyleBook = StyleBook1
     Left = 32
     Top = 384
   end

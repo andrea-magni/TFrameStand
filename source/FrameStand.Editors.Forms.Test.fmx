@@ -1,7 +1,7 @@
-object TestForm: TTestForm
+object FrameStandTestForm: TFrameStandTestForm
   Left = 0
   Top = 0
-  Caption = 'FrameStand - Test Form'
+  Caption = 'TFrameStand - Test Form'
   ClientHeight = 480
   ClientWidth = 652
   Position = ScreenCenter
@@ -62,16 +62,14 @@ object TestForm: TTestForm
           ImageIndex = -1
           Position.X = 10.000000000000000000
           TabOrder = 1
-          Visible = True
         end
         object HideButton: TButton
           Action = HideAction
           Enabled = True
           ImageIndex = -1
-          Position.X = 3.500000000000000000
+          Position.X = 10.000000000000000000
           Position.Y = 27.000000000000000000
           TabOrder = 0
-          Visible = True
         end
       end
     end
@@ -98,7 +96,7 @@ object TestForm: TTestForm
         AutoSize = True
         Position.X = 70.000000000000000000
         Position.Y = 3.000000000000000000
-        Size.Width = 124.000000000000000000
+        Size.Width = 121.000000000000000000
         Size.Height = 16.000000000000000000
         Size.PlatformDefault = False
         TextSettings.WordWrap = False

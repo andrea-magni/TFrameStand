@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2017 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2018 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'FrameStandPackage_10_3.dpk' rev: 33.00 (Windows)
@@ -14,12 +14,11 @@
 #pragma pack(push,8)
 #include <System.hpp>	// (rtl)
 #include <SysInit.hpp>
-#include <FrameStand.hpp>
-#include <FrameStand.Editors.hpp>
-#include <FrameStand.Editors.Forms.Test.hpp>
-#include <Frames.Test.hpp>
+#include <SubjectStand.hpp>
 #include <DeviceAndPlatformInfo.hpp>
 #include <ResponsiveContainer.hpp>
+#include <FrameStand.hpp>
+#include <FormStand.hpp>
 #include <System.UITypes.hpp>	// (rtl)
 #include <Winapi.Windows.hpp>	// (rtl)
 #include <Winapi.PsAPI.hpp>	// (rtl)
@@ -113,49 +112,6 @@
 #include <FMX.Clipboard.Win.hpp>	// (fmx)
 #include <FMX.Platform.hpp>	// (fmx)
 #include <FMX.Controls.hpp>	// (fmx)
-#include <System.IniFiles.hpp>	// (rtl)
-#include <System.Win.Registry.hpp>	// (rtl)
-#include <Vcl.Graphics.hpp>	// (vcl)
-#include <Vcl.ActnList.hpp>	// (vcl)
-#include <System.HelpIntfs.hpp>	// (rtl)
-#include <Vcl.GraphUtil.hpp>	// (vcl)
-#include <Vcl.StdCtrls.hpp>	// (vcl)
-#include <Vcl.Printers.hpp>	// (vcl)
-#include <Vcl.Clipbrd.hpp>	// (vcl)
-#include <Vcl.ComCtrls.hpp>	// (vcl)
-#include <Vcl.Dialogs.hpp>	// (vcl)
-#include <Vcl.ExtCtrls.hpp>	// (vcl)
-#include <Vcl.Themes.hpp>	// (vcl)
-#include <Winapi.FlatSB.hpp>	// (rtl)
-#include <Vcl.Forms.hpp>	// (vcl)
-#include <Vcl.Menus.hpp>	// (vcl)
-#include <Vcl.Controls.hpp>	// (vcl)
-#include <IDEMessages.hpp>	// (designide)
-#include <Vcl.CaptionedDockTree.hpp>	// (vcl)
-#include <Vcl.DockTabSet.hpp>	// (vcl)
-#include <Vcl.Grids.hpp>	// (vcl)
-#include <Vcl.CategoryButtons.hpp>	// (vcl)
-#include <Vcl.ButtonGroup.hpp>	// (vcl)
-#include <Vcl.SysStyles.hpp>	// (vcl)
-#include <Vcl.Styles.hpp>	// (vcl)
-#include <BrandingAPI.hpp>	// (designide)
-#include <PercentageDockTree.hpp>	// (designide)
-#include <Vcl.Buttons.hpp>	// (vcl)
-#include <Vcl.ExtDlgs.hpp>	// (vcl)
-#include <Winapi.Mapi.hpp>	// (rtl)
-#include <Vcl.ExtActns.hpp>	// (vcl)
-#include <Vcl.ActnMenus.hpp>	// (vclactnband)
-#include <Vcl.ActnMan.hpp>	// (vclactnband)
-#include <Vcl.PlatformDefaultStyleActnCtrls.hpp>	// (vclactnband)
-#include <BaseDock.hpp>	// (designide)
-#include <DeskUtil.hpp>	// (designide)
-#include <DeskForm.hpp>	// (designide)
-#include <DockForm.hpp>	// (designide)
-#include <Xml.Win.msxmldom.hpp>	// (xmlrtl)
-#include <Xml.xmldom.hpp>	// (xmlrtl)
-#include <ToolsAPI.hpp>	// (designide)
-#include <Proxies.hpp>	// (designide)
-#include <DesignEditors.hpp>	// (designide)
 // SO_SFX: _260
 // PRG_EXT: .bpl
 // BPI_DIR: ..\lib\cpp

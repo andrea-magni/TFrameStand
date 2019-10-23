@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FrameStand,
   FMX.StdCtrls, FMX.Layouts, FMX.Controls.Presentation, Frames.Picture,
-  System.ImageList, FMX.ImgList, FMX.Objects, FMX.Ani;
+  System.ImageList, FMX.ImgList, FMX.Objects, FMX.Ani, SubjectStand;
 
 type
   TMainForm = class(TForm)
@@ -17,8 +17,8 @@ type
     StyleBook1: TStyleBook;
     FlowLayout1: TFlowLayout;
     procedure RunButtonClick(Sender: TObject);
-    procedure FrameStand1BeforeStartAnimation(const ASender: TFrameStand;
-      const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>;
+    procedure FrameStand1BeforeStartAnimation(const ASender: TSubjectStand;
+      const AFrameInfo: TSubjectInfo;
       const AAnimation: TAnimation);
   private
     { Private declarations }
@@ -35,13 +35,13 @@ implementation
 
 uses FMX.MultiResBitmap, Math;
 
-procedure TMainForm.FrameStand1BeforeStartAnimation(const ASender: TFrameStand;
-  const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>; const AAnimation: TAnimation);
+procedure TMainForm.FrameStand1BeforeStartAnimation(const ASender: TSubjectStand;
+  const AFrameInfo: TSubjectInfo; const AAnimation: TAnimation);
 begin
-  if AFrameInfo.Frame is TPictureFrame
+  if AFrameInfo.Subject is TPictureFrame
      and SameText(AAnimation.StyleName, 'OnShowFadeIn')
   then
-    AAnimation.Delay := Math.Log10(TPictureFrame(AFrameInfo.Frame).PositionIndex + 2) / 2;
+    AAnimation.Delay := Math.Log10(TPictureFrame(AFrameInfo.Subject).PositionIndex + 2) / 2;
 end;
 
 procedure TMainForm.RunButtonClick(Sender: TObject);
@@ -49,7 +49,6 @@ var
   LIndex: Integer;
   LInfo: TFrameInfo<TPictureFrame>;
   LItem: TCustomBitmapItem;
-  LSize: TSize;
 begin
   while FrameStand1.Count > 0 do
   begin

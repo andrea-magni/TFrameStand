@@ -1,0 +1,26 @@
+inherited SecondForm_LgXhdpiPh: TSecondForm_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 0
+  inherited Button1: TButton
+    Size.Height = 39.000000000000000000
+  end
+  inherited Button2: TButton
+    Position.X = 340.000000000000000000
+    Size.Height = 39.000000000000000000
+  end
+  inherited Button3: TButton
+    Position.Y = 648.000000000000000000
+    Size.Height = 39.000000000000000000
+  end
+  inherited Button4: TButton
+    Position.X = 340.000000000000000000
+    Position.Y = 648.000000000000000000
+    Size.Height = 39.000000000000000000
+  end
+  inherited Label1: TLabel
+    Size.Width = 105.000000000000000000
+    Size.Height = 22.000000000000000000
+    Text = 'Android view'
+  end
+end

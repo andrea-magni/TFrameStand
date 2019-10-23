@@ -11,7 +11,8 @@ uses
   FMX.ListView.Adapters.Base, FMX.ListView, Data.Bind.GenData, Fmx.Bind.GenData,
   System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope, FMX.Objects,
-  FMX.ScrollBox, FMX.Memo, FMX.Layouts, System.ImageList, FMX.ImgList;
+  FMX.ScrollBox, FMX.Memo, FMX.Layouts, System.ImageList, FMX.ImgList,
+  SubjectStand;
 
 type
   TMainForm = class(TForm)

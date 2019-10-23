@@ -39,10 +39,10 @@ end;
 
 procedure TFrameStandEditor.Edit;
 var
-  LForm: TTestForm;
+  LForm: TFrameStandTestForm;
 begin
   inherited;
-  LForm := TTestForm.Create(nil);
+  LForm := TFrameStandTestForm.Create(nil);
   try
     LForm.FrameStand := CurrentObj;
     LForm.ShowModal;

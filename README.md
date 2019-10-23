@@ -1,27 +1,28 @@
 ![TFrameStand](media/frame_stand_xhdpi.png)
-#TFrameStand component (FMX)
-Easily use TFrame(s) in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
+![TFormStand](media/form_stand_xhdpi.png)
+#TFrameStand and TFormStand components (FMX)
+Easily use TFrame or TForm descendants in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 
 _All code and demos tested on Delphi XE8 and Delphi 10.3 Rio._
 
 ##Installation - GetIt!
-**TFrameStand is [now available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
+**TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
 
-_Current version on GetIt: 1.4_
+_Current version on GetIt: 1.4 (TFrameStand only!)_
 
 ##Installation - Manual
-1. Compile “packages\FrameStandPackage.dproj”
-2. Install “FrameStandPackage.bpl” package (please select a package specific for your version, when available)
-3. Add “source\” library path for Delphi (repeat for each platform you need)
+1. Open “packages\FrameStand_10_3.groupproj”
+2. Build both contained packages
+2. Install “dclFrameStandPackage_10_3_260.bpl” design time package
+3. Add “source\” library path for Delphi (do this for each platform you need to support)
 
 _Installing manually you get the latest updates (beware! :-) )_
 
 ##Main functionalities
-* Show any TFrame (manually or while doing a background task)
-* Add a common visual layer between the TFrame and its parent (either a TForm or any TControl)
-* Add animations and effects to provide a modern looking UI
+* Use any TFrame/TForm and show it through TFrame/TFormStand to add animations, effects and stands (a common visual layer between the TFrame/TForm and its Parent)
 * Share CommonActions through different UI combinations
 * Responsive frame substitution
+* Take advantage of design time style preview and Fire UI technology through TFormStand
 
 ##Get started
 * Have a look at [my blog posts about TFrameStand](https://blog.andreamagni.eu/tag/tframestand/)

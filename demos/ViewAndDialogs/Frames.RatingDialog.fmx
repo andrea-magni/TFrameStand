@@ -28,7 +28,7 @@ object RatingDialogFrame: TRatingDialogFrame
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Size = 14.000000000000000000
-      TextSettings.Font.Style = [fsBold]
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.HorzAlign = Center
       TextSettings.WordWrap = False
       Text = 'Rate the picture'
@@ -115,7 +115,7 @@ object RatingDialogFrame: TRatingDialogFrame
         Tag = 1
         Align = Client
         Fill.Color = xFFBBDEFB
-        Size.Width = 53.799999237060540000
+        Size.Width = 53.799999237060550000
         Size.Height = 61.000000000000000000
         Size.PlatformDefault = False
         Stroke.Kind = None
@@ -137,7 +137,7 @@ object RatingDialogFrame: TRatingDialogFrame
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
-          TextSettings.Font.Style = [fsBold]
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
           TextSettings.FontColor = xFF0D47A1
           TextSettings.WordWrap = False
           Text = '1'
@@ -147,14 +147,14 @@ object RatingDialogFrame: TRatingDialogFrame
         Tag = 2
         Align = Client
         Fill.Color = xFF90CAF9
-        Size.Width = 53.799999237060540000
+        Size.Width = 53.799999237060550000
         Size.Height = 61.000000000000000000
         Size.PlatformDefault = False
         Stroke.Kind = None
         OnClick = RectangleRating1Click
         object OnShowRating2: TFloatAnimation
           AnimationType = Out
-          Delay = 0.699999988079071100
+          Delay = 0.699999988079071000
           Duration = 0.100000001490116100
           Interpolation = Quadratic
           PropertyName = 'Scale.X'
@@ -169,7 +169,7 @@ object RatingDialogFrame: TRatingDialogFrame
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
-          TextSettings.Font.Style = [fsBold]
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
           TextSettings.FontColor = xFF0D47A1
           TextSettings.WordWrap = False
           Text = '2'
@@ -201,7 +201,7 @@ object RatingDialogFrame: TRatingDialogFrame
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
-          TextSettings.Font.Style = [fsBold]
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
           TextSettings.FontColor = xFF0D47A1
           TextSettings.WordWrap = False
           Text = '3'
@@ -233,7 +233,7 @@ object RatingDialogFrame: TRatingDialogFrame
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
-          TextSettings.Font.Style = [fsBold]
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
           TextSettings.FontColor = xFF0D47A1
           TextSettings.WordWrap = False
           Text = '4'
@@ -265,7 +265,7 @@ object RatingDialogFrame: TRatingDialogFrame
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
-          TextSettings.Font.Style = [fsBold]
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
           TextSettings.FontColor = xFF0D47A1
           TextSettings.WordWrap = False
           Text = '5'

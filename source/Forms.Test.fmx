@@ -1,0 +1,46 @@
+object TestForm: TTestForm
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Rectangle1: TRectangle
+    Align = Client
+    Fill.Color = claDodgerblue
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claNavy
+    Stroke.Thickness = 5.000000000000000000
+    object Circle1: TCircle
+      Align = Client
+      Fill.Color = claDodgerblue
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 620.000000000000000000
+      Size.Height = 460.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claPaleturquoise
+      Stroke.Thickness = 5.000000000000000000
+      Stroke.Cap = Round
+      Stroke.Dash = Dot
+      Stroke.Join = Round
+      object Circle2: TCircle
+        Align = Center
+        Fill.Color = claPaleturquoise
+        Size.Width = 32.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claNavy
+        Stroke.Thickness = 2.000000000000000000
+        Stroke.Cap = Round
+      end
+    end
+  end
+end

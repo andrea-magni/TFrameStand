@@ -84,7 +84,7 @@ object MainForm: TMainForm
     object Label1: TLabel
       Align = Center
       AutoSize = True
-      Size.Width = 205.000000000000000000
+      Size.Width = 201.000000000000000000
       Size.Height = 16.000000000000000000
       Size.PlatformDefault = False
       TextSettings.WordWrap = False
@@ -92,11 +92,11 @@ object MainForm: TMainForm
     end
   end
   object FrameStand1: TFrameStand
-    StyleBook = StyleBook1
-    DefaultStyleName = 'expand'
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
-    OnBeforeShow = FrameStand1BeforeShow
+    CommonActionPrefix = 'ca_'
+    DefaultStyleName = 'expand'
+    StyleBook = StyleBook1
     Left = 176
     Top = 312
   end

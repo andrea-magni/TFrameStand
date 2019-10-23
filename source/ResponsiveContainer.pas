@@ -8,7 +8,8 @@ uses
 
 
 type
-  TFrameClass = class of TFrame;
+  TSubject = TFmxObject;
+  TSubjectClass = class of TSubject;
 
   TBreakpoint = record
     MaxWidth: Single;
@@ -33,10 +34,10 @@ type
   end;
 
   TResponsiveDefinition = record
-    FrameClass: TFrameClass;
+    SubjectClass: TSubjectClass;
     StandName: string;
     Parent: TFmxObject;
-    constructor Create(const AFrameClass: TFrameClass; const AStandName: string = '';
+    constructor Create(const ASubjectClass: TSubjectClass; const AStandName: string = '';
       const AParent: TFmxObject = nil);
   end;
 
@@ -48,7 +49,7 @@ type
     function Matches(const ADef: TResponsiveDefinition; const ABreakpoint: string;
       const AAvailableBreakpoints: TBreakpoints): Boolean; overload;
 
-    function Matches(const AFrameClass: TFrameClass; const AStandName: string;
+    function Matches(const ASubjectClass: TSubjectClass; const AStandName: string;
       const AParent: TFmxObject; const ABreakpoint: string; const AAvailableBreakpoints: TBreakpoints): Boolean; overload;
     constructor Create(const ASource, ATarget: TResponsiveDefinition; const ABreakpoint: string);
   end;
@@ -63,7 +64,7 @@ type
     destructor Destroy; override;
 
     procedure Define(const ASourceDef, ATargetDef: TResponsiveDefinition; const ABreakpoint: string); overload;
-    procedure Define(const ASourceFrameClass, ATargetFrameClass: TFrameClass; const ABreakpoint: string); overload;
+    procedure Define(const ASourceSubjectClass, ATargetSubjectClass: TSubjectClass; const ABreakpoint: string); overload;
     function Lookup(const ASourceDef: TResponsiveDefinition; const ABreakpoint: string): TResponsiveDefinition;
     function CurrentBreakpoint(const AWidth: Single): TBreakpoint;
 
@@ -130,15 +131,15 @@ begin
   Breakpoint := ABreakpoint;
 end;
 
-function TResponsiveOption.Matches(const AFrameClass: TFrameClass;
+function TResponsiveOption.Matches(const ASubjectClass: TSubjectClass;
   const AStandName: string; const AParent: TFmxObject;
   const ABreakpoint: string; const AAvailableBreakpoints: TBreakpoints): Boolean;
 var
   LIndexBreakpoint, LIndexABreakpoint: Integer;
 begin
   Result := True;
-  if Assigned(AFrameClass) then
-    Result := Assigned(Source.FrameClass) and AFrameClass.InheritsFrom(Source.FrameClass);
+  if Assigned(ASubjectClass) then
+    Result := Assigned(Source.SubjectClass) and ASubjectClass.InheritsFrom(Source.SubjectClass);
   if not Result then
     Exit;
 
@@ -165,7 +166,7 @@ end;
 function TResponsiveOption.Matches(const ADef: TResponsiveDefinition;
   const ABreakpoint: string; const AAvailableBreakpoints: TBreakpoints): Boolean;
 begin
-  Result := Matches(ADef.FrameClass, ADef.StandName, ADef.Parent, ABreakpoint, AAvailableBreakpoints);
+  Result := Matches(ADef.SubjectClass, ADef.StandName, ADef.Parent, ABreakpoint, AAvailableBreakpoints);
 end;
 
 { TResponsiveContainer }
@@ -212,12 +213,12 @@ begin
   FOptions.Add(TResponsiveOption.Create(ASourceDef, ATargetDef, ABreakpoint));
 end;
 
-procedure TResponsiveContainer.Define(const ASourceFrameClass,
-  ATargetFrameClass: TFrameClass; const ABreakpoint: string);
+procedure TResponsiveContainer.Define(const ASourceSubjectClass,
+  ATargetSubjectClass: TSubjectClass; const ABreakpoint: string);
 begin
   Define(
-    TResponsiveDefinition.Create(ASourceFrameClass)
-  , TResponsiveDefinition.Create(ATargetFrameClass)
+    TResponsiveDefinition.Create(ASourceSubjectClass)
+  , TResponsiveDefinition.Create(ATargetSubjectClass)
   , ABreakpoint
   );
 end;
@@ -247,8 +248,8 @@ begin
 
   if LFound then
   begin
-    if Assigned(LMatch.FrameClass) then
-      Result.FrameClass := LMatch.FrameClass;
+    if Assigned(LMatch.SubjectClass) then
+      Result.SubjectClass := LMatch.SubjectClass;
     if (LOption.Target.StandName <> '') then
       Result.StandName := LMatch.StandName;
     if Assigned(LOption.Target.Parent) then
@@ -324,10 +325,10 @@ end;
 
 { TResponsiveDefinition }
 
-constructor TResponsiveDefinition.Create(const AFrameClass: TFrameClass;
+constructor TResponsiveDefinition.Create(const ASubjectClass: TSubjectClass;
   const AStandName: string; const AParent: TFmxObject);
 begin
-  FrameClass := AFrameClass;
+  SubjectClass := ASubjectClass;
   StandName := AStandName;
   Parent := AParent;
 end;

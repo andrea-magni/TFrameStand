@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FrameStand,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.Gestures, Frames.Image,
-  System.Actions, FMX.ActnList, FMX.Layouts;
+  System.Actions, FMX.ActnList, FMX.Layouts, SubjectStand;
 
 type
   TMainForm = class(TForm)
@@ -56,8 +56,6 @@ end;
 
 procedure TMainForm.FormGesture(Sender: TObject;
   const EventInfo: TGestureEventInfo; var Handled: Boolean);
-var
-  LLocalPoint: TPointF;
 begin
   if (EventInfo.GestureID = igiPan) then
   begin

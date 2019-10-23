@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2017 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2018 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'ResponsiveContainer.pas' rev: 33.00 (Windows)
@@ -33,7 +33,9 @@ struct TResponsiveDefinition;
 struct TResponsiveOption;
 class DELPHICLASS TResponsiveContainer;
 //-- type declarations -------------------------------------------------------
-typedef System::TMetaClass* TFrameClass;
+typedef Fmx::Types::TFmxObject TSubject;
+
+typedef System::TMetaClass* TSubjectClass;
 
 struct DECLSPEC_DRECORD TBreakpoint
 {
@@ -69,10 +71,10 @@ public:
 struct DECLSPEC_DRECORD TResponsiveDefinition
 {
 public:
-	TFrameClass FrameClass;
+	TSubjectClass SubjectClass;
 	System::UnicodeString StandName;
 	Fmx::Types::TFmxObject* Parent;
-	__fastcall TResponsiveDefinition(const TFrameClass AFrameClass, const System::UnicodeString AStandName, Fmx::Types::TFmxObject* const AParent);
+	__fastcall TResponsiveDefinition(const TSubjectClass ASubjectClass, const System::UnicodeString AStandName, Fmx::Types::TFmxObject* const AParent);
 	TResponsiveDefinition() {}
 };
 
@@ -84,7 +86,7 @@ public:
 	TResponsiveDefinition Target;
 	System::UnicodeString Breakpoint;
 	bool __fastcall Matches(const TResponsiveDefinition &ADef, const System::UnicodeString ABreakpoint, TBreakpoints* const AAvailableBreakpoints)/* overload */;
-	bool __fastcall Matches(const TFrameClass AFrameClass, const System::UnicodeString AStandName, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString ABreakpoint, TBreakpoints* const AAvailableBreakpoints)/* overload */;
+	bool __fastcall Matches(const TSubjectClass ASubjectClass, const System::UnicodeString AStandName, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString ABreakpoint, TBreakpoints* const AAvailableBreakpoints)/* overload */;
 	__fastcall TResponsiveOption(const TResponsiveDefinition &ASource, const TResponsiveDefinition &ATarget, const System::UnicodeString ABreakpoint);
 	TResponsiveOption() {}
 };
@@ -103,7 +105,7 @@ public:
 	__fastcall virtual TResponsiveContainer();
 	__fastcall virtual ~TResponsiveContainer();
 	void __fastcall Define(const TResponsiveDefinition &ASourceDef, const TResponsiveDefinition &ATargetDef, const System::UnicodeString ABreakpoint)/* overload */;
-	void __fastcall Define(const TFrameClass ASourceFrameClass, const TFrameClass ATargetFrameClass, const System::UnicodeString ABreakpoint)/* overload */;
+	void __fastcall Define(const TSubjectClass ASourceSubjectClass, const TSubjectClass ATargetSubjectClass, const System::UnicodeString ABreakpoint)/* overload */;
 	TResponsiveDefinition __fastcall Lookup(const TResponsiveDefinition &ASourceDef, const System::UnicodeString ABreakpoint);
 	TBreakpoint __fastcall CurrentBreakpoint(const float AWidth);
 	void __fastcall AddBreakpoint(const float AWidth, const System::UnicodeString AName);

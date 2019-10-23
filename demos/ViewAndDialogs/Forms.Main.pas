@@ -11,7 +11,7 @@ uses
   Data.Bind.ObjectScope, FMX.ListView, System.Rtti, System.Bindings.Outputs,
   Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt, FMX.Objects
   , Frames.EmployeeDetails
-  , Frames.RatingDialog
+  , Frames.RatingDialog, SubjectStand
   ;
 
 type

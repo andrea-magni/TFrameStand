@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Layouts, FMX.Controls.Presentation, FrameStand;
+  FMX.Layouts, FMX.Controls.Presentation, FrameStand, SubjectStand;
 
 type
   TMainForm = class(TForm)
@@ -28,30 +28,39 @@ implementation
 
 {$R *.fmx}
 
-uses Frames.Wait;
+uses Frames.Wait, System.Threading;
 
 procedure TMainForm.DoSomethingButtonClick(Sender: TObject);
+var
+  LFrameInfo: TFrameInfo<TWaitFrame>;
 begin
-  FrameStand1.New<TWaitFrame>(Layout1)
-    .Show(
+  LFrameInfo := FrameStand1.New<TWaitFrame>(Layout1);
+
+  LFrameInfo.Show;
+
+  TTask.Run(
+    procedure
+    begin
       // background task to execute
-      procedure(AFrameInfo: TFrameInfo<TWaitFrame>)
-      begin
-        Sleep(1000); // using Sleep to simulate some computation
+      Sleep(1000); // using Sleep to simulate some computation
 
-        AFrameInfo.Frame.UpdateMessageText('Phase 1...');
-        Sleep(2000);
+      LFrameInfo.Frame.UpdateMessageText('Phase 1...');
+      Sleep(2000);
 
-        AFrameInfo.Frame.UpdateMessageText('Phase 2...');
-        Sleep(3000);
-      end
-      , // On background task completion, hide the wait frame
-      procedure(AFrameInfo: TFrameInfo<TWaitFrame>)
-      begin
-        AFrameInfo.Hide;
-        AFrameInfo.Close;
-      end
-    );
+      LFrameInfo.Frame.UpdateMessageText('Phase 2...');
+      Sleep(3000);
+
+
+      // On background task completion, hide the wait frame
+      TThread.Synchronize(nil,
+        procedure
+        begin
+          LFrameInfo.Hide;
+          LFrameInfo.Close;
+        end
+      );
+    end
+  );
 end;
 
 initialization

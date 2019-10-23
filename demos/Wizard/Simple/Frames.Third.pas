@@ -25,7 +25,7 @@ implementation
 {$R *.fmx}
 
 uses
-  FrameStand
+  FrameStand, SubjectStand
 , Data.Main
 ;
 

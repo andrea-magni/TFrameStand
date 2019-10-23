@@ -30,14 +30,19 @@ _Installing manually you get the latest updates (beware! :-) )_
 
 ##Demo projects
 * **wait**: a wait splashscreen with running animation and opacity. Can be show on the top of a whole form or a single FMX control. Runs a task on a background thread and keeps UI responsive.
-* **lightbox**: achieves the popular lightbox effect to show different kind of content (pictures, text, data) using a consistent UI. Also provides an example of CommonActions use (the Close button) and provides fade-in animation of content
+* **lightbox**: achieves the popular lightbox effect to show different kind of content (pictures, text, data) using a consistent UI. Also provides an example of CommonActions use (the Close button) and provides fade-in animation of content.
 * **material_button**: a simple example to overlay a button on the form or any other control, with sliding animations.
 * **ViewAndDialogs**: some Material Design-like transition to show a view (employee's details) and a dialog (rate a picture).
-* **PictureWall**: show pictures in a TFlowLayout with a fading in transition
+* **PictureWall**: show pictures in a TFlowLayout with a fading in transition.
 * **ButtonSet**: mimics Android's Camera toolbuttons laying over your content.
 * **EditHelper**: adds easy to customize buttons or controls to any TEdit.
-* **BottomSheet**: implementation of a bottom sheet UI element with TFrameStand
-* **ResponsiveProject**: implementation of responsive application with FMX and TFrameStand
+* **BottomSheet**: implementation of a bottom sheet UI element with TFrameStand.
+* **ResponsiveProject**: implementation of responsive application with FMX and TFrameStand.
+* **WizardSimpleProject**: simple wizard example using frames.
+* **FormStandHelloWorld**: Hello, World! demo for TFormStand (!), featuring Fire UI synergy.
+* **FormStandActionList**: action list showcase with TFormStand.
+* **FormStandLiveBindings**: LiveBindings showcase with TFormStand.
+
 
 # Contributions
 This is an open source project, so obviously every contribution/help/suggestion will be very appreciated.

@@ -269,7 +269,7 @@ end;
 
 procedure TSubjectStand.CloseAll;
 begin
-  CloseAllExcept(nil);
+  CloseAllExcept([]);
 end;
 
 procedure TSubjectStand.CloseAllExcept(const AException: TClass);
@@ -383,7 +383,7 @@ end;
 
 procedure TSubjectStand.HideAndCloseAll;
 begin
-  HideAndCloseAllExcept(nil);
+  HideAndCloseAllExcept([]);
 end;
 
 procedure TSubjectStand.HideAndCloseAll(const ARestrictTo: TClass);

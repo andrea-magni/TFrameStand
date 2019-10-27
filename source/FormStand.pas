@@ -88,10 +88,8 @@ type
 
     function LastShownForm: TForm;
     procedure Remove(ASubject: TSubject); override;
-    procedure CloseAll<T: TForm>; overload;
     procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
     procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
-    procedure HideAndCloseAll<T: TForm>; overload;
     procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; override;
     procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
 
@@ -131,14 +129,9 @@ begin
 
   for LFormInfo in LFormInfos do
   begin
-    if LConsiderRestrictions and ClassInArray(LFormInfo.Form, ARestrictTo) then
+    if (not LConsiderRestrictions) or ClassInArray(LFormInfo.Form, ARestrictTo) then
       LFormInfo.Close;
   end;
-end;
-
-procedure TFormStand.CloseAll<T>;
-begin
-  CloseAll([TFormClass(T)]);
 end;
 
 procedure TFormStand.CloseAllExcept(const AExceptions: TArray<TClass>);
@@ -152,7 +145,7 @@ begin
 
   for LFormInfo in LFormInfos do
   begin
-    if LConsiderExceptions and not ClassInArray(LFormInfo.Form, AExceptions) then
+    if (not LConsiderExceptions) or (not ClassInArray(LFormInfo.Form, AExceptions)) then
       LFormInfo.Close;
   end;
 end;
@@ -250,14 +243,9 @@ begin
 
   for LFormInfo in LFormInfos do
   begin
-    if LConsiderRestrictions and ClassInArray(LFormInfo.Form, ARestrictTo) then
+    if (not LConsiderRestrictions) or ClassInArray(LFormInfo.Form, ARestrictTo) then
       LFormInfo.HideAndClose;
   end;
-end;
-
-procedure TFormStand.HideAndCloseAll<T>;
-begin
-  HideAndCloseAll([TFormClass(T)]);
 end;
 
 procedure TFormStand.HideAndCloseAllExcept(const AExceptions: TArray<TClass>);
@@ -271,7 +259,7 @@ begin
 
   for LFormInfo in LFormInfos do
   begin
-    if LConsiderExceptions and not ClassInArray(LFormInfo.Form, AExceptions) then
+    if (not LConsiderExceptions) or (not ClassInArray(LFormInfo.Form, AExceptions)) then
       LFormInfo.HideAndClose;
   end;
 end;

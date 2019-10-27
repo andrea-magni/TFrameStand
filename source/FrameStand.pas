@@ -102,7 +102,7 @@ begin
 
   for LFrameInfo in LFrameInfos do
   begin
-    if LConsiderRestrictions and ClassInArray(LFrameInfo.Frame, ARestrictTo) then
+    if (not LConsiderRestrictions) or ClassInArray(LFrameInfo.Frame, ARestrictTo) then
       LFrameInfo.Close;
   end;
 end;
@@ -118,7 +118,7 @@ begin
 
   for LFrameInfo in LFrameInfos do
   begin
-    if LConsiderExceptions and not ClassInArray(LFrameInfo.Frame, AExceptions) then
+    if (not LConsiderExceptions) or not ClassInArray(LFrameInfo.Frame, AExceptions) then
       LFrameInfo.Close;
   end;
 end;
@@ -222,7 +222,7 @@ begin
 
   for LFrameInfo in LFrameInfos do
   begin
-    if LConsiderRestrictions and ClassInArray(LFrameInfo.Frame, ARestrictTo) then
+    if (not LConsiderRestrictions) or ClassInArray(LFrameInfo.Frame, ARestrictTo) then
       LFrameInfo.HideAndClose;
   end;
 end;
@@ -238,7 +238,7 @@ begin
 
   for LFrameInfo in LFrameInfos do
   begin
-    if LConsiderExceptions and not ClassInArray(LFrameInfo.Frame, AExceptions) then
+    if (not LConsiderExceptions) or not ClassInArray(LFrameInfo.Frame, AExceptions) then
       LFrameInfo.HideAndClose;
   end;
 end;

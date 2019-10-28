@@ -81,6 +81,10 @@ type
     function New<T: TFrame>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFrameInfo<T>;
 
+    function NewAndShow<T: TFrame>(const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil;
+      const AConfigFIProc: TProc<TFrameInfo<T>> = nil): TFrameInfo<T>;
+
     property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
     property VisibleFrames: TList<TFrame> read FVisibleFrames;
   published
@@ -269,6 +273,18 @@ begin
     LFrame.Free;
     raise;
   end;
+end;
+
+function TFrameStand.NewAndShow<T>(const AParent: TFmxObject;
+  const AStandStyleName: string; const AConfigProc: TProc<T>;
+  const AConfigFIProc: TProc<TFrameInfo<T>>): TFrameInfo<T>;
+begin
+  Result := New<T>(AParent, AStandStyleName);
+  if Assigned(AConfigProc) then
+    AConfigProc(Result.Frame);
+  if Assigned(AConfigFIProc) then
+    AConfigFIProc(Result);
+  Result.Show();
 end;
 
 procedure TFrameStand.Remove(ASubject: TSubject);

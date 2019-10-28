@@ -105,6 +105,10 @@ type
     function New<T: TForm>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFormInfo<T>;
 
+    function NewAndShow<T: TForm>(const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil;
+      const AConfigFIProc: TProc<TFormInfo<T>> = nil): TFormInfo<T>; overload;
+
     property FormInfos: TObjectDictionary<TForm, TFormInfo<TForm>> read FFormInfos;
     property VisibleForms: TList<TForm> read FVisibleForms;
   published
@@ -290,6 +294,18 @@ begin
     LForm.Free;
     raise;
   end;
+end;
+
+function TFormStand.NewAndShow<T>(const AParent: TFmxObject;
+  const AStandStyleName: string; const AConfigProc: TProc<T>;
+  const AConfigFIProc: TProc<TFormInfo<T>>): TFormInfo<T>;
+begin
+  Result := New<T>(AParent, AStandStyleName);
+  if Assigned(AConfigProc) then
+    AConfigProc(Result.Form);
+  if Assigned(AConfigFIProc) then
+    AConfigFIProc(Result);
+  Result.Show();
 end;
 
 procedure TFormStand.Remove(ASubject: TSubject);

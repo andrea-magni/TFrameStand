@@ -39,7 +39,7 @@ uses Forms.Second;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  FormStand1.CloseAll<TSecondForm>;
+  FormStand1.CloseAll([TSecondForm]);
 end;
 
 procedure TMainForm.OpenButtonClick(Sender: TObject);
@@ -58,7 +58,7 @@ end;
 
 procedure TMainForm.CloseButtonClick(Sender: TObject);
 begin
-  FormStand1.HideAndCloseAll<TSecondForm>;
+  FormStand1.HideAndCloseAll([TSecondForm]);
 end;
 
 end.

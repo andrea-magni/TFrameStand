@@ -366,10 +366,12 @@
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitor</AppDPIAwarenessMode>
+        <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitor</AppDPIAwarenessMode>
+        <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -417,9 +419,9 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="OSX32\Debug\ButtonSetTFrameStand" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="OSX32\Debug\MaterialButtonSetTFrameStand.info.plist" Configuration="Debug" Class="ProjectOSXInfoPList"/>
                 <DeployFile LocalName="OSX32\Debug\MaterialButtonSetTFrameStand.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements"/>
                 <DeployFile LocalName="$(BDS)\bin\delphi_PROJECTICNS.icns" Configuration="Debug" Class="ProjectOSXResource"/>
-                <DeployFile LocalName="OSX32\Debug\MaterialButtonSetTFrameStand.info.plist" Configuration="Debug" Class="ProjectOSXInfoPList"/>
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libPCRE.dylib" Class="DependencyModule">
                     <Platform Name="iOSSimulator">
                         <Overwrite>true</Overwrite>

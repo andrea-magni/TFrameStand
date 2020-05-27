@@ -1,14 +1,14 @@
 ﻿[ListView1]
-Coordinates=10,10,89,159
+Coordinates=10,10,107,190
 Visible=True
 
 [BindSourceDB1]
-Coordinates=118,80,92,87
+Coordinates=210,40,108,102
 
 []
 Coordinates=215,90,87,159
 Visible=False
 
 [BindingsList1]
-Coordinates=136,87,82,33
+Coordinates=136,87,91,36
 

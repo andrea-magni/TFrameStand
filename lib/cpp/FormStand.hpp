@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2018 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2020 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FormStand.pas' rev: 33.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FormStand.pas' rev: 34.00 (Windows)
 
 #ifndef FormstandHPP
 #define FormstandHPP
@@ -177,7 +177,7 @@ public:
 	template<typename T> TFormInfo__1<T>* __fastcall GetFormInfo(const bool ANewIfNotFound = true, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFormInfo__1<T>* __fastcall Use(const T AForm, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFormInfo__1<T>* __fastcall New(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
-	template<typename T> TFormInfo__1<T>* __fastcall NewAndShow(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString(), const System::DelphiInterface<System::Sysutils::TProc__1<T> > AConfigProc = System::DelphiInterface<System::Sysutils::TProc__1<T> >());
+	template<typename T> TFormInfo__1<T>* __fastcall NewAndShow(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString(), const System::DelphiInterface<System::Sysutils::TProc__1<T> > AConfigProc = System::DelphiInterface<System::Sysutils::TProc__1<T> >(), const System::DelphiInterface<System::Sysutils::TProc__1<TFormInfo__1<T>*> > AConfigFIProc = System::DelphiInterface<System::Sysutils::TProc__1<TFormInfo__1<T>*> >())/* overload */;
 	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TForm*,TFormInfo__1<Fmx::Forms::TForm*>*>* FormInfos = {read=FFormInfos};
 	__property System::Generics::Collections::TList__1<Fmx::Forms::TForm*>* VisibleForms = {read=FVisibleForms};
 	

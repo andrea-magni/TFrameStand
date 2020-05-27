@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2018 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2020 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FrameStandPackage_10_3.dpk' rev: 33.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FrameStandPackage_10_4.dpk' rev: 34.00 (Windows)
 
-#ifndef Framestandpackage_10_3HPP
-#define Framestandpackage_10_3HPP
+#ifndef Framestandpackage_10_4HPP
+#define Framestandpackage_10_4HPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -31,8 +31,8 @@
 #include <System.Rtti.hpp>	// (rtl)
 #include <System.TypInfo.hpp>	// (rtl)
 #include <System.Generics.Defaults.hpp>	// (rtl)
-#include <System.Classes.hpp>	// (rtl)
 #include <System.TimeSpan.hpp>	// (rtl)
+#include <System.Classes.hpp>	// (rtl)
 #include <System.SyncObjs.hpp>	// (rtl)
 #include <System.Threading.hpp>	// (rtl)
 #include <System.Actions.hpp>	// (rtl)
@@ -120,18 +120,18 @@
 
 //-- user supplied -----------------------------------------------------------
 
-namespace Framestandpackage_10_3
+namespace Framestandpackage_10_4
 {
 //-- forward type declarations -----------------------------------------------
 //-- type declarations -------------------------------------------------------
 //-- var, const, procedure ---------------------------------------------------
-}	/* namespace Framestandpackage_10_3 */
-#if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_FRAMESTANDPACKAGE_10_3)
-using namespace Framestandpackage_10_3;
+}	/* namespace Framestandpackage_10_4 */
+#if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_FRAMESTANDPACKAGE_10_4)
+using namespace Framestandpackage_10_4;
 #endif
 #pragma pack(pop)
 #pragma option pop
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Framestandpackage_10_3HPP
+#endif	// Framestandpackage_10_4HPP

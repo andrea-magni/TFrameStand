@@ -36,7 +36,7 @@ uses Forms.Orders;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  FormStand1.CloseAll<TOrdersForm>;
+  FormStand1.CloseAll(TOrdersForm);
 end;
 
 procedure TMainForm.OpenButtonClick(Sender: TObject);
@@ -50,7 +50,7 @@ end;
 
 procedure TMainForm.CloseButtonClick(Sender: TObject);
 begin
-  FormStand1.HideAndCloseAll<TOrdersForm>;
+  FormStand1.HideAndCloseAll(TOrdersForm);
 end;
 
 end.

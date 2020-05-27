@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2018 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2020 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FrameStand.pas' rev: 33.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FrameStand.pas' rev: 34.00 (Windows)
 
 #ifndef FramestandHPP
 #define FramestandHPP
@@ -131,7 +131,7 @@ public:
 	template<typename T> TFrameInfo__1<T>* __fastcall GetFrameInfo(const bool ANewIfNotFound = true, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFrameInfo__1<T>* __fastcall Use(const T AFrame, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
 	template<typename T> TFrameInfo__1<T>* __fastcall New(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
-	template<typename T> TFrameInfo__1<T>* __fastcall NewAndShow(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString(), const System::DelphiInterface<System::Sysutils::TProc__1<T> > AConfigProc = System::DelphiInterface<System::Sysutils::TProc__1<T> >());
+	template<typename T> TFrameInfo__1<T>* __fastcall NewAndShow(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString(), const System::DelphiInterface<System::Sysutils::TProc__1<T> > AConfigProc = System::DelphiInterface<System::Sysutils::TProc__1<T> >(), const System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> > AConfigFIProc = System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> >());
 	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TFrameInfo__1<Fmx::Forms::TFrame*>*>* FrameInfos = {read=FFrameInfos};
 	__property System::Generics::Collections::TList__1<Fmx::Forms::TFrame*>* VisibleFrames = {read=FVisibleFrames};
 	

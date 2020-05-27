@@ -1,0 +1,48 @@
+package dclFrameStandPackage_10_4;
+
+{$R *.res}
+{$R *.dres}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'TFrameStand and TFormStand Design Time Package'}
+{$LIBSUFFIX '_270'}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  fmx,
+  FrameStandPackage_10_4;
+
+contains
+  ComponentRegistration in '..\source\ComponentRegistration.pas',
+  Forms.Test in '..\source\Forms.Test.pas' {TestForm},
+  FormStand.Editors.Forms.Test in '..\source\FormStand.Editors.Forms.Test.pas' {FormStandTestForm},
+  FormStand.Editors in '..\source\FormStand.Editors.pas',
+  Frames.Test in '..\source\Frames.Test.pas' {TestFrame: TFrame},
+  FrameStand.Editors.Forms.Test in '..\source\FrameStand.Editors.Forms.Test.pas' {FrameStandTestForm},
+  FrameStand.Editors in '..\source\FrameStand.Editors.pas';
+
+end.

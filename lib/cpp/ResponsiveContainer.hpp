@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2018 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2020 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ResponsiveContainer.pas' rev: 33.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'ResponsiveContainer.pas' rev: 34.00 (Windows)
 
 #ifndef ResponsivecontainerHPP
 #define ResponsivecontainerHPP
@@ -46,10 +46,11 @@ public:
 	bool __fastcall IsEmpty();
 	__fastcall TBreakpoint(const System::UnicodeString AName, const float AMaxWidth);
 	static TBreakpoint __fastcall _op_Implicit(const System::UnicodeString AString);
-	TBreakpoint& __fastcall operator=(const System::UnicodeString AString) { *this = TBreakpoint::_op_Implicit(AString); return *this; };
 	__fastcall operator System::UnicodeString();
 	void __fastcall Clear();
 	TBreakpoint() {}
+	
+	TBreakpoint& operator =(const System::UnicodeString AString) { *this = TBreakpoint::_op_Implicit(AString); return *this; }
 };
 
 

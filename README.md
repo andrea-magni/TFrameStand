@@ -8,7 +8,7 @@ _All code and demos tested on Delphi XE8 and Delphi 10.4 Sydney._
 ## Installation - GetIt!
 **TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
 
-_Current version on GetIt: 1.4 (TFrameStand only!)_
+_Current version on GetIt: 1.6_
 
 ## Installation - Manual
 1. Open “packages\FrameStand_10_4.groupproj”

@@ -1,3 +1,7 @@
+![](https://img.shields.io/github/v/release/andrea-magni/TFrameStand)
+![](https://img.shields.io/github/release-date/andrea-magni/TFrameStand)
+![](https://img.shields.io/github/commits-since/andrea-magni/TFrameStand/v.1.6)
+
 ![TFrameStand](media/frame_stand_xhdpi.png)
 ![TFormStand](media/form_stand_xhdpi.png)
 #TFrameStand and TFormStand components (FMX)

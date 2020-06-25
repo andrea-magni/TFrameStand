@@ -1,0 +1,30 @@
+object FirstFrame: TFirstFrame
+  Align = Client
+  Size.Width = 320.000000000000000000
+  Size.Height = 240.000000000000000000
+  Size.PlatformDefault = False
+  object Label1: TLabel
+    Align = Client
+    StyledSettings = [Family, Style, FontColor]
+    Size.Width = 320.000000000000000000
+    Size.Height = 190.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 48.000000000000000000
+    TextSettings.HorzAlign = Center
+    Text = 'This is my first frame'
+  end
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 320.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    object HideAndCloseButton: TButton
+      Align = Right
+      Position.X = 160.000000000000000000
+      Size.Width = 160.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'HideAndClose'
+    end
+  end
+end

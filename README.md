@@ -47,6 +47,10 @@ _Installing manually you get the latest updates (beware! :-) )_
 * **FormStandActionList**: action list showcase with TFormStand.
 * **FormStandLiveBindings**: LiveBindings showcase with TFormStand.
 
+# Related Links
+Embarcadero Delphi is a modern, powerful and effective language and development tool. Learn more about it at the following links:
+ * https://www.embarcadero.com/
+ * https://learndelphi.org/
 
 # Contributions
 This is an open source project, so obviously every contribution/help/suggestion will be very appreciated.

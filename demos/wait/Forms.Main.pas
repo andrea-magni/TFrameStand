@@ -34,9 +34,7 @@ procedure TMainForm.DoSomethingButtonClick(Sender: TObject);
 var
   LFrameInfo: TFrameInfo<TWaitFrame>;
 begin
-  LFrameInfo := FrameStand1.New<TWaitFrame>(Layout1);
-
-  LFrameInfo.Show;
+  LFrameInfo := FrameStand1.NewAndShow<TWaitFrame>(Layout1);
 
   TTask.Run(
     procedure
@@ -55,8 +53,7 @@ begin
       TThread.Synchronize(nil,
         procedure
         begin
-          LFrameInfo.Hide;
-          LFrameInfo.Close;
+          LFrameInfo.HideAndClose();
         end
       );
     end

@@ -2,10 +2,10 @@
 // Copyright (c) 1995, 2021 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FrameStandPackage_10_4.dpk' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FrameStandPackage_11.dpk' rev: 35.00 (Windows)
 
-#ifndef Framestandpackage_10_4HPP
-#define Framestandpackage_10_4HPP
+#ifndef Framestandpackage_11HPP
+#define Framestandpackage_11HPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -117,18 +117,18 @@
 
 //-- user supplied -----------------------------------------------------------
 
-namespace Framestandpackage_10_4
+namespace Framestandpackage_11
 {
 //-- forward type declarations -----------------------------------------------
 //-- type declarations -------------------------------------------------------
 //-- var, const, procedure ---------------------------------------------------
-}	/* namespace Framestandpackage_10_4 */
-#if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_FRAMESTANDPACKAGE_10_4)
-using namespace Framestandpackage_10_4;
+}	/* namespace Framestandpackage_11 */
+#if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_FRAMESTANDPACKAGE_11)
+using namespace Framestandpackage_11;
 #endif
 #pragma pack(pop)
 #pragma option pop
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Framestandpackage_10_4HPP
+#endif	// Framestandpackage_11HPP

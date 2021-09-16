@@ -7,7 +7,7 @@
 #TFrameStand and TFormStand components (FMX)
 Easily use TFrame or TForm descendants in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 
-_All code and demos tested on Delphi XE8 and Delphi 10.4 Sydney._
+_All code and demos tested on Delphi XE8 and Delphi 10.4 Sydney. (Delphi 11 initial support included!)_
 
 ## Installation - GetIt!
 **TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**

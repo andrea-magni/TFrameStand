@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FrameStand,
-  FMX.Layouts, FMX.StdCtrls, FMX.Controls.Presentation;
+  FMX.Layouts, FMX.StdCtrls, FMX.Controls.Presentation, SubjectStand, FMX.Ani;
 
 type
   TMainForm = class(TForm)
@@ -16,6 +16,8 @@ type
     Stands: TStyleBook;
     procedure StepButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FrameStand1BeforeStartAnimation(const ASender: TSubjectStand;
+      const ASubjectInfo: TSubjectInfo; const AAnimation: TAnimation);
   private
     { Private declarations }
     FFrameInfo: TFrameInfo<TFrame>;
@@ -58,15 +60,12 @@ begin
   , procedure (const S: TObject; const M: TMessage)
     begin
       if Assigned(FFrameInfo) then
-      begin
-        FFrameInfo.Hide(0
+        FFrameInfo.HideAndClose(0
         , procedure
           begin
-            FFrameInfo.Close;
             FFrameInfo := nil;
           end
         );
-      end;
     end
   );
 
@@ -82,26 +81,32 @@ begin
     MainData.STEP_COUNT: LStandName := 'wizard_end';
   end;
 
-  FFrameInfo := TFrameInfo<TFrame>( FrameStand1.New<T>(nil, LStandName) );
+  FFrameInfo := TFrameInfo<TFrame>( FrameStand1.New<T>(nil, LStandName) ); // this cast should not be necessary a T has a TFrame type constraint
   FFrameInfo.Show();
 end;
 
 procedure TMainForm.ShowStep<T>;
 begin
   if Assigned(FFrameInfo) then
-  begin
-    FFrameInfo.Hide(0
-    , procedure
+    FFrameInfo.HideAndClose(0,
+      procedure
       begin
-        FFrameInfo.Close;
-        FFrameInfo := nil;
-
         ShowNext<T>;
       end
-    );
-  end
+    )
   else
     ShowNext<T>;
+end;
+
+procedure TMainForm.FrameStand1BeforeStartAnimation(
+  const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo;
+  const AAnimation: TAnimation);
+begin
+  if AAnimation.StyleName = 'OnShow_SlideIn' then
+    (AAnimation as TFloatAnimation).StartValue := ASubjectInfo.Stand.Width
+  else if AAnimation.StyleName = 'OnShow_SlideOut' then
+    (AAnimation as TFloatAnimation).StopValue := ASubjectInfo.Stand.Width;
+
 end;
 
 procedure TMainForm.StepButtonClick(Sender: TObject);

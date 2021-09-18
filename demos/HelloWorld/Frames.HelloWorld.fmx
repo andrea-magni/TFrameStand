@@ -1,6 +1,6 @@
 object HelloWorldFrame: THelloWorldFrame
   Align = Client
-  Size.Width = 273.000000000000000000
+  Size.Width = 272.000000000000000000
   Size.Height = 196.000000000000000000
   Size.PlatformDefault = False
   object Label1: TLabel
@@ -8,8 +8,8 @@ object HelloWorldFrame: THelloWorldFrame
     AutoSize = True
     StyledSettings = [Family, Style, FontColor]
     HitTest = True
-    Size.Width = 132.000000000000000000
-    Size.Height = 30.000000000000000000
+    Size.Width = 126.666656494140600000
+    Size.Height = 29.333335876464840000
     Size.PlatformDefault = False
     TextSettings.Font.Size = 22.000000000000000000
     TextSettings.WordWrap = False

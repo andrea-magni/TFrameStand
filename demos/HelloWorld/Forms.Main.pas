@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, FrameStand, Frames.HelloWorld,
-  Frames.CodeRageX;
+  Frames.CodeRageX, SubjectStand;
 
 type
   TMainForm = class(TForm)
@@ -54,9 +54,9 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   FrameStand1.CommonActions.Add(
     'SayHello*'
-    , procedure (AInfo: TFrameInfo<TFrame>)
+    , procedure (AInfo: TSubjectInfo)
       begin
-        ShowMessage('Hello, the frame is ' + AInfo.Frame.ClassName);
+        ShowMessage('Hello, the frame is ' + AInfo.Subject.ClassName);
       end
   );
 end;

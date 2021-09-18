@@ -1,7 +1,7 @@
 object CodeRageXFrame: TCodeRageXFrame
   Align = Client
   Size.Width = 674.000000000000000000
-  Size.Height = 177.000000000000000000
+  Size.Height = 176.000000000000000000
   Size.PlatformDefault = False
   object Image1: TImage
     MultiResBitmap = <
@@ -912,7 +912,7 @@ object CodeRageXFrame: TCodeRageXFrame
       end>
     Align = Client
     Size.Width = 674.000000000000000000
-    Size.Height = 177.000000000000000000
+    Size.Height = 176.000000000000000000
     Size.PlatformDefault = False
     OnClick = Image1Click
   end

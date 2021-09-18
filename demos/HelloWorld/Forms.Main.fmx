@@ -56,14 +56,6 @@ object MainForm: TMainForm
     Size.PlatformDefault = False
     TabOrder = 1
   end
-  object FrameStand1: TFrameStand
-    StyleBook = StandsStyleBook
-    DefaultStyleName = 'framestand'
-    AnimationShow = 'OnShow*'
-    AnimationHide = 'OnHide*'
-    Left = 152
-    Top = 136
-  end
   object StandsStyleBook: TStyleBook
     Styles = <
       item
@@ -119,5 +111,17 @@ object MainForm: TMainForm
       end>
     Left = 152
     Top = 192
+  end
+  object FrameStand1: TFrameStand
+    AnimationShow = 'OnShow*'
+    AnimationHide = 'OnHide*'
+    CommonActionPrefix = 'ca_'
+    DefaultHideAndCloseDeferTimeMS = 100
+    DefaultStyleName = 'framestand'
+    DefaultStandName = 'framestand'
+    StyleBook = StandsStyleBook
+    StandBook = StandsStyleBook
+    Left = 152
+    Top = 136
   end
 end

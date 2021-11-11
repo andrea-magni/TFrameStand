@@ -10,23 +10,23 @@ package dclFrameStandPackage_11;
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS ON}
+{$LOCALSYMBOLS OFF}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION OFF}
+{$OPTIMIZATION ON}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO ON}
+{$REFERENCEINFO OFF}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES ON}
+{$STACKFRAMES OFF}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE DEBUG}
+{$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'TFrameStand and TFormStand Design Time Package'}
+{$DESCRIPTION 'TFrameStand and TFormStand Designtime Package'}
 {$LIBSUFFIX '_280'}
 {$DESIGNONLY}
 {$IMPLICITBUILD ON}
@@ -34,7 +34,7 @@ package dclFrameStandPackage_11;
 requires
   rtl,
   fmx,
-  FrameStandPackage_10_4;
+  FrameStandPackage_11;
 
 contains
   ComponentRegistration in '..\source\ComponentRegistration.pas',

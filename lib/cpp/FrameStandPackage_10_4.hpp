@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2021 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FrameStandPackage_10_4.dpk' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FrameStandPackage_10_4.dpk' rev: 34.00 (Windows)
 
 #ifndef Framestandpackage_10_4HPP
 #define Framestandpackage_10_4HPP
@@ -27,10 +27,10 @@
 #include <System.SysUtils.hpp>	// (rtl)
 #include <System.VarUtils.hpp>	// (rtl)
 #include <System.Variants.hpp>	// (rtl)
-#include <System.TypInfo.hpp>	// (rtl)
 #include <System.Math.hpp>	// (rtl)
-#include <System.Generics.Defaults.hpp>	// (rtl)
 #include <System.Rtti.hpp>	// (rtl)
+#include <System.TypInfo.hpp>	// (rtl)
+#include <System.Generics.Defaults.hpp>	// (rtl)
 #include <System.TimeSpan.hpp>	// (rtl)
 #include <System.Classes.hpp>	// (rtl)
 #include <System.SyncObjs.hpp>	// (rtl)
@@ -56,10 +56,12 @@
 #include <Winapi.MsCTF.hpp>	// (rtl)
 #include <Winapi.ShellAPI.hpp>	// (rtl)
 #include <FMX.Helpers.Win.hpp>	// (fmx)
+#include <FMX.FontGlyphs.hpp>	// (fmx)
 #include <FMX.Objects.hpp>	// (fmx)
 #include <FMX.DialogService.hpp>	// (fmx)
 #include <FMX.Menus.hpp>	// (fmx)
 #include <FMX.Types3D.hpp>	// (fmx)
+#include <FMX.Canvas.GPU.Helpers.hpp>	// (fmx)
 #include <System.IOUtils.hpp>	// (rtl)
 #include <Winapi.GDIPOBJ.hpp>	// (rtl)
 #include <FMX.Canvas.GDIP.hpp>	// (fmx)
@@ -69,12 +71,14 @@
 #include <FMX.Controls.Win.hpp>	// (fmx)
 #include <FMX.Presentation.Win.hpp>	// (fmx)
 #include <FMX.Presentation.Win.Style.hpp>	// (fmx)
+#include <FMX.Controls.Presentation.hpp>	// (fmx)
 #include <FMX.Styles.Objects.hpp>	// (fmx)
 #include <FMX.Styles.Switch.hpp>	// (fmx)
 #include <FMX.Switch.Style.hpp>	// (fmx)
 #include <FMX.Switch.Win.hpp>	// (fmx)
 #include <FMX.StdCtrls.hpp>	// (fmx)
 #include <FMX.InertialMovement.hpp>	// (fmx)
+#include <FMX.Filter.hpp>	// (fmx)
 #include <FMX.Filter.Custom.hpp>	// (fmx)
 #include <FMX.Effects.hpp>	// (fmx)
 #include <FMX.Layouts.hpp>	// (fmx)
@@ -87,18 +91,17 @@
 #include <FMX.Canvas.D2D.hpp>	// (fmx)
 #include <FMX.Context.DX9.hpp>	// (fmx)
 #include <FMX.Context.DX11.hpp>	// (fmx)
-#include <FMX.Gestures.hpp>	// (fmx)
-#include <FMX.Gestures.Win.hpp>	// (fmx)
-#include <System.Win.InternetExplorer.hpp>	// (rtl)
-#include <Winapi.EdgeUtils.hpp>	// (rtl)
-#include <FMX.WebBrowser.Win.hpp>	// (fmx)
-#include <FMX.WebBrowser.hpp>	// (fmx)
 #include <FMX.ListBox.hpp>	// (fmx)
+#include <FMX.DateTimeCtrls.Types.hpp>	// (fmx)
 #include <FMX.DateTimeCtrls.hpp>	// (fmx)
-#include <FMX.ExtCtrls.hpp>	// (fmx)
 #include <FMX.Calendar.Style.hpp>	// (fmx)
 #include <FMX.Calendar.hpp>	// (fmx)
 #include <FMX.Pickers.hpp>	// (fmx)
+#include <FMX.ExtCtrls.hpp>	// (fmx)
+#include <FMX.Gestures.hpp>	// (fmx)
+#include <FMX.Gestures.Win.hpp>	// (fmx)
+#include <System.Win.InternetExplorer.hpp>	// (rtl)
+#include <FMX.WebBrowser.hpp>	// (fmx)
 #include <FMX.Platform.Win.hpp>	// (fmx)
 #include <FMX.Canvas.GPU.hpp>	// (fmx)
 #include <FMX.TextLayout.GPU.hpp>	// (fmx)
@@ -109,7 +112,7 @@
 #include <FMX.Clipboard.Win.hpp>	// (fmx)
 #include <FMX.Platform.hpp>	// (fmx)
 #include <FMX.Controls.hpp>	// (fmx)
-// SO_SFX: _280
+// SO_SFX: _270
 // PRG_EXT: .bpl
 // BPI_DIR: ..\lib\cpp
 // OBJ_DIR: ..\lib\cpp

@@ -65,8 +65,8 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
       Margins.Right = 5.000000000000000000
       Size.Width = 232.000000000000000000
       AlternatingRowBackground = True
-      Viewport.Width = 228.000000000000000000
-      Viewport.Height = 304.000000000000000000
+      Viewport.Width = 232.000000000000000000
+      Viewport.Height = 308.000000000000000000
       inherited ListBoxGroupHeader1: TListBoxGroupHeader
         TextSettings.Font.StyleExt = {00070000000000000004000000}
       end
@@ -75,7 +75,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited TermsText: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -84,7 +83,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited MethodText: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -93,7 +91,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited TaxRateText: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -105,7 +102,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited EmpFullNameText: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -114,7 +110,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited EmpPhoneExtText: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -123,7 +118,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited EmpSalaryText: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -135,7 +129,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited CustCompanyText: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -144,7 +137,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited CustAddress: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end
@@ -153,7 +145,6 @@ inherited OrdersFrame_lg_Android: TOrdersFrame_lg_Android
         StyledSettings = [Family, Style, Other]
         inherited CustPhone: TText
           HitTest = False
-          Position.X = 28.000000000000000000
           TextSettings.HorzAlign = Trailing
         end
       end

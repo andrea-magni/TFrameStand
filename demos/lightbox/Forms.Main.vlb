@@ -29,5 +29,8 @@ Coordinates=199,10,84,51
 Coordinates=10,10,87,159
 
 []
-Coordinates=10,179,68,51
+Coordinates=208,80,115,33
+
+[GaussianBlurEffect1]
+Coordinates=208,80,115,33
 

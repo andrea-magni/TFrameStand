@@ -14,7 +14,7 @@ object TextFrame: TTextFrame
     Size.Height = 240.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Viewport.Width = 316.000000000000000000
-    Viewport.Height = 236.000000000000000000
+    Viewport.Width = 320.000000000000000000
+    Viewport.Height = 240.000000000000000000
   end
 end

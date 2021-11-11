@@ -6,7 +6,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Controls.Presentation, FrameStand, FMX.ListBox, FMX.Objects,
-  System.ImageList, FMX.ImgList, Data.DB, Datasnap.DBClient, SubjectStand;
+  System.ImageList, FMX.ImgList, Data.DB, Datasnap.DBClient, SubjectStand,
+  FMX.Effects, FMX.Filter.Effects;
 
 type
   TMainForm = class(TForm)
@@ -20,11 +21,14 @@ type
     TextButton: TButton;
     DatasetButton: TButton;
     ClientDataSet1: TClientDataSet;
+    GaussianBlurEffect1: TGaussianBlurEffect;
     procedure PictureButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure TextButtonClick(Sender: TObject);
     procedure DatasetButtonClick(Sender: TObject);
     procedure FrameStand1BeforeShow(const ASender: TSubjectStand;
+      const ASubjectInfo: TSubjectInfo);
+    procedure FrameStand1AfterHide(const ASender: TSubjectStand;
       const ASubjectInfo: TSubjectInfo);
   private
     { Private declarations }
@@ -69,12 +73,25 @@ begin
   );
 end;
 
+procedure TMainForm.FrameStand1AfterHide(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
+begin
+  if ASubjectInfo.StandStyleName = 'lightbox' then
+    GaussianBlurEffect1.Enabled := False;
+
+end;
+
 procedure TMainForm.FrameStand1BeforeShow(const ASender: TSubjectStand;
   const ASubjectInfo: TSubjectInfo);
 var
   LContentBackground: TRectangle;
   LTenPercent: Single;
 begin
+  if ASubjectInfo.StandStyleName = 'lightbox' then
+    GaussianBlurEffect1.Enabled := True;
+
+
+
   LTenPercent := 0;
   if ASubjectInfo.Parent is TCustomForm then
     LTenPercent := TCustomForm(ASubjectInfo.Parent).Width / 10

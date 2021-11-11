@@ -7,7 +7,7 @@
 #TFrameStand and TFormStand components (FMX)
 Easily use TFrame or TForm descendants in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 
-_All code and demos tested on Delphi XE8 and Delphi 10.4 Sydney. (Delphi 11 initial support included!)_
+_All code and demos tested on Delphi XE8 and Delphi 11 Alexandria._
 
 ## Installation - GetIt!
 **TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
@@ -15,10 +15,10 @@ _All code and demos tested on Delphi XE8 and Delphi 10.4 Sydney. (Delphi 11 init
 _Current version on GetIt: 1.6_
 
 ## Installation - Manual
-1. Open “packages\FrameStand_10_4.groupproj”
+1. Open “packages\FrameStand_11.groupproj”
 2. Build both contained packages
-2. Install “dclFrameStandPackage_10_4_270.bpl” design time package
-3. Add “source\” library path for Delphi (do this for each platform you need to support)
+2. Install “dclFrameStandPackage_11_280.bpl” design time package
+3. Add “source\” library path for Delphi (repeat this for each platform you need to support)
 
 _Installing manually you get the latest updates (beware! :-) )_
 
@@ -31,6 +31,7 @@ _Installing manually you get the latest updates (beware! :-) )_
 ## Get started
 * Have a look at [my blog posts about TFrameStand](https://blog.andreamagni.eu/tag/tframestand/)
 * [My CodeRage X session (50 min video covering all the basic functionalities)](https://www.youtube.com/watch?v=Z6_ZvnCmFCw)
+* An entire chapter of [my FMX book](https://www.packtpub.com/product/delphi-gui-programming-with-firemonkey/9781788624176) is dedicated to TFrameStand/TFormStand.
 
 ## Demo projects
 * **wait**: a wait splashscreen with running animation and opacity. Can be show on the top of a whole form or a single FMX control. Runs a task on a background thread and keeps UI responsive.
@@ -46,6 +47,7 @@ _Installing manually you get the latest updates (beware! :-) )_
 * **FormStandHelloWorld**: Hello, World! demo for TFormStand (!), featuring Fire UI synergy.
 * **FormStandActionList**: action list showcase with TFormStand.
 * **FormStandLiveBindings**: LiveBindings showcase with TFormStand.
+* **Stand3D**: example how to use a 3D container as stand for your frames
 
 # Related Links
 Embarcadero Delphi is a modern, powerful and effective language and development tool. Learn more about it at the following links:

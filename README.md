@@ -1,6 +1,6 @@
 ![](https://img.shields.io/github/v/release/andrea-magni/TFrameStand)
 ![](https://img.shields.io/github/release-date/andrea-magni/TFrameStand)
-![](https://img.shields.io/github/commits-since/andrea-magni/TFrameStand/v.1.7)
+![](https://img.shields.io/github/commits-since/andrea-magni/TFrameStand/v.1.8)
 
 ![TFrameStand](media/frame_stand_xhdpi.png)
 ![TFormStand](media/form_stand_xhdpi.png)
@@ -11,6 +11,7 @@ _All code and demos tested on Delphi XE8 and Delphi 11.1 Alexandria._
 
 ## Installation - GetIt!
 **TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
+[Link on GetIt website](https://getitnow.embarcadero.com/?q=TFrameStand)
 
 ## Installation - Manual
 1. Open “packages\FrameStand_11.groupproj”

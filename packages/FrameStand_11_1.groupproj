@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{E37B655B-1A47-47B0-9EFE-184AA11AF604}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="FrameStandPackage_11_1.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dclFrameStandPackage_11_1.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="FrameStandPackage_11_1">
+        <MSBuild Projects="FrameStandPackage_11_1.dproj"/>
+    </Target>
+    <Target Name="FrameStandPackage_11_1:Clean">
+        <MSBuild Projects="FrameStandPackage_11_1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FrameStandPackage_11_1:Make">
+        <MSBuild Projects="FrameStandPackage_11_1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dclFrameStandPackage_11_1">
+        <MSBuild Projects="dclFrameStandPackage_11_1.dproj"/>
+    </Target>
+    <Target Name="dclFrameStandPackage_11_1:Clean">
+        <MSBuild Projects="dclFrameStandPackage_11_1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dclFrameStandPackage_11_1:Make">
+        <MSBuild Projects="dclFrameStandPackage_11_1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="FrameStandPackage_11_1;dclFrameStandPackage_11_1"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="FrameStandPackage_11_1:Clean;dclFrameStandPackage_11_1:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="FrameStandPackage_11_1:Make;dclFrameStandPackage_11_1:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

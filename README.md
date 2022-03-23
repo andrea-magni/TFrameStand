@@ -11,6 +11,7 @@ _All code and demos tested on Delphi XE8 and Delphi 11.1 Alexandria._
 
 ## Installation - GetIt!
 **TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
+[Link on GetIt website](https://getitnow.embarcadero.com/?q=TFrameStand)
 
 ## Installation - Manual
 1. Open “packages\FrameStand_11.groupproj”

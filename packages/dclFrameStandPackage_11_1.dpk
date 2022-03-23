@@ -27,7 +27,7 @@ package dclFrameStandPackage_11_1;
 {$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'TFrameStand and TFormStand Designtime Package'}
-{$LIBSUFFIX '_290'}
+{$LIBSUFFIX AUTO}
 {$DESIGNONLY}
 {$IMPLICITBUILD ON}
 

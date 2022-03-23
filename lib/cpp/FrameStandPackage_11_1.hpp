@@ -109,7 +109,7 @@
 #include <FMX.Clipboard.Win.hpp>	// (fmx)
 #include <FMX.Platform.hpp>	// (fmx)
 #include <FMX.Controls.hpp>	// (fmx)
-// SO_SFX: _290
+// SO_SFX: 280
 // PRG_EXT: .bpl
 // BPI_DIR: ..\lib\cpp
 // OBJ_DIR: ..\lib\cpp

@@ -92,7 +92,7 @@
         <VerInfo_Locale>1040</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <DCC_Description>TFrameStand and TFormStand Designtime Package</DCC_Description>
-        <DllSuffix>_290</DllSuffix>
+        <DllSuffix>$(Auto)</DllSuffix>
         <DCC_AdditionalSwitches>-LUDesignIDE</DCC_AdditionalSwitches>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">

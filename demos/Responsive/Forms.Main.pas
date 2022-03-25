@@ -10,7 +10,7 @@ uses
   , Frames.Dashboard
   , Frames.Orders_xs, Frames.Orders_sm, Frames.Orders_lg, SubjectStand
   {$IFDEF ANDROID}
-  , Frames.Orders_sm_Android, Frames.Orders_lg_Android
+//  , Frames.Orders_sm_Android, Frames.Orders_lg_Android
   {$ENDIF}
   ;
 
@@ -89,8 +89,8 @@ begin
   {$ENDIF}
 
   {$IFDEF ANDROID}
-  FrameStand1.Responsive.Define(TOrdersFrame_xs, TOrdersFrame_sm_Android, 'sm');
-  FrameStand1.Responsive.Define(TOrdersFrame_xs, TOrdersFrame_lg_Android, 'md');
+//  FrameStand1.Responsive.Define(TOrdersFrame_xs, TOrdersFrame_sm_Android, 'sm');
+//  FrameStand1.Responsive.Define(TOrdersFrame_xs, TOrdersFrame_lg_Android, 'md');
   {$ENDIF}
 
 //  FBreakpoint := FrameStand1.Responsive.CurrentBreakpoint(MainContent.Width);

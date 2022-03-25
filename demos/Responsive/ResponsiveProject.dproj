@@ -295,23 +295,13 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Utils.Application.pas"/>
-        <DCCReference Include="Frames.Orders_sm.pas">
-            <Form>OrdersFrame_sm</Form>
-            <FormType>fmx</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="Frames.Orders_lg.pas">
             <Form>OrdersFrame_lg</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="Frames.Orders_sm_Android.pas">
-            <Form>OrdersFrame_sm_Android</Form>
-            <FormType>fmx</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Frames.Orders_lg_Android.pas">
-            <Form>OrdersFrame_lg_Android</Form>
+        <DCCReference Include="Frames.Orders_sm.pas">
+            <Form>OrdersFrame_sm</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -470,6 +460,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Win32\Debug\ResponsiveProject.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>ResponsiveProject.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win32\Release\ResponsiveProject.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>ResponsiveProject.exe</RemoteName>
                         <Overwrite>true</Overwrite>

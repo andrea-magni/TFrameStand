@@ -27,14 +27,14 @@ type
     BindingsList1: TBindingsList;
     LinkListControlToField1: TLinkListControlToField;
     Rectangle1: TRectangle;
-    procedure FrameStand1BeforeShow(const ASender: TFrameStand;
-      const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
     procedure ListView1ButtonClick(const Sender: TObject;
       const AItem: TListItem; const AObject: TListItemSimpleControl);
     procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
       Shift: TShiftState);
     procedure ListView1ItemClickEx(const Sender: TObject; ItemIndex: Integer;
       const [Ref] LocalClickPos: TPointF; const ItemObject: TListItemDrawable);
+    procedure FrameStand1BeforeShow(const ASender: TSubjectStand;
+      const ASubjectInfo: TSubjectInfo);
   private
     FEmployeeDetailsInfo: TFrameInfo<TEmployeeDetailsFrame>;
     FRatingDialogInfo: TFrameInfo<TRatingDialogFrame>;
@@ -62,14 +62,15 @@ begin
   // handle hardware back to close frames
 end;
 
-procedure TMainForm.FrameStand1BeforeShow(const ASender: TFrameStand;
-  const AFrameInfo: TFrameInfo<FMX.Forms.TFrame>);
+
+procedure TMainForm.FrameStand1BeforeShow(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
 var
   LContainer_bkg: TRectangle;
 begin
-  if (AFrameInfo.StandStyleName = 'expand') then
+  if (ASubjectInfo.StandStyleName = 'expand') then
   begin
-    LContainer_bkg := AFrameInfo.Stand.FindStyleResource('container_bkg') as TRectangle;
+    LContainer_bkg := ASubjectInfo.Stand.FindStyleResource('container_bkg') as TRectangle;
     LContainer_bkg.Margins.Top := ListView1.Height / 2;
     LContainer_bkg.Margins.Bottom := ListView1.Height / 2;
   end;

@@ -54,7 +54,10 @@ type
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
     function GetCount: Integer; override;
-    function GetFrameClass<T: TFrame>(var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
+    function GetFrameClass<T: TFrame>(var AParent: TFmxObject;
+      var AStandStyleName: string): TFrameClass; overload;
+    function GetFrameClass(const AClassName: string; var AParent: TFmxObject;
+      var AStandStyleName: string): TFrameClass; overload;
     procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
     procedure DoBeforeShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
     procedure DoClose(const ASubject: TFmxObject); override;
@@ -76,10 +79,17 @@ type
       const AParent: TFmxObject = nil; const AStandStyleName: string = ''): TFrameInfo<T>;
 
     function Use<T: TFrame>(const AFrame: T; const AParent: TFmxObject = nil;
-      const AStandStyleName: string = ''): TFrameInfo<T>;
+      const AStandStyleName: string = ''): TFrameInfo<T>; overload;
+    function Use(const AFrame: TFrame; const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''): TFrameInfo<TFrame>; overload;
+
 
     function New<T: TFrame>(const AParent: TFmxObject = nil;
-      const AStandStyleName: string = ''): TFrameInfo<T>;
+      const AStandStyleName: string = ''): TFrameInfo<T>; overload;
+
+    function New(const AFrameClassName: string; const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''): TFrameInfo<TFrame>; overload;
+
 
     function NewAndShow<T: TFrame>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil;
@@ -198,6 +208,29 @@ begin
   Result := FFrameInfos.Count;
 end;
 
+function TFrameStand.GetFrameClass(const AClassName: string;
+  var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
+begin
+  var LContext := TRttiContext.Create;
+  var LType := LContext.FindType(AClassName);
+
+  if not Assigned(LType) then
+    raise Exception.CreateFmt('Type not found: %s', [AClassName]);
+
+  if not (LType is TRttiInstanceType) then
+    raise Exception.CreateFmt('Type %s is not an instance type', [AClassName]);
+
+  var LInstanceType := LType as TRttiInstanceType;
+
+  if not (LInstanceType.MetaclassType.InheritsFrom(TFrame)) then
+    raise Exception.CreateFmt('Type %s is not a TFrame descendant', [AClassName]);
+
+  Result := TFrameClass(LInstanceType.MetaclassType);
+  DoResponsiveLookup(TSubjectClass(Result), AStandStyleName, AParent);
+  if Assigned(FOnGetFrameClass) then
+    FOnGetFrameClass(Self, AParent, AStandStyleName, Result);
+end;
+
 function TFrameStand.GetFrameClass<T>(var AParent: TFmxObject;
   var AStandStyleName: string): TFrameClass;
 begin
@@ -254,6 +287,28 @@ begin
     Result := FVisibleFrames.Last;
 end;
 
+function TFrameStand.New(const AFrameClassName: string;
+  const AParent: TFmxObject; const AStandStyleName: string): TFrameInfo<TFrame>;
+var
+  LFrame: TFrame;
+  LParent: TFmxObject;
+  LStandName: string;
+begin
+  LParent := AParent;
+  if not Assigned(LParent) then
+    LParent := GetDefaultParent;
+  LStandName := AStandStyleName;
+  LFrame := GetFrameClass(AFrameClassName, LParent, LStandName).Create(nil);
+  try
+    LFrame.Name := '';
+    Result := Use(LFrame, LParent, LStandName);
+    Result.FrameIsOwned := True;
+  except
+    LFrame.Free;
+    raise;
+  end;
+end;
+
 function TFrameStand.New<T>(const AParent: TFmxObject; const AStandStyleName: string): TFrameInfo<T>;
 var
   LFrame: T;
@@ -304,6 +359,12 @@ begin
       LInfo.Free;
     {$ENDIF}
   end;
+end;
+
+function TFrameStand.Use(const AFrame: TFrame; const AParent: TFmxObject;
+  const AStandStyleName: string): TFrameInfo<TFrame>;
+begin
+  Result := Use<TFrame>(AFrame, AParent, AStandStyleName);
 end;
 
 function TFrameStand.Use<T>(const AFrame: T; const AParent: TFmxObject;

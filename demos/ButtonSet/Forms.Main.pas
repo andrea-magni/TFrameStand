@@ -12,7 +12,7 @@ uses
   System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, Data.Bind.Components, Data.Bind.ObjectScope, FMX.Objects,
   FMX.ScrollBox, FMX.Memo, FMX.Layouts, System.ImageList, FMX.ImgList,
-  SubjectStand;
+  SubjectStand, FMX.Memo.Types;
 
 type
   TMainForm = class(TForm)

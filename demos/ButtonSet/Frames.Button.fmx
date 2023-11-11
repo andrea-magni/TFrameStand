@@ -31,8 +31,9 @@ object ButtonFrame: TButtonFrame
     Size.PlatformDefault = False
     TextSettings.Font.Family = 'Lucida Sans Unicode'
     TextSettings.Font.Size = 20.000000000000000000
-    TextSettings.Font.Style = [fsBold]
+    TextSettings.Font.StyleExt = {00070000000000000004000000}
     TextSettings.FontColor = claWhite
+    TextSettings.Trimming = None
     Text = 'Button Text Here'
     OnClick = TextLabelClick
   end

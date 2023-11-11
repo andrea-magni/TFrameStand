@@ -63,7 +63,7 @@ object ButtonSetFrame: TButtonSetFrame
       TextSettings.Font.StyleExt = {00070000000000000004000000}
     end
     inherited OnShowSlideIn: TFloatAnimation
-      Delay = 0.400000005960464500
+      Delay = 0.400000005960464400
       Duration = 0.500000000000000000
     end
   end

@@ -28,9 +28,10 @@ object EmployeeDetailsFrame: TEmployeeDetailsFrame
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
       TextSettings.Font.Size = 14.000000000000000000
-      TextSettings.Font.Style = [fsBold]
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.HorzAlign = Center
       TextSettings.WordWrap = False
+      TextSettings.Trimming = None
       Text = 'Mark Anderson'
     end
     object Label2: TLabel
@@ -42,6 +43,7 @@ object EmployeeDetailsFrame: TEmployeeDetailsFrame
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Center
       TextSettings.WordWrap = False
+      TextSettings.Trimming = None
       Text = 'Software Engineer'
     end
   end
@@ -85,6 +87,7 @@ object EmployeeDetailsFrame: TEmployeeDetailsFrame
       Size.PlatformDefault = False
       TabOrder = 1
       Text = 'Close'
+      TextSettings.Trimming = None
       OnClick = Button1Click
     end
     object Label3: TLabel
@@ -97,6 +100,7 @@ object EmployeeDetailsFrame: TEmployeeDetailsFrame
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       TextSettings.WordWrap = False
+      TextSettings.Trimming = None
       Text = 'Active:'
     end
   end
@@ -131,8 +135,8 @@ object EmployeeDetailsFrame: TEmployeeDetailsFrame
     Size.Height = 198.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 4
-    Viewport.Width = 258.000000000000000000
-    Viewport.Height = 194.000000000000000000
+    Viewport.Width = 278.000000000000000000
+    Viewport.Height = 198.000000000000000000
   end
   object BindingsList1: TBindingsList
     Methods = <>

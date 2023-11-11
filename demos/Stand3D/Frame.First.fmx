@@ -11,6 +11,7 @@ object FirstFrame: TFirstFrame
     Size.PlatformDefault = False
     TextSettings.Font.Size = 48.000000000000000000
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = 'This is my first frame'
   end
   object Layout1: TLayout
@@ -25,6 +26,7 @@ object FirstFrame: TFirstFrame
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
       Text = 'HideAndClose'
+      TextSettings.Trimming = None
     end
   end
 end

@@ -57,15 +57,21 @@ begin
     LInfo.Close;
   end;
 
-  for LIndex := 0 to 8 do
-  begin
-    LInfo := FrameStand1.New<TPictureFrame>(FlowLayout1, 'stand1');
-    LItem := ImageList1.Source.Items[LIndex].MultiResBitmap.ItemByScale(1, False, False);
-    LInfo.Frame.Bitmap := LItem.Bitmap;
-    LInfo.Frame.PositionIndex := LIndex;
-    LInfo.Frame.DisplayName := ExtractFileName(LItem.FileName);
-    LInfo.Show;
+  FlowLayout1.BeginUpdate;
+  try
+    for LIndex := 0 to 8 do
+    begin
+      LInfo := FrameStand1.New<TPictureFrame>(FlowLayout1, 'stand1');
+      LItem := ImageList1.Source.Items[LIndex].MultiResBitmap.ItemByScale(1, False, False);
+      LInfo.Frame.Bitmap := LItem.Bitmap;
+      LInfo.Frame.PositionIndex := LIndex;
+      LInfo.Frame.DisplayName := ExtractFileName(LItem.FileName);
+      LInfo.Show;
+    end;
+  finally
+    FlowLayout1.EndUpdate;
   end;
+
 end;
 
 initialization

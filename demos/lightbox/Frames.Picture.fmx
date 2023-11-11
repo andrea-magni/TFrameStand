@@ -38,6 +38,7 @@ object PictureFrame: TPictureFrame
       Size.Width = 310.000000000000000000
       Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
+      TextSettings.Trimming = None
       Text = 'DescriptionLabel'
     end
   end

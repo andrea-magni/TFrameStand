@@ -21,6 +21,7 @@ object HelperFrame: THelperFrame
       Size.PlatformDefault = False
       TabOrder = 0
       Text = '-10'
+      TextSettings.Trimming = None
       OnClick = TenLessButtonClick
     end
     object FiveLessButton: TButton
@@ -30,6 +31,7 @@ object HelperFrame: THelperFrame
       Size.PlatformDefault = False
       TabOrder = 1
       Text = '-5'
+      TextSettings.Trimming = None
       OnClick = FiveLessButtonClick
     end
     object FiveMoreButton: TButton
@@ -39,6 +41,7 @@ object HelperFrame: THelperFrame
       Size.PlatformDefault = False
       TabOrder = 2
       Text = '+5'
+      TextSettings.Trimming = None
       OnClick = FiveMoreButtonClick
     end
     object TenMoreButton: TButton
@@ -48,6 +51,7 @@ object HelperFrame: THelperFrame
       Size.PlatformDefault = False
       TabOrder = 3
       Text = '+10'
+      TextSettings.Trimming = None
       OnClick = TenMoreButtonClick
     end
   end

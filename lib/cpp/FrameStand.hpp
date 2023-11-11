@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FrameStand.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FrameStand.pas' rev: 36.00 (Windows)
 
 #ifndef FramestandHPP
 #define FramestandHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -78,8 +80,8 @@ private:
 	TFrameStand* __fastcall GetFrameStand();
 	
 protected:
-	virtual Fmx::Types::TFmxObject* __fastcall GetSubject();
-	virtual void __fastcall SetSubject(Fmx::Types::TFmxObject* const Value);
+	virtual Subjectstand::TSubject* __fastcall GetSubject();
+	virtual void __fastcall SetSubject(Subjectstand::TSubject* const Value);
 	virtual bool __fastcall GetSubjectIsOwned();
 	virtual void __fastcall SetSubjectIsOwned(const bool Value);
 	virtual void __fastcall InjectContextAttribute(Subjectstand::ContextAttribute* const AAttribute, System::Rtti::TRttiField* const AField, const System::TClass AFieldClassType);
@@ -111,7 +113,8 @@ private:
 protected:
 	System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TFrameInfo__1<Fmx::Forms::TFrame*>*>* FFrameInfos;
 	virtual int __fastcall GetCount();
-	template<typename T> TFrameClass __fastcall GetFrameClass(Fmx::Types::TFmxObject* &AParent, System::UnicodeString &AStandStyleName);
+	template<typename T> TFrameClass __fastcall GetFrameClass(Fmx::Types::TFmxObject* &AParent, System::UnicodeString &AStandStyleName)/* overload */;
+	TFrameClass __fastcall GetFrameClass(const System::UnicodeString AClassName, Fmx::Types::TFmxObject* &AParent, System::UnicodeString &AStandStyleName)/* overload */;
 	virtual void __fastcall DoAfterHide(Subjectstand::TSubjectStand* const ASender, Subjectstand::TSubjectInfo* const ASubjectInfo);
 	virtual void __fastcall DoBeforeShow(Subjectstand::TSubjectStand* const ASender, Subjectstand::TSubjectInfo* const ASubjectInfo);
 	virtual void __fastcall DoClose(Fmx::Types::TFmxObject* const ASubject);
@@ -120,7 +123,7 @@ public:
 	__fastcall virtual TFrameStand(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TFrameStand();
 	Fmx::Forms::TFrame* __fastcall LastShownFrame();
-	virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject);
+	virtual void __fastcall Remove(Subjectstand::TSubject* ASubject);
 	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> ARestrictTo)/* overload */;
 	virtual void __fastcall CloseAllExcept(const System::DynamicArray<System::TClass> AExceptions)/* overload */;
 	virtual void __fastcall HideAndCloseAll(const System::DynamicArray<System::TClass> ARestrictTo)/* overload */;
@@ -129,8 +132,10 @@ public:
 	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall FrameInfo(const TFrameClass AFrameClass)/* overload */;
 	template<typename T> TFrameInfo__1<T>* __fastcall FrameInfo()/* overload */;
 	template<typename T> TFrameInfo__1<T>* __fastcall GetFrameInfo(const bool ANewIfNotFound = true, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
-	template<typename T> TFrameInfo__1<T>* __fastcall Use(const T AFrame, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
-	template<typename T> TFrameInfo__1<T>* __fastcall New(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString());
+	template<typename T> TFrameInfo__1<T>* __fastcall Use(const T AFrame, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString())/* overload */;
+	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall Use(Fmx::Forms::TFrame* const AFrame, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString())/* overload */;
+	template<typename T> TFrameInfo__1<T>* __fastcall New(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString())/* overload */;
+	TFrameInfo__1<Fmx::Forms::TFrame*>* __fastcall New(const System::UnicodeString AFrameClassName, Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString())/* overload */;
 	template<typename T> TFrameInfo__1<T>* __fastcall NewAndShow(Fmx::Types::TFmxObject* const AParent = (Fmx::Types::TFmxObject*)(0x0), const System::UnicodeString AStandStyleName = System::UnicodeString(), const System::DelphiInterface<System::Sysutils::TProc__1<T> > AConfigProc = System::DelphiInterface<System::Sysutils::TProc__1<T> >(), const System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> > AConfigFIProc = System::DelphiInterface<System::Sysutils::TProc__1<TFrameInfo__1<T>*> >());
 	__property System::Generics::Collections::TObjectDictionary__2<Fmx::Forms::TFrame*,TFrameInfo__1<Fmx::Forms::TFrame*>*>* FrameInfos = {read=FFrameInfos};
 	__property System::Generics::Collections::TList__1<Fmx::Forms::TFrame*>* VisibleFrames = {read=FVisibleFrames};

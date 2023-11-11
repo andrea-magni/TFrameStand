@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'SubjectStand.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'SubjectStand.pas' rev: 36.00 (Windows)
 
 #ifndef SubjectstandHPP
 #define SubjectstandHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -235,8 +237,8 @@ private:
 	bool __fastcall GetIsVisible();
 	
 protected:
-	virtual Fmx::Types::TFmxObject* __fastcall GetSubject() = 0 ;
-	virtual void __fastcall SetSubject(Fmx::Types::TFmxObject* const Value) = 0 ;
+	virtual TSubject* __fastcall GetSubject() = 0 ;
+	virtual void __fastcall SetSubject(TSubject* const Value) = 0 ;
 	virtual bool __fastcall GetSubjectIsOwned() = 0 ;
 	virtual void __fastcall SetSubjectIsOwned(const bool Value) = 0 ;
 	virtual bool __fastcall BindCommonActions(Fmx::Types::TFmxObject* const AObject);
@@ -274,9 +276,9 @@ public:
 	bool __fastcall Hide(const int ADelay = 0x0, const System::Sysutils::_di_TProc AThen = System::Sysutils::_di_TProc());
 	void __fastcall HideAndClose(const int ADeferExecutionMS = 0x0, const System::Sysutils::_di_TProc AThen = System::Sysutils::_di_TProc());
 	void __fastcall Close();
-	__fastcall virtual TSubjectInfo(TSubjectStand* const ASubjectStand, Fmx::Types::TFmxObject* const ASubject, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString AStandStyleName);
+	__fastcall virtual TSubjectInfo(TSubjectStand* const ASubjectStand, TSubject* const ASubject, Fmx::Types::TFmxObject* const AParent, const System::UnicodeString AStandStyleName);
 	__fastcall virtual ~TSubjectInfo();
-	__property Fmx::Types::TFmxObject* Subject = {read=GetSubject, write=SetSubject};
+	__property TSubject* Subject = {read=GetSubject, write=SetSubject};
 	__property bool SubjectIsOwned = {read=GetSubjectIsOwned, write=SetSubjectIsOwned, nodefault};
 	__property TSubjectStand* SubjectStand = {read=FSubjectStand};
 	__property Fmx::Controls::TControl* Stand = {read=FStand, write=FStand};
@@ -294,9 +296,9 @@ typedef void __fastcall (__closure *TOnAfterShowEvent)(TSubjectStand* const ASen
 
 typedef TOnAfterShowEvent TOnBeforeShowEvent;
 
-typedef TOnAfterShowEvent TOnAfterHideEvent;
+typedef TOnBeforeShowEvent TOnAfterHideEvent;
 
-typedef TOnAfterShowEvent TOnBeforeHideEvent;
+typedef TOnBeforeShowEvent TOnBeforeHideEvent;
 
 typedef void __fastcall (__closure *TOnBeforeStartAnimationEvent)(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo, Fmx::Ani::TAnimation* const AAnimation);
 
@@ -336,10 +338,10 @@ private:
 	System::UnicodeString FAnimationHide;
 	System::UnicodeString FAnimationShow;
 	TCommonActionDictionary__1<TSubjectInfo*>* FCommonActions;
-	TOnAfterShowEvent FOnAfterHide;
-	TOnAfterShowEvent FOnBeforeHide;
+	TOnAfterHideEvent FOnAfterHide;
+	TOnBeforeHideEvent FOnBeforeHide;
 	TOnAfterShowEvent FOnAfterShow;
-	TOnAfterShowEvent FOnBeforeShow;
+	TOnBeforeShowEvent FOnBeforeShow;
 	TOnBeforeStartAnimationEvent FOnBeforeStartAnimation;
 	Fmx::Actnlist::TActionList* FCommonActionList;
 	System::UnicodeString FCommonActionPrefix;
@@ -361,12 +363,12 @@ protected:
 	virtual void __fastcall DoBeforeShow(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 	virtual void __fastcall DoAfterHide(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
 	virtual void __fastcall DoBeforeHide(TSubjectStand* const ASender, TSubjectInfo* const ASubjectInfo);
-	virtual void __fastcall DoClose(Fmx::Types::TFmxObject* const ASubject);
+	virtual void __fastcall DoClose(TSubject* const ASubject);
 	
 public:
 	__fastcall virtual TSubjectStand(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TSubjectStand();
-	HIDESBASE virtual void __fastcall Remove(Fmx::Types::TFmxObject* ASubject) = 0 ;
+	HIDESBASE virtual void __fastcall Remove(TSubject* ASubject) = 0 ;
 	Deviceandplatforminfo::TDeviceAndPlatformInfo __fastcall DeviceAndPlatformInfo(Fmx::Forms::TForm* const AForm = (Fmx::Forms::TForm*)(0x0));
 	virtual void __fastcall CloseAll()/* overload */;
 	virtual void __fastcall CloseAll(const System::DynamicArray<System::TClass> ARestrictTo) = 0 /* overload */;
@@ -395,10 +397,10 @@ __published:
 	__property Fmx::Types::TFmxObject* DefaultParent = {read=FDefaultParent, write=FDefaultParent};
 	__property Fmx::Controls::TStyleBook* StyleBook = {read=FStandBook, write=FStandBook};
 	__property Fmx::Controls::TStyleBook* StandBook = {read=FStandBook, write=FStandBook};
-	__property TOnAfterShowEvent OnAfterHide = {read=FOnAfterHide, write=FOnAfterHide};
-	__property TOnAfterShowEvent OnBeforeHide = {read=FOnBeforeHide, write=FOnBeforeHide};
+	__property TOnAfterHideEvent OnAfterHide = {read=FOnAfterHide, write=FOnAfterHide};
+	__property TOnBeforeHideEvent OnBeforeHide = {read=FOnBeforeHide, write=FOnBeforeHide};
 	__property TOnAfterShowEvent OnAfterShow = {read=FOnAfterShow, write=FOnAfterShow};
-	__property TOnAfterShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
+	__property TOnBeforeShowEvent OnBeforeShow = {read=FOnBeforeShow, write=FOnBeforeShow};
 	__property TOnBeforeStartAnimationEvent OnBeforeStartAnimation = {read=FOnBeforeStartAnimation, write=FOnBeforeStartAnimation};
 	__property TOnBindCommonActionList OnBindCommonActionList = {read=FOnBindCommonActionList, write=FOnBindCommonActionList};
 };

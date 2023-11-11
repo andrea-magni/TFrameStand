@@ -998,7 +998,7 @@ procedure TSubjectInfo.TeardownStand;
 begin
   if not (csDestroying in FSubjectStand.ComponentState) then
   begin
-    Stand.DisposeOf;
+    Stand.Free;
     Stand := nil;
   end;
 end;
@@ -1016,7 +1016,7 @@ begin
   begin
     if not (csDestroying in FSubjectStand.ComponentState) then
     begin
-      Subject.DisposeOf;
+      Subject.Free;
       Subject := nil;
     end;
   end

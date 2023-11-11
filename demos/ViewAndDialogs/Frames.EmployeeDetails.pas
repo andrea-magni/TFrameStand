@@ -8,7 +8,7 @@ uses
   FMX.Controls.Presentation, FMX.Objects, FMX.Layouts, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components
-  , FrameStand, FMX.ScrollBox, FMX.Memo
+  , FrameStand, FMX.ScrollBox, FMX.Memo, FMX.Memo.Types
   ;
 
 type

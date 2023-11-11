@@ -20,6 +20,7 @@ object PictureFrame: TPictureFrame
     Size.Height = 30.000000000000000000
     Size.PlatformDefault = False
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = 'DisplayNameLabel'
   end
 end

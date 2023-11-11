@@ -12,6 +12,7 @@ object Frame2: TFrame2
     Size.PlatformDefault = False
     TextSettings.Font.Size = 68.000000000000000000
     TextSettings.HorzAlign = Center
+    TextSettings.Trimming = None
     Text = '2'
     TabOrder = 0
   end

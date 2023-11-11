@@ -1,6 +1,6 @@
 ![](https://img.shields.io/github/v/release/andrea-magni/TFrameStand)
 ![](https://img.shields.io/github/release-date/andrea-magni/TFrameStand)
-![](https://img.shields.io/github/commits-since/andrea-magni/TFrameStand/v.1.8)
+![](https://img.shields.io/github/commits-since/andrea-magni/TFrameStand/v.1.9)
 
 ![TFrameStand](media/frame_stand_xhdpi.png)
 ![TFormStand](media/form_stand_xhdpi.png)

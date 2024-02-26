@@ -166,7 +166,10 @@ var
   LKey: TForm;
 begin
   for LKey in FFormInfos.Keys.ToArray do
+  begin
     Remove(LKey);
+    LKey.Free;
+  end;
   FreeAndNil(FFormInfos);
   FreeAndNil(FVisibleForms);
 

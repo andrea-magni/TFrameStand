@@ -157,7 +157,7 @@ end;
 constructor TFormStand.Create(AOwner: TComponent);
 begin
   inherited;
-  FFormInfos := TObjectDictionary<TForm, TFormInfo<TForm>>.Create([doOwnsKeys]);
+  FFormInfos := TObjectDictionary<TForm, TFormInfo<TForm>>.Create();
   FVisibleForms := TList<TForm>.Create;
 end;
 
@@ -166,7 +166,10 @@ var
   LKey: TForm;
 begin
   for LKey in FFormInfos.Keys.ToArray do
+  begin
     Remove(LKey);
+    LKey.Free;
+  end;
   FreeAndNil(FFormInfos);
   FreeAndNil(FVisibleForms);
 

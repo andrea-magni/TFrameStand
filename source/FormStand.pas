@@ -157,7 +157,7 @@ end;
 constructor TFormStand.Create(AOwner: TComponent);
 begin
   inherited;
-  FFormInfos := TObjectDictionary<TForm, TFormInfo<TForm>>.Create();
+  FFormInfos := TObjectDictionary<TForm, TFormInfo<TForm>>.Create([doOwnsKeys]);
   FVisibleForms := TList<TForm>.Create;
 end;
 

@@ -145,7 +145,7 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="fmx.dcp"/>
-        <DCCReference Include="FrameStandPackage_11_1.dcp"/>
+        <DCCReference Include="FrameStandPackage_13.dcp"/>
         <DCCReference Include="..\source\ComponentRegistration.pas"/>
         <DCCReference Include="..\source\Forms.Test.pas">
             <Form>TestForm</Form>

@@ -26,8 +26,8 @@ type
     procedure SetSubject(const Value: TSubject); override;
     function GetSubjectIsOwned: Boolean; override;
     procedure SetSubjectIsOwned(const Value: Boolean); override;
-    procedure InjectContextAttribute(const AAttribute: ContextAttribute;
-      const AField: TRttiField; const AFieldClassType: TClass); override;
+    function ResolveContext(const AAttribute: ContextAttribute;
+      const AType: TRttiInstanceType; out AObject: TObject): Boolean; override;
   public
     constructor Create(const AFrameStand: TFrameStand; const AFrame: T;
       const AParent: TFmxObject; const AStandStyleName: string); reintroduce; virtual;
@@ -425,15 +425,22 @@ begin
   Result := FFrameIsOwned;
 end;
 
-procedure TFrameInfo<T>.InjectContextAttribute(
-  const AAttribute: ContextAttribute; const AField: TRttiField;
-  const AFieldClassType: TClass);
+function TFrameInfo<T>.ResolveContext(const AAttribute: ContextAttribute;
+  const AType: TRttiInstanceType; out AObject: TObject): Boolean;
 begin
-  inherited;
-  if (AAttribute is FrameStandAttribute) and (AFieldClassType.InheritsFrom(TFrameStand)) then
-      AField.SetValue(TObject(Frame), FrameStand)
-  else if (AAttribute is FrameInfoAttribute) then
-    AField.SetValue(TObject(Frame), Self);
+  if (AAttribute is FrameStandAttribute) and AType.MetaclassType.InheritsFrom(TFrameStand) then
+  begin
+    AObject := FrameStand;
+    Result := True;
+  end
+  else if (AAttribute is FrameInfoAttribute)
+    and (InheritsFrom(AType.MetaclassType) or AType.MetaclassType.InheritsFrom(TSubjectInfo)) then
+  begin
+    AObject := Self;
+    Result := True;
+  end
+  else
+    Result := inherited;
 end;
 
 procedure TFrameInfo<T>.SetSubject(const Value: TSubject);

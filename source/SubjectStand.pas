@@ -17,6 +17,9 @@ uses
 ;
 
 type
+  /// <summary>Raised when the context of a subject cannot be injected.</summary>
+  ESubjectStandError = class(Exception);
+
   SubjectStandCustomAttribute = class(TCustomAttribute);
 
   ContextAttribute = class(SubjectStandCustomAttribute);
@@ -99,6 +102,14 @@ type
     procedure InjectContext; virtual;
     procedure InjectContextAttribute(const AAttribute: ContextAttribute;
       const AField: TRttiField; const AFieldClassType: TClass); virtual;
+    /// <summary>The object a context attribute refers to, for a field or a
+    /// parameter of type AType. False if the attribute does not apply to
+    /// that type. Override to support more attributes.</summary>
+    function ResolveContext(const AAttribute: ContextAttribute;
+      const AType: TRttiInstanceType; out AObject: TObject): Boolean; virtual;
+    function ContextValue(const AObject: TObject; const AType: TRttiInstanceType;
+      const AAttribute: ContextAttribute; const ATarget: string): TValue;
+    function CustomMethodArguments(const AMethod: TRttiMethod): TArray<TValue>;
 
     function FireCustomMethods(AMethods: TArray<TRttiMethod>): Boolean; virtual;
     function FireCustomBeforeShowMethods: Boolean; virtual;
@@ -268,7 +279,7 @@ type
 implementation
 
 uses
-    FMX.Layouts, FMX.StdCtrls, FMX.Platform
+    System.TypInfo, FMX.Layouts, FMX.StdCtrls, FMX.Platform
   ;
 
 type
@@ -904,41 +915,41 @@ function TSubjectInfo.FireCustomMethods(
   AMethods: TArray<TRttiMethod>): Boolean;
 var
   LMethod: TRttiMethod;
-  LParameter: TRttiParameter;
-  LAttribute: ContextAttribute;
-  LArguments: array of TValue;
-  LMetaClassType: TClass;
 begin
   Result := False;
   for LMethod in AMethods do
   begin
     Result := True;
+    LMethod.Invoke(Subject, CustomMethodArguments(LMethod));
+  end;
+end;
 
-    LArguments := [];
-    for LParameter in LMethod.GetParameters do
-    begin
-      if LParameter.ParamType.IsInstance then
-      begin
-        LMetaClassType := TRttiInstanceType(LParameter.ParamType).MetaclassType;
+function TSubjectInfo.CustomMethodArguments(const AMethod: TRttiMethod): TArray<TValue>;
+var
+  LParameter: TRttiParameter;
+  LAttribute: ContextAttribute;
+  LObject: TObject;
+begin
+  Result := [];
+  for LParameter in AMethod.GetParameters do
+  begin
+    LAttribute := nil;
+    if Assigned(LParameter.ParamType) and LParameter.ParamType.IsInstance then
+      LAttribute := HasAttribute<ContextAttribute>(LParameter);
 
-        LAttribute := HasAttribute<ContextAttribute>(LParameter);
-        if not Assigned(LAttribute) then
-          Continue;
-        // injection
-        if (LAttribute is SubjectStandAttribute) and (LMetaClassType.InheritsFrom(TSubjectStand)) then
-          LArguments := LArguments + [SubjectStand]
-        else if (LAttribute is StandAttribute) and (LMetaClassType.InheritsFrom(TControl)) then
-          LArguments := LArguments + [Stand]
-        else if (LAttribute is ParentAttribute) and (LMetaClassType.InheritsFrom(TFmxObject)) then
-          LArguments := LArguments + [Parent]
-        else if (LAttribute is ContextAttribute) and (LMetaClassType.InheritsFrom(TFmxObject)) then
-          LArguments := LArguments + [Container]
-        else if (LAttribute is SubjectInfoAttribute) then
-          LArguments := LArguments + [Self];
-      end;
-    end;
+    if not (Assigned(LAttribute)
+      and ResolveContext(LAttribute, TRttiInstanceType(LParameter.ParamType), LObject))
+    then
+      raise ESubjectStandError.CreateFmt(
+        '%s.%s: cannot inject parameter %s. Parameters of [BeforeShow], [Show], '
+        + '[AfterShow] and [Hide] methods must be objects marked with a context '
+        + 'attribute: [SubjectStand], [SubjectInfo], [Stand], [Parent], [Container], '
+        + 'or the stand/info attribute of the component ([FrameStand], [FrameInfo], '
+        + '[FormStand], [FormInfo]) with a compatible type'
+      , [Subject.ClassName, AMethod.Name, LParameter.Name]);
 
-    LMethod.Invoke(Subject, LArguments);
+    Result := Result + [ContextValue(LObject, TRttiInstanceType(LParameter.ParamType)
+      , LAttribute, Format('parameter %s of %s', [LParameter.Name, AMethod.Name]))];
   end;
 end;
 
@@ -1133,7 +1144,7 @@ var
   LType: TRttiType;
   LField: TRttiField;
   LAttribute: ContextAttribute;
-  LFieldClassType: TClass;
+  LMethod: TRttiMethod;
 begin
   LType := TRttiContext.Create.GetType(Subject.ClassInfo);
 
@@ -1141,29 +1152,84 @@ begin
   for LField in LType.GetFields do
   begin
     // only consider object types
-    if LField.FieldType.IsInstance then
+    if Assigned(LField.FieldType) and LField.FieldType.IsInstance then
     begin
-      LFieldClassType := TRttiInstanceType(LField.FieldType).MetaclassType;
       LAttribute := HasAttribute<ContextAttribute>(LField);
       if Assigned(LAttribute) then
-        InjectContextAttribute(LAttribute, LField, LFieldClassType);
+        InjectContextAttribute(LAttribute, LField, TRttiInstanceType(LField.FieldType).MetaclassType);
     end;
   end;
+
+  // check the parameters of the lifecycle methods now, rather than at Show/Hide
+  for LMethod in FCustomBeforeShowMethods + FCustomShowMethods
+    + FCustomAfterShowMethods + FCustomHideMethods
+  do
+    CustomMethodArguments(LMethod);
 end;
 
 procedure TSubjectInfo.InjectContextAttribute(const AAttribute: ContextAttribute;
   const AField: TRttiField; const AFieldClassType: TClass);
+var
+  LObject: TObject;
 begin
-  if (AAttribute is SubjectStandAttribute) and (AFieldClassType.InheritsFrom(TSubjectStand)) then
-      AField.SetValue(TObject(Subject), SubjectStand)
-  else if (AAttribute is StandAttribute) and (AFieldClassType.InheritsFrom(TControl)) then
-    AField.SetValue(TObject(Subject), Stand)
-  else if (AAttribute is ParentAttribute) and (AFieldClassType.InheritsFrom(TFmxObject)) then
-    AField.SetValue(TObject(Subject), Parent)
-  else if (AAttribute is ContextAttribute) and (AFieldClassType.InheritsFrom(TFmxObject)) then
-    AField.SetValue(TObject(Subject), Container)
-  else if (AAttribute is SubjectInfoAttribute) then
-    AField.SetValue(TObject(Subject), Self);
+  // attributes that do not apply to the type of the field are ignored
+  if ResolveContext(AAttribute, TRttiInstanceType(AField.FieldType), LObject) then
+    AField.SetValue(TObject(Subject), ContextValue(LObject
+      , TRttiInstanceType(AField.FieldType), AAttribute, 'field ' + AField.Name));
+end;
+
+function TSubjectInfo.ResolveContext(const AAttribute: ContextAttribute;
+  const AType: TRttiInstanceType; out AObject: TObject): Boolean;
+var
+  LClass: TClass;
+begin
+  AObject := nil;
+  LClass := AType.MetaclassType;
+  Result := True;
+  if (AAttribute is SubjectStandAttribute) and LClass.InheritsFrom(TSubjectStand) then
+    AObject := SubjectStand
+  else if (AAttribute is StandAttribute) and LClass.InheritsFrom(TControl) then
+    AObject := Stand
+  else if (AAttribute is ParentAttribute) and LClass.InheritsFrom(TFmxObject) then
+    AObject := Parent
+  else if (AAttribute is SubjectInfoAttribute)
+    and (InheritsFrom(LClass) or LClass.InheritsFrom(TSubjectInfo)) then
+    AObject := Self
+  // [Container], [Context] (and, as before, any other context attribute on a
+  // TFmxObject) give the container
+  else if LClass.InheritsFrom(TFmxObject)
+    and not ((AAttribute is SubjectStandAttribute) or (AAttribute is StandAttribute)
+      or (AAttribute is ParentAttribute) or (AAttribute is SubjectInfoAttribute)) then
+    AObject := Container
+  else
+    Result := False;
+end;
+
+function TSubjectInfo.ContextValue(const AObject: TObject;
+  const AType: TRttiInstanceType; const AAttribute: ContextAttribute;
+  const ATarget: string): TValue;
+var
+  LObject: TObject;
+  LAttributeName, LHint: string;
+begin
+  if Assigned(AObject) and not AObject.InheritsFrom(AType.MetaclassType) then
+  begin
+    LAttributeName := AAttribute.ClassName;
+    if LAttributeName.EndsWith('Attribute') then
+      LAttributeName := LAttributeName.Substring(0, LAttributeName.Length - Length('Attribute'));
+    LHint := '';
+    // generic infos are unrelated types: TFrameInfo<TBase> (a TDerived frame
+    // created by New<TBase>, e.g. through responsive substitution) does not
+    // fit a TFrameInfo<TDerived>
+    if AObject is TSubjectInfo then
+      LHint := Format(' (declare it as %s or TSubjectInfo)', [AObject.ClassName]);
+    raise ESubjectStandError.CreateFmt('%s: cannot inject [%s] into %s: '
+      + 'the value is a %s, the declared type is %s%s'
+    , [Subject.ClassName, LAttributeName, ATarget, AObject.ClassName, AType.Name, LHint]);
+  end;
+
+  LObject := AObject;
+  TValue.Make(@LObject, AType.Handle, Result);
 end;
 
 function TSubjectInfo.SubjectShow(const ABackgroundTask: TProc<TSubjectInfo>;

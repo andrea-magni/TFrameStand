@@ -50,8 +50,8 @@ type
     procedure UnparentAll(const AForm: TForm); virtual;
     procedure SetupSubjectContainer; override;
     procedure TeardownSubjectContainer; override;
-    procedure InjectContextAttribute(const AAttribute: ContextAttribute;
-      const AField: TRttiField; const AFieldClassType: TClass); override;
+    function ResolveContext(const AAttribute: ContextAttribute;
+      const AType: TRttiInstanceType; out AObject: TObject): Boolean; override;
     procedure FreeFormContainer;
   public
     constructor Create(const AFormStand: TFormStand; const AForm: T;
@@ -445,15 +445,22 @@ begin
   Result := FFormIsOwned;
 end;
 
-procedure TFormInfo<T>.InjectContextAttribute(
-  const AAttribute: ContextAttribute; const AField: TRttiField;
-  const AFieldClassType: TClass);
+function TFormInfo<T>.ResolveContext(const AAttribute: ContextAttribute;
+  const AType: TRttiInstanceType; out AObject: TObject): Boolean;
 begin
-  inherited;
-  if (AAttribute is FormStandAttribute) and (AFieldClassType.InheritsFrom(TFormStand)) then
-      AField.SetValue(TObject(Form), FormStand)
-  else if (AAttribute is FormInfoAttribute) then
-    AField.SetValue(TObject(Form), Self);
+  if (AAttribute is FormStandAttribute) and AType.MetaclassType.InheritsFrom(TFormStand) then
+  begin
+    AObject := FormStand;
+    Result := True;
+  end
+  else if (AAttribute is FormInfoAttribute)
+    and (InheritsFrom(AType.MetaclassType) or AType.MetaclassType.InheritsFrom(TSubjectInfo)) then
+  begin
+    AObject := Self;
+    Result := True;
+  end
+  else
+    Result := inherited;
 end;
 
 procedure TFormInfo<T>.SetSubject(const Value: TSubject);

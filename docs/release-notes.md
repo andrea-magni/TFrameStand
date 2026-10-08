@@ -7,6 +7,7 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 **Runtime**
 - Hide and close delays use the FMX platform timer instead of a background thread per call; pending hides and closes are cancelled when the subject is closed or the component is destroyed, so their callbacks never run on freed objects. `TDelayedAction.Schedule` returns a cancellable `IDelayedAction`.
 - `HideAndClose` called while a `Hide` (or another `HideAndClose`) is in progress now closes the subject when it completes; before, the close was silently dropped.
+- Lifecycle methods (`[BeforeShow]`, `[Show]`, `[AfterShow]`, `[Hide]`) accept `[FrameInfo]`, `[FrameStand]`, `[FormInfo]` and `[FormStand]` parameters, like fields. Injection problems raise an `ESubjectStandError` naming the field or parameter, when the subject is created (before: "Parameter count mismatch" or "Invalid class typecast", at `Show`).
 
 ## v.2.0.1 — October 2026
 

@@ -80,15 +80,7 @@ The methods must be visible to extended RTTI (public or published; this is the d
 
 ### Parameters
 
-Lifecycle methods can take parameters, if every parameter is an object marked with one of these attributes:
-
-| Attribute | Parameter type | Value |
-|---|---|---|
-| `[SubjectStand]` | `TSubjectStand` | the component |
-| `[SubjectInfo]` | `TSubjectInfo` | the info |
-| `[Parent]` | `TFmxObject` or descendant | the parent |
-| `[Stand]` | `TControl` or descendant | the stand |
-| `[Container]` | `TFmxObject` or descendant | the container |
+Lifecycle methods can take parameters, if every parameter is an object marked with a context attribute: the same attributes, with the same rules, as for the fields.
 
 ```pascal
 type
@@ -97,10 +89,27 @@ type
     [BeforeShow]
     procedure BeforeShow([Parent] AParentObj: TFmxObject);
   end;
+
+  TDetailsFrame = class(TFrame)
+  public
+    [AfterShow]
+    procedure AfterShow([FrameInfo] AInfo: TFrameInfo<TDetailsFrame>; [Stand] AStand: TControl);
+  end;
 ```
 
-::: warning
-For method parameters only the attributes above are supported: `[FrameInfo]`, `[FrameStand]`, `[FormInfo]` and `[FormStand]` work on **fields** only. A parameter without attribute, or with a value that cannot be injected, makes the call fail with an RTTI "parameter count mismatch" exception. Use an injected field when you need the typed info.
+## Errors
+
+Problems are reported when the subject is created (`New`, `Use`), with an `ESubjectStandError` that names the class, the field or parameter and the reason:
+
+- a lifecycle method with a parameter that is not an object, has no context attribute, or has one that does not apply to its type:
+  `TMyFrame.BeforeShow: cannot inject parameter AParent. Parameters of [BeforeShow], [Show], [AfterShow] and [Hide] methods must be objects marked with a context attribute...`
+- a value that does not fit the declared type, e.g. `[Parent] FEdit: TEdit` on a frame shown on a `TLayout`:
+  `TEditFrame: cannot inject [Parent] into field FEdit: the value is a TLayout, the declared type is TEdit`
+
+On **fields**, a context attribute that does not apply to the type of the field (say `[Stand]` on a `string`) is ignored, as it has always been.
+
+::: tip Responsive substitution and typed infos
+Generic types are unrelated in Delphi: `TFrameInfo<TBase>` is not a `TFrameInfo<TDerived>`. When `New<TBase>` creates a `TDerived` frame through [responsive substitution](/features/responsive), its info is a `TFrameInfo<TBase>`: declare the `[FrameInfo]` field (or parameter) of `TDerived` as `TFrameInfo<TBase>`, or as `TSubjectInfo`. The error message suggests the right type.
 :::
 
 ## Form-level attributes (TFormStand)

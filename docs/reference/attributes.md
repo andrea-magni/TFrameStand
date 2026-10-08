@@ -13,10 +13,10 @@ Used on **fields** of the subject (injected by `New`/`Use`) and, where noted, on
 | `[Stand]` | `SubjectStand` | the stand clone (`TControl`) | ✓ | ✓ |
 | `[Container]` | `SubjectStand` | the stand element holding the subject (`TFmxObject`) | ✓ | ✓ |
 | `[Parent]` | `SubjectStand` | the parent of the stand (`TFmxObject`) | ✓ | ✓ |
-| `[FrameStand]` | `FrameStand` | the component (`TFrameStand`) | ✓ | |
-| `[FrameInfo]` | `FrameStand` | the info (`TFrameInfo<T>`) | ✓ | |
-| `[FormStand]` | `FormStand` | the component (`TFormStand`) | ✓ | |
-| `[FormInfo]` | `FormStand` | the info (`TFormInfo<T>`) | ✓ | |
+| `[FrameStand]` | `FrameStand` | the component (`TFrameStand`) | ✓ | ✓ |
+| `[FrameInfo]` | `FrameStand` | the info (`TFrameInfo<T>`) | ✓ | ✓ |
+| `[FormStand]` | `FormStand` | the component (`TFormStand`) | ✓ | ✓ |
+| `[FormInfo]` | `FormStand` | the info (`TFormInfo<T>`) | ✓ | ✓ |
 
 ## Lifecycle attributes
 

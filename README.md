@@ -27,7 +27,11 @@ _Installing manually you get the latest updates (beware! :-) )_
 * Responsive frame substitution
 * Take advantage of design time style preview and Fire UI technology through TFormStand
 
+## Documentation
+**[andrea-magni.github.io/TFrameStand](https://andrea-magni.github.io/TFrameStand/)**: guide, features, API reference and demos.
+
 ## Get started
+* Read the [Your First Stand](https://andrea-magni.github.io/TFrameStand/guide/getting-started) walkthrough
 * Have a look at [my blog posts about TFrameStand](https://blog.andreamagni.eu/tag/tframestand/)
 * [My CodeRage X session (50 min video covering all the basic functionalities)](https://www.youtube.com/watch?v=Z6_ZvnCmFCw)
 * An entire chapter of [my FMX book](https://www.packtpub.com/product/delphi-gui-programming-with-firemonkey/9781788624176) is dedicated to TFrameStand/TFormStand.

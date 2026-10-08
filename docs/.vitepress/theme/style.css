@@ -1,0 +1,24 @@
+/* TFrameStand brand colors (the red of the component icon) */
+:root {
+  --vp-c-brand-1: #d32f2f;
+  --vp-c-brand-2: #e53935;
+  --vp-c-brand-3: #f44336;
+  --vp-c-brand-soft: rgba(244, 67, 54, 0.14);
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #f44336 30%, #ff8a65);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #f4433655 50%, #ff8a6555 50%);
+  --vp-home-hero-image-filter: blur(56px);
+}
+
+.dark {
+  --vp-c-brand-1: #ff7961;
+  --vp-c-brand-2: #f44336;
+  --vp-c-brand-3: #e53935;
+}
+
+/* animated GIFs of the demos: keep them readable but not huge */
+.vp-doc img.demo-gif {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider);
+}

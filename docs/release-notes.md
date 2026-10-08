@@ -2,6 +2,12 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
+## Unreleased (v.2.1)
+
+**Runtime**
+- Hide and close delays use the FMX platform timer instead of a background thread per call; pending hides and closes are cancelled when the subject is closed or the component is destroyed, so their callbacks never run on freed objects. `TDelayedAction.Schedule` returns a cancellable `IDelayedAction`.
+- `HideAndClose` called while a `Hide` (or another `HideAndClose`) is in progress now closes the subject when it completes; before, the close was silently dropped.
+
 ## v.2.0.1 — October 2026
 
 Maintenance release: packages, demos and a few runtime fixes. No API changes.

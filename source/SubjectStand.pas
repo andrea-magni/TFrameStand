@@ -81,6 +81,9 @@ type
     FStatus: TSubjectStatus;
     FGuard: ILifeGuard;
     FPendingActions: TList<IDelayedAction>;
+    FHideContinuations: TList<TProc>;
+    FCloseRequested: Boolean;
+    FCloseContinuations: TList<TProc>;
     function GetIsVisible: Boolean;
   protected
     function GetSubject: TSubject; virtual; abstract;
@@ -125,6 +128,7 @@ type
     procedure Track(const AAction: IDelayedAction);
     procedure CancelPendingActions;
     procedure CompleteHide(const AThen: TProc); virtual;
+    procedure CloseAndContinue;
   public
     procedure DefaultShow; virtual;
     procedure DefaultHide; virtual;
@@ -689,6 +693,8 @@ begin
 
   FGuard := TLifeGuard.Create;
   FPendingActions := TList<IDelayedAction>.Create;
+  FHideContinuations := TList<TProc>.Create;
+  FCloseContinuations := TList<TProc>.Create;
 
   FStatus := Initializing;
   FSubjectStand := ASubjectStand;
@@ -730,6 +736,8 @@ begin
   TeardownStandParent;
   TeardownStand;
 
+  FreeAndNil(FCloseContinuations);
+  FreeAndNil(FHideContinuations);
   FreeAndNil(FPendingActions);
   inherited;
 end;
@@ -1008,7 +1016,12 @@ var
 begin
   Result := False;
   if FHiding then
+  begin
+    // a hide is already in progress: AThen runs when it completes
+    if Assigned(AThen) then
+      FHideContinuations.Add(AThen);
     Exit;
+  end;
 
   LGuard := FGuard;
   if Assigned(SubjectStand) then
@@ -1040,6 +1053,8 @@ procedure TSubjectInfo.CompleteHide(const AThen: TProc);
 var
   LGuard: ILifeGuard;
   LSubjectStand: TSubjectStand;
+  LContinuations: TArray<TProc>;
+  LContinuation: TProc;
 begin
   LGuard := FGuard;
   if not FireCustomHideMethods then
@@ -1049,12 +1064,16 @@ begin
 
   FHiding := False;
   FStatus := TSubjectStatus.Hidden;
+  LContinuations := FHideContinuations.ToArray;
+  FHideContinuations.Clear;
   LSubjectStand := SubjectStand;
 
-  // AThen may close (free) this info: from here on, check LGuard before
-  // touching Self
+  // AThen and the continuations may close (free) this info: from here on,
+  // check LGuard before touching Self
   if Assigned(AThen) then
     AThen();
+  for LContinuation in LContinuations do
+    LContinuation();
 
   if LGuard.IsAlive and Assigned(LSubjectStand) then
     LSubjectStand.DoAfterHide(LSubjectStand, Self);
@@ -1065,6 +1084,12 @@ var
   LDeferExecutionMS: Integer;
   LGuard: ILifeGuard;
 begin
+  if Assigned(AThen) then
+    FCloseContinuations.Add(AThen);
+  if FCloseRequested then // already hiding and closing: AThen runs after that close
+    Exit;
+  FCloseRequested := True;
+
   LDeferExecutionMS := 100;
   if Assigned(SubjectStand) then
     LDeferExecutionMS := SubjectStand.DefaultHideAndCloseDeferTimeMS;
@@ -1072,28 +1097,35 @@ begin
     LDeferExecutionMS := ADeferExecutionMS;
 
   LGuard := FGuard;
+  // if a Hide is already in progress, this continuation runs when it completes
   Hide(0
   , procedure
     begin
       if not LGuard.IsAlive then
         Exit;
       if LDeferExecutionMS <= 0 then
-      begin
-        Close; // frees Self
-        if Assigned(AThen) then
-          AThen();
-      end
+        CloseAndContinue
       else
         Track(TDelayedAction.Schedule(LDeferExecutionMS
         , procedure
           begin
-            Close; // frees Self
-            if Assigned(AThen) then
-              AThen();
+            CloseAndContinue;
           end
         ));
     end
   );
+end;
+
+procedure TSubjectInfo.CloseAndContinue;
+var
+  LContinuations: TArray<TProc>;
+  LContinuation: TProc;
+begin
+  LContinuations := FCloseContinuations.ToArray;
+  FCloseContinuations.Clear;
+  Close; // frees Self
+  for LContinuation in LContinuations do
+    LContinuation();
 end;
 
 procedure TSubjectInfo.InjectContext;

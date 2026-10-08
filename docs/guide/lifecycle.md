@@ -55,7 +55,7 @@ FrameStand1.NewAndShow<TDetailsFrame>(Layout1, 'lightbox',
 function Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
 ```
 
-1. if the subject is already hiding, nothing happens and `Hide` returns `False`;
+1. if the subject is already hiding, no new hide starts and `Hide` returns `False`; its `AThen` is called when the hide in progress completes;
 2. the `OnBeforeHide` event; `Status := Hiding`;
 3. the animations matching `AnimationHide` (`OnHide*`) are started, and the longest `Delay + Duration` among them becomes the hide delay;
 4. after the delay (or after `ADelay` milliseconds, when you pass a value other than 0): the frame's `[Hide]` methods if any, otherwise the default (stop the animations, `Stand.Visible := False`); `Status := Hidden`; `AThen` is called; the `OnAfterHide` event.
@@ -83,6 +83,8 @@ end;
 ```
 
 `HideAndClose(ADeferExecutionMS = 0; AThen = nil)` is the usual way to dismiss a subject: it hides it (with its animations), waits `DefaultHideAndCloseDeferTimeMS` milliseconds (100 by default, or `ADeferExecutionMS`), then closes it and calls `AThen`.
+
+It is safe to call it at any moment: if a `Hide` is already in progress, the subject is closed when that hide completes; if a `HideAndClose` is already in progress (a double tap on a close button, `HideAndCloseAll` while a subject is closing), the subject is closed once and every `AThen` is called after the close.
 
 ## Closing many subjects
 

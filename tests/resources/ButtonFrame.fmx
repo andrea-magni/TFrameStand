@@ -1,0 +1,11 @@
+object ButtonFrame: TButtonFrame
+  Size.Width = 200.000000000000000000
+  Size.Height = 100.000000000000000000
+  Size.PlatformDefault = False
+  object CloseButton: TButton
+    Position.X = 10.000000000000000000
+    Position.Y = 10.000000000000000000
+    TabOrder = 0
+    Text = 'Close'
+  end
+end

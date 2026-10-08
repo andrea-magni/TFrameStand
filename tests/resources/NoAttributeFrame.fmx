@@ -1,0 +1,5 @@
+object NoAttributeFrame: TNoAttributeFrame
+  Size.Width = 200.000000000000000000
+  Size.Height = 100.000000000000000000
+  Size.PlatformDefault = False
+end

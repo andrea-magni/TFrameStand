@@ -1,0 +1,8 @@
+object EmptyForm: TEmptyForm
+  ClientHeight = 200
+  ClientWidth = 300
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+end

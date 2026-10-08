@@ -37,7 +37,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B8 deprecated aliases streamed | fixed (`afe2905`), streaming test (old forms still load) |
 | B9 VisibleFrames history | fixed (`b5b736d`): Hide removes the *last* entry, Close removes all; duplicates are intended (Show/Hide history). FMX console test, 12 checks (6 fail on the previous code) |
 | B11 locale / uninitialized record | fixed (`690e5d6`), console test |
-| E3, E4, P7, B6, B7, B10, B12, B13 | open: v.2.1 |
+| E3, E4, P7, B10, B12, B13 | open: v.2.1 |
 
 ## Status v.2.1 (in progress)
 
@@ -48,6 +48,9 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B5 method-parameter injection | fixed (`bbc8982`): one ResolveContext for fields and parameters, `[FrameInfo]`/`[FrameStand]`/`[FormInfo]`/`[FormStand]` on parameters, `ESubjectStandError` at New/Use naming field/parameter. Test: 21 checks, only 10 pass on v.2.0.1. Generic infos after responsive substitution: clear error with the right type (was EInvalidCast) |
 | B14 adopted form without controls | fixed (`a09616a`, #108), plus `UnparentAll` enumerating a list it modifies (one control in two lost) |
 | B15 owner/parent/subject destroyed | fixed (`a3c7968`, #109): stands and subjects watched with FreeNotification, teardown independent of csDestroying, deferred free of the stand when the subject dies. Related defects fixed by the same change: forms created with New leaked with their owner; parent freed alone -> Invalid pointer operation; adopted frame freed by the app stayed registered; component owned elsewhere left its stands on the form. Tests: 8 scenarios in separate processes (7 failed before), 950 cycles with 0 bytes of growth |
+| B15 under ARC | `bab8120`: stands and owned subjects disposed with DisposeOf under AUTOREFCOUNT (FFreeNotifies holds strong references there); compile-checked only |
+| B7 references to other forms/data modules | fixed (`1cb8140`): setters with FreeNotification for StandBook, CommonActionList, DefaultParent. Test: 4 scenarios (3 failed before, 2 with access violations) |
+| B6 3D parents, non-FMX owners | fixed (`903fc27`): lookup only with definitions, virtual GetParentWidth (3D layers: Width * Resolution, since LayerWidth is protected), ResolveParent with ESubjectStandError. Test: 4 scenarios (all failed before) |
 
 All 16 demos build for Win32 with Delphi 13 with no warnings.
 
@@ -148,3 +151,18 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
    duplication (B13).
 7. **AI agent skill** for TFrameStand, like the MARS skills (`mars-development`): the docs and
    `llms.txt` are a ready base.
+
+## Platform review (v.2.1)
+
+Done on request, before B6/B7, re-checking B1 and B15. Sources: `sourcemx` and `sourcetl` of Delphi 13.
+
+| Topic | Finding | How |
+|---|---|---|
+| One-shot timers destroyed in their own callback (B1) | Safe on Windows (callback loop breaks after the call), macOS and iOS (the NSTimer target is released, but `onTimer` touches no field after the call), Android (`DestroyTimer` only sets a flag, the runnable releases itself on the next run). It is the same path as `TTimer.Enabled := False` inside `OnTimer`. | source reading (FMX.Platform.Timer.*); Windows by tests |
+| Main-thread queue (`TThread.Queue`, `ForceQueue`) | All four platforms hook `WakeMainThread` and run `CheckSynchronize` from their event loop. | source reading (FMX.Platform.*) |
+| Destruction order: children before owned components (B15) | `TFmxObject.Destroy` (`DeleteChildren`, then inherited) is common FMX code: same on every platform. | source reading; Windows by tests |
+| ARC (Delphi 10.3, Android/iOS) | `TComponent.FFreeNotifies` holds strong references under AUTOREFCOUNT: Free would not destroy stands linked by FreeNotification, hence DisposeOf (`bab8120`). | source reading; ARC branches compile-checked with `-DAUTOREFCOUNT`, not run (no ARC compiler in Delphi 13) |
+| Linux (FMXLinux) | Not in the Delphi sources; TDelayedAction falls back to a thread + `TThread.Queue` when no `IFMXTimerService` is registered. | not verified |
+| Build | Runtime package builds for Win32, Win64, Android64, OSXARM64, iOSDevice64; design-time for Win32 and Win64x. | built with Delphi 13 |
+
+Recommendation: decide whether v.2.1 keeps Delphi 10.3 (ARC code paths that cannot be tested here) or raises the minimum to 10.4, which also removes the AUTOREFCOUNT branches (B12).

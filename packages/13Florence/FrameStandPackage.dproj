@@ -63,12 +63,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <DllSuffix>$(Auto)</DllSuffix>
-        <DCC_ObjOutput>..\..\lib\13Florence\cpp</DCC_ObjOutput>
-        <DCC_BpiOutput>..\..\lib\13Florence\cpp</DCC_BpiOutput>
         <DCC_HppOutputARM>true</DCC_HppOutputARM>
-        <DCC_HppOutput>..\..\lib\13Florence\cpp</DCC_HppOutput>
-        <DCC_BplOutput>..\..\lib\13Florence\bpl</DCC_BplOutput>
-        <DCC_DcpOutput>..\..\lib\13Florence\dcp</DCC_DcpOutput>
         <VerInfo_Locale>1040</VerInfo_Locale>
         <DCC_Description>TFrameStand and TFormStand Runtime Package</DCC_Description>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>

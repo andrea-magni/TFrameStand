@@ -69,7 +69,7 @@ TFrameStand is being added to the Smart Setup community server: until `tms insta
 | 11 Alexandria (11.1 or later) | `packages\11Alexandria\FrameStand.groupproj` |
 | 10.4 Sydney | `packages\104Sydney\FrameStand.groupproj` |
 
-Each group has the runtime package `FrameStandPackage` and the design-time package `dclFrameStandPackage`. The packages use `{$LIBSUFFIX AUTO}`, so the BPL file name carries the IDE version (for example `dclFrameStandPackage370.bpl` for Delphi 13, whose package version is 370). The compiled files go to `lib\<folder>` (for example `lib\13Florence`), so the packages of different Delphi versions do not overwrite each other.
+Each group has the runtime package `FrameStandPackage` and the design-time package `dclFrameStandPackage`. The packages use `{$LIBSUFFIX AUTO}`, so the BPL file name carries the IDE version (for example `dclFrameStandPackage370.bpl` for Delphi 13, whose package version is 370). The compiled units go to `lib\<folder>\dcu\<platform>\<config>` (for example `lib\13Florence\dcu\Win32\Release`), BPL and DCP files to the default folders of the IDE (`Bpl` and `Dcp` under `Public Documents\Embarcadero\Studio\<version>`, with a subfolder for each platform but Win32), so the packages of different Delphi versions and platforms do not overwrite each other.
 
 ::: tip Upgrading from v.2.1 or earlier
 Up to v.2.1 the package names carried the Delphi version (`FrameStandPackage_13`, `dclFrameStandPackage_13`, ...). Before installing the new packages, remove the old design-time package in **Component ▸ Install Packages**. Projects built with runtime packages must list `FrameStandPackage` instead of `FrameStandPackage_XX`.

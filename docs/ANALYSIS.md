@@ -38,7 +38,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B9 VisibleFrames history | fixed (`b5b736d`): Hide removes the *last* entry, Close removes all; duplicates are intended (Show/Hide history). FMX console test, 12 checks (6 fail on the previous code) |
 | B11 locale / uninitialized record | fixed (`690e5d6`), console test |
 | E3 | not a defect: FMX style lookups ignore case (`TStyleIndexer` lowercases names and lookups), so `'viewport3d'` finds `viewport3D`. Verified with Delphi 13: the `stand3D` stand shows and gets its camera |
-| P7 | done (not released yet): one folder per Delphi version with the same package names, output in `lib\<folder>` (it also fixes the setup overwriting the units of one Delphi version with another), `tmsbuild.yaml` for TMS Smart Setup. The 11.0 packages are dropped |
+| P7 | done (not released yet): one folder per Delphi version with the same package names, DCU output in `lib\<folder>\dcu`, BPL/DCP in the IDE default folders (it also fixes the setup overwriting the units of one Delphi version with another, and Win64 overwriting the Win32 BPL/DCP); build groups in the `.groupproj` (the setup builds only what they list: without them the v.2.1 setup found no RAD Studio version), `tmsbuild.yaml` for TMS Smart Setup. The 11.0 packages are dropped |
 
 ## Status v.2.1 (released)
 

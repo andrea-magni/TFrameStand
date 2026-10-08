@@ -45,4 +45,18 @@
         <CallTarget Targets="FrameStandPackage:Make;dclFrameStandPackage:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+    <ItemGroup Condition="'$(BuildGroup)'=='ALL'">
+        <BuildGroupProject Include="FrameStandPackage.dproj">
+            <ProjectGuid>{C9B48BE1-659A-405C-9CC0-EE25C95BE3A8}</ProjectGuid>
+            <Configurations>Release</Configurations>
+            <Platforms>Win32;Win64</Platforms>
+            <Enabled>True</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="dclFrameStandPackage.dproj">
+            <ProjectGuid>{FA0F5B90-B67C-420B-AF4D-4AA3622FB029}</ProjectGuid>
+            <Configurations>Release</Configurations>
+            <Platforms>Win32</Platforms>
+            <Enabled>True</Enabled>
+        </BuildGroupProject>
+    </ItemGroup>
 </Project>

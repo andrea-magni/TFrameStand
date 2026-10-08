@@ -193,6 +193,14 @@
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>TFRAMESTAND</ResourceId>
         </RcItem>
+        <RcItem Include="..\..\media\FrameStandSplash48.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>FRAMESTANDSPLASH48PNG</ResourceId>
+        </RcItem>
+        <RcItem Include="..\..\media\FrameStandSplash24.bmp">
+            <ResourceType>BITMAP</ResourceType>
+            <ResourceId>FRAMESTANDSPLASH24BMP</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

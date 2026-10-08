@@ -2,6 +2,12 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
+## Unreleased
+
+**IDE**
+- TFrameStand is listed in the About box of RAD Studio and on its splash screen, with its version and license (as MARS-Curiosity).
+- The components are in the **TFrameStand - Andrea Magni** page of the Tool Palette (it was **Andrea Magni**).
+
 ## v.2.2 — October 2026
 
 Packaging release: setup, TMS Smart Setup, one package folder per Delphi version. No changes to the units.

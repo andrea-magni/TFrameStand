@@ -14,7 +14,7 @@
 
 | Unit | Contents |
 |---|---|
-| `ComponentRegistration` | registers `TFrameStand` and `TFormStand` in the **Andrea Magni** palette page. |
+| `ComponentRegistration` | registers `TFrameStand` and `TFormStand` in the **TFrameStand - Andrea Magni** palette page. |
 | `FrameStand.Editors`, `FormStand.Editors` | component editors (double-click). |
 | `FrameStand.Editors.Forms.Test`, `FormStand.Editors.Forms.Test` | the test windows of the editors. |
 | `Frames.Test`, `Forms.Test` | the sample subjects shown by the editors. |

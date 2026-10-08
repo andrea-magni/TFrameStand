@@ -15,7 +15,7 @@ The GetIt version is the latest release. Installing from the repository gives yo
 Each [GitHub release](https://github.com/andrea-magni/TFrameStand/releases/latest) has a setup, `TFrameStand_<version>_Setup.exe`, that installs the library in one or more RAD Studio versions found on the computer (10.4 Sydney to 13 Florence). Close RAD Studio, run the setup, choose the folder and the RAD Studio versions. The setup:
 
 - copies the library (sources, packages, demos, tests, documentation sources) to the folder you choose, by default `Documents\TFrameStand`;
-- builds the runtime and design-time packages with the compiler of each selected RAD Studio version, and installs the design-time package (the components appear in the **Andrea Magni** page of the Tool Palette);
+- builds the runtime and design-time packages with the compiler of each selected RAD Studio version, and installs the design-time package (the components appear in the **TFrameStand - Andrea Magni** page of the Tool Palette);
 - defines the IDE environment variable `TFRAMESTANDDIR` and adds `$(TFRAMESTANDDIR)\source` to the library path of **every platform** configured in the IDE: Windows (Win32, Win64, Win64x, WinArm64EC), Android, iOS, macOS and Linux;
 - uninstalls a previous version installed by the setup, and tries to remove a TFrameStand installed with GetIt in the same RAD Studio versions (if GetIt still lists it afterwards, uninstall it from GetIt: two copies of the components cannot be installed together).
 
@@ -57,7 +57,7 @@ TFrameStand is being added to the Smart Setup community server: until `tms insta
 1. Clone or download the repository from [GitHub](https://github.com/andrea-magni/TFrameStand).
 2. Open the package group for your Delphi version from the `packages` folder, for example `packages\13Florence\FrameStand.groupproj` for Delphi 13 Florence.
 3. Build both packages of the group: the runtime package `FrameStandPackage` and the design-time package `dclFrameStandPackage`.
-4. Right-click the design-time package and choose **Install**. `TFrameStand` and `TFormStand` appear in the **Andrea Magni** page of the Tool Palette.
+4. Right-click the design-time package and choose **Install**. `TFrameStand` and `TFormStand` appear in the **TFrameStand - Andrea Magni** page of the Tool Palette.
 5. Add the `source` folder to the library path (**Tools ▸ Options ▸ Language ▸ Delphi ▸ Library**), for **each platform** you target (Windows 32/64, Android, iOS, macOS, Linux).
 
 ## Supported Delphi versions

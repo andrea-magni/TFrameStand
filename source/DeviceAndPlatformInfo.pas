@@ -86,6 +86,7 @@ var
   LContext: TForm;
   LDeviceName: string;
 begin
+  Result := Default(TDeviceAndPlatformInfo);
   LContext := AForm;
   if not Assigned(LContext) and Assigned(Application.MainForm) then
     LContext := Application.MainForm as TForm;

@@ -102,7 +102,10 @@ begin
   if Length(LTokens) = 2 then
   begin
     Result.Name := LTokens[0].Trim;
-    Result.MaxWidth := LTokens[1].Substring(1, Length(LTokens[1])-2).ToSingle;
+    // invariant format ('768.00'); a decimal comma is accepted too
+    Result.MaxWidth := StrToFloat(
+      LTokens[1].Substring(1, Length(LTokens[1])-2).Replace(',', '.')
+    , TFormatSettings.Invariant);
   end;
 end;
 
@@ -118,7 +121,7 @@ end;
 
 function TBreakpoint.ToString: string;
 begin
-  Result := Format('%s (%.2f)', [Name, MaxWidth]);
+  Result := Format('%s (%.2f)', [Name, MaxWidth], TFormatSettings.Invariant);
 end;
 
 { TResponsiveOption }

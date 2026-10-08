@@ -61,7 +61,13 @@ In the target, an empty class, stand name or parent means "keep the requested on
 
 ## When the substitution happens
 
-The lookup runs in `New` (not in `Use`, which receives an already created frame) and uses the width of the parent **at that moment**. A frame already on screen is not replaced when the window is resized: if you want that, close it and create it again when the breakpoint changes, as the `Responsive` demo does.
+The lookup runs in `New` (not in `Use`, which receives an already created frame), only when at least one definition exists, and uses the width of the parent **at that moment**:
+
+- `Width` of controls and forms (`TForm`, `TForm3D`);
+- the width in pixels of the 2D content of 3D layers (`TLayer3D`...: `Width * Resolution`, or `Width` with the `Screen` projection);
+- any other `Width` property, read through RTTI.
+
+Override `GetParentWidth` in a descendant of the component for other kinds of parents. A frame already on screen is not replaced when the window is resized: if you want that, close it and create it again when the breakpoint changes, as the `Responsive` demo does.
 
 ```pascal
 procedure TMainForm.FormResize(Sender: TObject);

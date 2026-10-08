@@ -313,9 +313,7 @@ var
   LParent: TFmxObject;
   LStandName: string;
 begin
-  LParent := AParent;
-  if not Assigned(LParent) then
-    LParent := GetDefaultParent;
+  LParent := ResolveParent(AParent);
   LStandName := AStandStyleName;
   LFrame := GetFrameClass(AFrameClassName, LParent, LStandName).Create(nil);
   try
@@ -334,9 +332,7 @@ var
   LParent: TFmxObject;
   LStandName: string;
 begin
-  LParent := AParent;
-  if not Assigned(LParent) then
-    LParent := GetDefaultParent;
+  LParent := ResolveParent(AParent);
   LStandName := AStandStyleName;
   LFrame := T(GetFrameClass<T>(LParent, LStandName).Create(nil));
   try
@@ -393,9 +389,7 @@ var
   LParent: TFmxObject;
 begin
   LStandStyleName := GetStandStyleName(AStandStyleName);
-  LParent := AParent;
-  if not Assigned(LParent) then
-    LParent := GetDefaultParent;
+  LParent := ResolveParent(AParent);
 
   Result := TFrameInfo<T>.Create(Self, AFrame, LParent, LStandStyleName);
   try

@@ -16,6 +16,8 @@ The other stand of the demo, `stand3D`, uses the `TLayer3D` itself as `container
 
 The frame is placed, as usual, in the `container` element, which here is inside the `TLayer3D`: it keeps working as a normal 2D frame, with mouse and touch input.
 
+A 3D object can also be the **parent** of an ordinary stand: `FrameStand1.New<TMyFrame>(Layer3D1)` puts the stand on the 2D surface of a `TLayer3D`, and a `TFrameStand` dropped on a `TForm3D` uses the form as default parent.
+
 ## Wiring the scene
 
 Some 3D settings cannot be expressed in the style and must be applied to each clone. The `OnBeforeShow` event of the component is the place for them, for example to make the viewport use the camera of the stand:

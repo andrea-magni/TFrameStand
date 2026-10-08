@@ -40,7 +40,9 @@ The **parent** is the FMX object the stand is added to: any `TFmxObject`, typica
 
 1. the `AParent` argument, when assigned;
 2. the `DefaultParent` property;
-3. the `Owner` of the component (the form you dropped it on).
+3. the `Owner` of the component (the form you dropped it on), when it is a FMX object.
+
+Any `TFmxObject` works as parent, 3D objects such as a `TLayer3D` or a `TForm3D` included. If no parent can be found (the component is owned by a data module, or by nothing), `New` and `Use` raise an `ESubjectStandError`: pass the parent or set `DefaultParent`.
 
 ## Info
 

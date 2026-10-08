@@ -224,6 +224,13 @@ type
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetDefaultParent: TFmxObject; virtual;
+    /// <summary>The parent for a new stand: AParent, else DefaultParent, else
+    /// the owner when it is a FMX object. Raises ESubjectStandError if none.</summary>
+    function ResolveParent(const AParent: TFmxObject): TFmxObject;
+    /// <summary>Width (in logical pixels) used for the responsive lookup:
+    /// Width of controls and forms, LayerWidth of 3D layers, else a Width
+    /// property found through RTTI. Override for other kinds of parents.</summary>
+    function GetParentWidth(const AParent: TFmxObject; out AWidth: Single): Boolean; virtual;
     procedure SetStandBook(const AValue: TStyleBook);
     procedure SetCommonActionList(const AValue: TActionList);
     procedure SetDefaultParent(const AValue: TFmxObject);
@@ -542,12 +549,14 @@ var
   FTarget: TResponsiveDefinition;
   LWidth: Single;
 begin
-  if (AParent is TControl) then
-    LWidth := TControl(AParent).Width
-  else if (AParent is TForm) then
-    LWidth := TForm(AParent).Width
- else
-    raise Exception.Create('Error in DoResponsiveLookup: cannot determine parent Width');
+  // nothing to look up: any kind of parent is fine
+  if not FResponsive.HasDefinitions then
+    Exit;
+
+  if not GetParentWidth(AParent, LWidth) then
+    raise ESubjectStandError.CreateFmt('%s: responsive definitions need the width '
+      + 'of the parent, and a %s has none (override GetParentWidth to provide it)'
+    , [ClassName, AParent.ClassName]);
 
   FTarget := FResponsive.Lookup(
     TResponsiveDefinition.Create(ASubjectClass, AStandStyleName, AParent)
@@ -598,8 +607,71 @@ function TSubjectStand.GetDefaultParent: TFmxObject;
 begin
   if Assigned(FDefaultParent) then
     Result := FDefaultParent
+  else if Owner is TFmxObject then
+    Result := TFmxObject(Owner)
   else
-    Result := Self.Owner as TFmxObject;
+    Result := nil; // e.g. owned by a data module
+end;
+
+function TSubjectStand.ResolveParent(const AParent: TFmxObject): TFmxObject;
+var
+  LOwnerName: string;
+begin
+  Result := AParent;
+  if not Assigned(Result) then
+    Result := GetDefaultParent;
+  if not Assigned(Result) then
+  begin
+    LOwnerName := 'none';
+    if Assigned(Owner) then
+      LOwnerName := Owner.ClassName;
+    raise ESubjectStandError.CreateFmt('%s: no parent for the stand. Pass AParent, '
+      + 'set DefaultParent, or let a FMX object (a form, a frame) own the component '
+      + '(owner: %s)', [ClassName, LOwnerName]);
+  end;
+end;
+
+function TSubjectStand.GetParentWidth(const AParent: TFmxObject; out AWidth: Single): Boolean;
+
+  function ReadNumber(const AType: TRttiType; const AName: string; out ANumber: Single): Boolean;
+  var
+    LProperty: TRttiProperty;
+  begin
+    LProperty := AType.GetProperty(AName);
+    Result := Assigned(LProperty) and LProperty.IsReadable
+      and (LProperty.PropertyType.TypeKind in [tkInteger, tkInt64, tkFloat]);
+    if Result then
+      if LProperty.PropertyType.TypeKind = tkFloat then
+        ANumber := LProperty.GetValue(AParent).AsExtended
+      else
+        ANumber := LProperty.GetValue(AParent).AsInt64;
+  end;
+
+var
+  LType: TRttiType;
+  LProjection: TRttiProperty;
+  LResolution: Single;
+begin
+  Result := True;
+  if AParent is TControl then
+    AWidth := TControl(AParent).Width
+  else if AParent is TCommonCustomForm then // TForm, TForm3D
+    AWidth := TCommonCustomForm(AParent).Width
+  else
+  begin
+    LType := TRttiContext.Create.GetType(AParent.ClassType);
+    Result := ReadNumber(LType, 'Width', AWidth);
+    // 3D layers (TLayer3D, TTextLayer3D...): Width is in 3D units, their 2D
+    // content is Width * Resolution pixels wide, or Width pixels with the
+    // Screen projection (TAbstractLayer3D.LayerWidth, which is protected)
+    if Result and ReadNumber(LType, 'Resolution', LResolution) then
+    begin
+      LProjection := LType.GetProperty('Projection');
+      if not (Assigned(LProjection)
+        and SameText(LProjection.GetValue(AParent).ToString, 'Screen')) then
+        AWidth := AWidth * LResolution;
+    end;
+  end;
 end;
 
 function TSubjectStand.GetResponsiveBreakpoint(const AName: string): TBreakpoint;

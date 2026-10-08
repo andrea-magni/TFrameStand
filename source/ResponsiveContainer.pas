@@ -70,6 +70,8 @@ type
 
     procedure AddBreakpoint(const AWidth: Single; const AName: string);
     procedure SetBreakpoint(const AWidth: Single; const AName: string);
+    /// <summary>True when at least one definition exists.</summary>
+    function HasDefinitions: Boolean;
 
     property Breakpoints: TBreakpoints read FBreakpoints;
   end;
@@ -265,6 +267,11 @@ begin
     if Assigned(LMatch.Parent) then
       Result.Parent := LMatch.Parent;
   end;
+end;
+
+function TResponsiveContainer.HasDefinitions: Boolean;
+begin
+  Result := FOptions.Count > 0;
 end;
 
 procedure TResponsiveContainer.SetBreakpoint(const AWidth: Single;

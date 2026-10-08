@@ -1,1 +1,36 @@
+# Line endings: stored as LF in the repository, checked out (and exported in
+# the GitHub ZIP / GetIt archives) as CRLF for the Delphi sources and
+# projects, whatever the core.autocrlf setting of the clone.
+* text=auto
+
+*.pas       text eol=crlf
+*.Pas       text eol=crlf
+*.dpr       text eol=crlf
+*.dpk       text eol=crlf
+*.dproj     text eol=crlf
+*.groupproj text eol=crlf
+*.deployproj text eol=crlf
+*.fmx       text eol=crlf
+*.dfm       text eol=crlf
+*.vlb       text eol=crlf
+*.style     text eol=crlf
+*.rc        text eol=crlf
+*.hpp       text eol=crlf
+*.inc       text eol=crlf
+*.cmd       text eol=crlf
+*.bat       text eol=crlf
+
+*.res       binary
+*.dres      binary
+*.bpl       binary
+*.dcp       binary
+*.dcu       binary
+*.bpi       binary
+*.lib       binary
+*.png       binary
+*.PNG       binary
+*.bmp       binary
+*.gif       binary
+*.ico       binary
+
 lib/* linguist-vendored

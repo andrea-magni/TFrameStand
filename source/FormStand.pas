@@ -336,12 +336,7 @@ begin
   if Assigned(LForm) and FFormInfos.TryGetValue(LForm, LInfo) then
   begin
     FFormInfos.Remove(LForm);
-    {$IFDEF AUTOREFCOUNT}
-      LInfo.DisposeOf;
-      LInfo := nil;
-    {$ELSE}
-      LInfo.Free;
-    {$ENDIF}
+    LInfo.Free;
   end;
 end;
 
@@ -502,14 +497,7 @@ end;
 procedure TFormInfo<T>.FreeFormContainer;
 begin
   if IsUsable(FFormContainer) then
-  begin
-    {$IFDEF AUTOREFCOUNT}
-      FFormContainer.DisposeOf;
-      FFormContainer := nil;
-    {$ELSE}
-      FreeAndNil(FFormContainer);
-    {$ENDIF}
-  end;
+    FreeAndNil(FFormContainer);
 end;
 
 
@@ -522,12 +510,7 @@ begin
   if FormIsOwned and IsUsable(FForm) then
   begin
     // the form owns its controls: they go with it
-    {$IFDEF AUTOREFCOUNT}
-      FForm.DisposeOf;
-      FForm := nil;
-    {$ELSE}
-      FreeAndNil(FForm);
-    {$ENDIF}
+    FreeAndNil(FForm);
   end
   else if IsUsable(FForm) and IsUsable(FFormContainer) then
     // a form adopted with Use gets its controls back

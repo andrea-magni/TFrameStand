@@ -27,12 +27,11 @@ The GetIt version is the latest release. Installing from the repository gives yo
 | 11.1+ Alexandria | `FrameStand_11_1.groupproj` | `FrameStandPackage_11_1` | `dclFrameStandPackage_11_1` |
 | 11.0 Alexandria | `FrameStand_11.groupproj` | `FrameStandPackage_11` | `dclFrameStandPackage_11` |
 | 10.4 Sydney | `FrameStand_10_4.groupproj` | `FrameStandPackage_10_4` | `dclFrameStandPackage_10_4` |
-| 10.3 Rio | `FrameStand_10_3.groupproj` | `FrameStandPackage_10_3` | `dclFrameStandPackage_10_3` |
 
 The packages use `{$LIBSUFFIX AUTO}`, so the BPL file name carries the IDE version (for example `dclFrameStandPackage_13370.bpl` for Delphi 13, whose package version is 370).
 
 ::: warning Older versions
-The repository still contains packages for XE8, 10 Seattle, 10.1 Berlin and 10.2 Tokyo, but the current source uses inline variable declarations, which require Delphi 10.3 Rio or later. For those versions use v.1.8 or an earlier release (inline variables arrived in v.1.9).
+Delphi 10.4 Sydney is the minimum: the units stop the compilation with a clear message on older compilers. For Delphi 10.3 Rio use [v.2.0.1](https://github.com/andrea-magni/TFrameStand/releases/tag/v.2.0.1), for XE8 to 10.2 Tokyo use [v.1.8](https://github.com/andrea-magni/TFrameStand/releases/tag/v.1.8).
 :::
 
 ## Without packages

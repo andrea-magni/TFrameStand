@@ -31,7 +31,7 @@ Each subject shown gets an **info** object (`TFrameInfo<T>` / `TFormInfo<T>`) th
 
 ## Requirements
 
-- Delphi with FireMonkey. Packages are provided for each Delphi version from 10.3 Rio to Delphi 13 Florence (older package files for XE8–10.2 are still in the repository, see [Installation](/guide/installation#supported-delphi-versions)).
+- Delphi 10.4 Sydney or later, with FireMonkey. Packages are provided for each version up to Delphi 13 Florence; older Delphi versions can use older releases (see [Installation](/guide/installation#supported-delphi-versions)).
 - Any FMX platform: Windows, macOS, iOS, Android, Linux (FMXLinux).
 
 ## Learn more

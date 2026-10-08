@@ -37,7 +37,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B8 deprecated aliases streamed | fixed (`afe2905`), streaming test (old forms still load) |
 | B9 VisibleFrames history | fixed (`b5b736d`): Hide removes the *last* entry, Close removes all; duplicates are intended (Show/Hide history). FMX console test, 12 checks (6 fail on the previous code) |
 | B11 locale / uninitialized record | fixed (`690e5d6`), console test |
-| E3, E4, P7, B10, B12, B13 | open: v.2.1 |
+| E3, E4, P7, B10, B13 | open: v.2.1 |
 
 ## Status v.2.1 (in progress)
 
@@ -165,4 +165,4 @@ Done on request, before B6/B7, re-checking B1 and B15. Sources: `sourcemx` and 
 | Linux (FMXLinux) | Not in the Delphi sources; TDelayedAction falls back to a thread + `TThread.Queue` when no `IFMXTimerService` is registered. | not verified |
 | Build | Runtime package builds for Win32, Win64, Android64, OSXARM64, iOSDevice64; design-time for Win32 and Win64x. | built with Delphi 13 |
 
-Recommendation: decide whether v.2.1 keeps Delphi 10.3 (ARC code paths that cannot be tested here) or raises the minimum to 10.4, which also removes the AUTOREFCOUNT branches (B12).
+Decision (2026-10-08): minimum raised to Delphi 10.4 Sydney. AUTOREFCOUNT branches removed (B12), packages for XE8 to 10.3 removed, `{$MESSAGE FATAL}` on older compilers in `SubjectStand`. The ARC row above is history: no supported compiler uses ARC.

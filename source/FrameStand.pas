@@ -367,12 +367,7 @@ begin
   if Assigned(LFrame) and FFrameInfos.TryGetValue(LFrame, LInfo) then
   begin
     FFrameInfos.Remove(LFrame);
-    {$IFDEF AUTOREFCOUNT}
-      LInfo.DisposeOf;
-      LInfo := nil;
-    {$ELSE}
-      LInfo.Free;
-    {$ENDIF}
+    LInfo.Free;
   end;
 end;
 

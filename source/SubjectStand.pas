@@ -6,6 +6,10 @@
 *)
 unit SubjectStand;
 
+{$IF CompilerVersion < 34.0}
+  {$MESSAGE FATAL 'TFrameStand requires Delphi 10.4 Sydney or later'}
+{$ENDIF}
+
 interface
 
 uses
@@ -1426,12 +1430,9 @@ begin
     FStand.Align := TAlignLayout.Contents;
     FStand.StyleName := 'container';
   end;
-{$IF compilerversion >= 31}
-  // 10.1 Berlin and later
   // See https://github.com/andrea-magni/TSubjectStand/issues/12
   // also see https://quality.embarcadero.com/browse/RSP-14806
   FStand.Align := TAlignLayout.Contents;
-{$ENDIF}
   FStand.Visible := False;
 end;
 
@@ -1486,14 +1487,8 @@ end;
 
 procedure TSubjectInfo.DisposeComponent(const AComponent: TComponent);
 begin
-  // drop the free notification first: under ARC (mobile, Delphi 10.3) the
-  // notification lists hold strong references
   AComponent.RemoveFreeNotification(FSubjectStand);
-  {$IFDEF AUTOREFCOUNT}
-  AComponent.DisposeOf;
-  {$ELSE}
   AComponent.Free;
-  {$ENDIF}
 end;
 
 procedure TSubjectInfo.TeardownStand;
@@ -1513,12 +1508,7 @@ begin
       TThread.ForceQueue(nil
       , procedure
         begin
-          {$IFDEF AUTOREFCOUNT}
-          LStand.DisposeOf;
-          LStand := nil;
-          {$ELSE}
           LStand.Free;
-          {$ENDIF}
         end
       );
     end

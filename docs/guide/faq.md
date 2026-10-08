@@ -48,4 +48,4 @@ The units are Delphi code and can be used from C++Builder projects through the p
 
 ### Is there a Delphi version requirement?
 
-The current source needs Delphi 10.3 Rio or later. See [Installation](/guide/installation#supported-delphi-versions).
+Delphi 10.4 Sydney or later. Older versions can use older releases: see [Installation](/guide/installation#supported-delphi-versions).

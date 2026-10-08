@@ -417,6 +417,7 @@ procedure TSubjectStand.SetResponsiveBreakpoints(
 begin
   Responsive.Breakpoints.Clear;
   Responsive.Breakpoints.AddRange(ABreakpoints);
+  Responsive.Breakpoints.Sort;
 end;
 
 { TSubjectInfo }

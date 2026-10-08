@@ -13,9 +13,9 @@ A breakpoint is a name and a maximum width. The component starts with four:
 | `md` | 992 |
 | `lg` | 1200 |
 
-The current breakpoint for a width is the first one, in list order, whose `MaxWidth` is greater than or equal to the width; widths beyond the last breakpoint fall in the last one.
+The current breakpoint for a width is the smallest one whose `MaxWidth` is greater than or equal to the width; widths beyond the largest breakpoint fall in the largest one.
 
-Define your own in ascending order:
+Define your own:
 
 ```pascal
 FrameStand1.Responsive.Breakpoints.Clear;
@@ -25,9 +25,7 @@ FrameStand1.Responsive.AddBreakpoint(720, 'md');
 FrameStand1.Responsive.AddBreakpoint(1080, 'lg');
 ```
 
-::: warning
-The breakpoints must stay in ascending order of width: the list is not sorted automatically. `Responsive.SetBreakpoint`, which replaces a breakpoint by name, appends it at the end of the list, so use it only for the largest breakpoint, or rebuild the list with `Clear` and `AddBreakpoint`.
-:::
+The list is kept sorted by width (`AddBreakpoint` and `SetBreakpoint`, which replaces a breakpoint by name, sort it), and the comparisons between breakpoints use their widths, so the order in which you add them does not matter.
 
 `Responsive.CurrentBreakpoint(AWidth)` tells you the breakpoint for a width, and `Responsive.Breakpoints.ByName('md').MaxWidth` reads a threshold back.
 

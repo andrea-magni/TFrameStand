@@ -157,9 +157,10 @@ begin
   begin
     LIndexBreakpoint := AAvailableBreakpoints.IndexOfBP(Breakpoint);
     LIndexABreakpoint := AAvailableBreakpoints.IndexOfBP(ABreakpoint);
+    // compare widths, not positions: the list may not be sorted
     Result := (LIndexBreakpoint <> -1)
           and (LIndexABreakpoint <> -1)
-          and (LIndexABreakpoint >= LIndexBreakpoint);
+          and (AAvailableBreakpoints[LIndexABreakpoint].MaxWidth >= AAvailableBreakpoints[LIndexBreakpoint].MaxWidth);
   end;
 end;
 
@@ -175,6 +176,7 @@ procedure TResponsiveContainer.AddBreakpoint(const AWidth: Single;
   const AName: string);
 begin
   Breakpoints.Add(TBreakpoint.Create(AName, AWidth));
+  Breakpoints.Sort;
 end;
 
 constructor TResponsiveContainer.Create;
@@ -188,23 +190,27 @@ end;
 function TResponsiveContainer.CurrentBreakpoint(
   const AWidth: Single): TBreakpoint;
 var
-  LIndex: Integer;
+  LBreakpoint, LLargest: TBreakpoint;
+  LFound: Boolean;
 begin
+  // the smallest breakpoint whose MaxWidth is >= AWidth (independent of the
+  // order of the list); beyond the largest one, the largest one
   Result.Clear;
-  for LIndex := 0 to Breakpoints.Count-1 do
-    if AWidth <= Breakpoints[LIndex].MaxWidth then
-    begin
-      Result := Breakpoints[LIndex];
-      Break;
-    end;
-
-  if Result.IsEmpty and (Breakpoints.Count > 0) then
+  LLargest.Clear;
+  LFound := False;
+  for LBreakpoint in Breakpoints do
   begin
-    if AWidth <= Breakpoints.First.MaxWidth then
-      Result := Breakpoints.First
-    else if AWidth > Breakpoints.Last.MaxWidth then
-      Result := Breakpoints.Last;
+    if (AWidth <= LBreakpoint.MaxWidth) and ((not LFound) or (LBreakpoint.MaxWidth < Result.MaxWidth)) then
+    begin
+      Result := LBreakpoint;
+      LFound := True;
+    end;
+    if LLargest.IsEmpty or (LBreakpoint.MaxWidth > LLargest.MaxWidth) then
+      LLargest := LBreakpoint;
   end;
+
+  if not LFound then
+    Result := LLargest;
 end;
 
 procedure TResponsiveContainer.Define(const ASourceDef,
@@ -267,6 +273,7 @@ begin
   if LIndex <> -1 then
     Breakpoints.Delete(LIndex);
   Breakpoints.Add(TBreakpoint.Create(AName, AWidth));
+  Breakpoints.Sort;
 end;
 
 { TBreakpoints }
@@ -287,15 +294,17 @@ begin
     TComparer<TBreakpoint>.Construct(
       function (const Left, Right: TBreakpoint): Integer
       begin
+        // ascending MaxWidth
         Result := 0;
-        if Left.MaxWidth > Right.MaxWidth then
+        if Left.MaxWidth < Right.MaxWidth then
           Result := -1
-        else if Left.MaxWidth < Right.MaxWidth then
+        else if Left.MaxWidth > Right.MaxWidth then
           Result := 1;
       end
     )
   );
   AddRange(ABreakpoints);
+  Sort;
 end;
 
 function TBreakpoints.IndexOfBP(const AName: string): Integer;

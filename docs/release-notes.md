@@ -7,6 +7,7 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 **Delphi 10.4 Sydney is now the minimum version.** The packages for XE8 to 10.3 are removed, together with the code for the ARC compilers (Android and iOS up to 10.3), which could no longer be tested. Delphi 10.3 users can stay on v.2.0.1.
 
 **Quality**
+- `TFrameStand` and `TFormStand` share their implementation through a generic base class, `TSubjectStandBase<S, I>` (about 140 duplicated lines removed). Public API unchanged; for descendants, the protected fields `FFrameInfos` / `FFormInfos` are now `FInfos`, and `CloseAll`, `CloseAllExcept`, `HideAndCloseAll`, `HideAndCloseAllExcept` are implemented once in `TSubjectStand`.
 - A DUnitX test suite (`tests\`, 54 tests) and a build script (`build.cmd`) that builds packages, demos and tests for a Delphi version and runs the tests. See [Building & Testing](/guide/building).
 
 **Runtime**

@@ -47,31 +47,17 @@ type
   TOnGetFrameClassEvent = procedure (const ASender: TFrameStand; var AParent: TFmxObject;
     var AStandStyleName: string; var AFrameClass: TFrameClass) of object;
 
-  TFrameStand = class(TSubjectStand)
+  TFrameStand = class(TSubjectStandBase<TFrame, TFrameInfo<TFrame>>)
   private
     FOnGetFrameClass: TOnGetFrameClassEvent;
-    FVisibleFrames : TList<TFrame>;
   protected
-    FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
-    function GetCount: Integer; override;
-    function GetSubjectInfos: TArray<TSubjectInfo>; override;
     function GetFrameClass<T: TFrame>(var AParent: TFmxObject;
       var AStandStyleName: string): TFrameClass; overload;
     function GetFrameClass(const AClassName: string; var AParent: TFmxObject;
       var AStandStyleName: string): TFrameClass; overload;
-    procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
-    procedure DoBeforeShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
-    procedure DoClose(const ASubject: TFmxObject); override;
   public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-
     function LastShownFrame: TFrame;
-    procedure Remove(ASubject: TSubject); override;
-    procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
-    procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
-    procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; override;
-    procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
+    function GetVisibleFrames: TList<TFrame>;
 
     function FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>; overload;
     function FrameInfo(const AFrameClass: TFrameClass): TFrameInfo<TFrame>; overload;
@@ -96,8 +82,8 @@ type
       const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil;
       const AConfigFIProc: TProc<TFrameInfo<T>> = nil): TFrameInfo<T>;
 
-    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FFrameInfos;
-    property VisibleFrames: TList<TFrame> read FVisibleFrames;
+    property FrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>> read FInfos;
+    property VisibleFrames: TList<TFrame> read GetVisibleFrames;
   published
     property OnGetSubjectClass: TOnGetFrameClassEvent read FOnGetFrameClass write FOnGetFrameClass;
   end;
@@ -106,99 +92,9 @@ implementation
 
 { TFrameStand }
 
-procedure TFrameStand.CloseAll(const ARestrictTo: TArray<TClass>);
-var
-  LFrameInfo: TFrameInfo<TFrame>;
-  LFrameInfos: TArray<TFrameInfo<TFrame>>;
-  LConsiderRestrictions: Boolean;
+function TFrameStand.FrameInfo(const AFrameClass: TFrameClass): TFrameInfo<TFrame>;
 begin
-  LFrameInfos := FFrameInfos.Values.ToArray;
-  LConsiderRestrictions := Length(ARestrictTo) > 0;
-
-  for LFrameInfo in LFrameInfos do
-  begin
-    if (not LConsiderRestrictions) or ClassInArray(LFrameInfo.Frame, ARestrictTo) then
-      LFrameInfo.Close;
-  end;
-end;
-
-procedure TFrameStand.CloseAllExcept(const AExceptions: TArray<TClass>);
-var
-  LFrameInfo: TFrameInfo<TFrame>;
-  LFrameInfos: TArray<TFrameInfo<TFrame>>;
-  LConsiderExceptions: Boolean;
-begin
-  LFrameInfos := FFrameInfos.Values.ToArray;
-  LConsiderExceptions := Length(AExceptions) > 0;
-
-  for LFrameInfo in LFrameInfos do
-  begin
-    if (not LConsiderExceptions) or not ClassInArray(LFrameInfo.Frame, AExceptions) then
-      LFrameInfo.Close;
-  end;
-end;
-
-constructor TFrameStand.Create(AOwner: TComponent);
-begin
-  inherited;
-  FFrameInfos := TObjectDictionary<TFrame, TFrameInfo<TFrame>>.Create();
-  FVisibleFrames := TList<TFrame>.Create;
-end;
-
-destructor TFrameStand.Destroy;
-var
-  LKey: TFrame;
-begin
-  for LKey in FFrameInfos.Keys.ToArray do
-    Remove(LKey);
-  FreeAndNil(FFrameInfos);
-  FreeAndNil(FVisibleFrames);
-
-  inherited;
-end;
-
-procedure TFrameStand.DoAfterHide(const ASender: TSubjectStand;
-  const ASubjectInfo: TSubjectInfo);
-var
-  LIndex: Integer;
-begin
-  inherited;
-  // VisibleFrames tracks the Show/Hide history: a frame shown twice is listed twice,
-  // a Hide takes back its most recent Show
-  LIndex := FVisibleFrames.LastIndexOf(ASubjectInfo.Subject as TFrame);
-  if LIndex <> -1 then
-    FVisibleFrames.Delete(LIndex);
-end;
-
-procedure TFrameStand.DoBeforeShow(const ASender: TSubjectStand;
-  const ASubjectInfo: TSubjectInfo);
-begin
-  inherited;
-  FVisibleFrames.Add(ASubjectInfo.Subject as TFrame);
-end;
-
-procedure TFrameStand.DoClose(const ASubject: TFmxObject);
-begin
-  // the subject is going away: remove every entry, not just one
-  while FVisibleFrames.Remove(ASubject as TFrame) <> -1 do
-    ;
-  inherited;
-end;
-
-function TFrameStand.FrameInfo(
-  const AFrameClass: TFrameClass): TFrameInfo<TFrame>;
-var
-  LPair: TPair<TFrame, TFrameInfo<TFrame>>;
-begin
-  Result := nil;
-  for LPair in FFrameInfos do
-  begin
-    if LPair.Key is AFrameClass then
-    begin
-      Result := LPair.Value;
-      Break;
-    end;
-  end;
+  Result := FindInfo(AFrameClass);
 end;
 
 function TFrameStand.FrameInfo<T>: TFrameInfo<T>;
@@ -208,23 +104,12 @@ end;
 
 function TFrameStand.FrameInfo(const AFrame: TFrame): TFrameInfo<TFrame>;
 begin
-  Result := nil;
-  FFrameInfos.TryGetValue(AFrame, Result);
+  Result := FindInfo(AFrame);
 end;
 
-function TFrameStand.GetCount: Integer;
+function TFrameStand.GetVisibleFrames: TList<TFrame>;
 begin
-  Result := FFrameInfos.Count;
-end;
-
-function TFrameStand.GetSubjectInfos: TArray<TSubjectInfo>;
-var
-  LInfo: TFrameInfo<TFrame>;
-begin
-  Result := [];
-  if Assigned(FFrameInfos) then
-    for LInfo in FFrameInfos.Values do
-      Result := Result + [LInfo];
+  Result := VisibleSubjects;
 end;
 
 function TFrameStand.GetFrameClass(const AClassName: string;
@@ -267,43 +152,9 @@ begin
     Result := New<T>(AParent, AStandStyleName);
 end;
 
-procedure TFrameStand.HideAndCloseAll(const ARestrictTo: TArray<TClass>);
-var
-  LFrameInfo: TFrameInfo<TFrame>;
-  LFrameInfos: TArray<TFrameInfo<TFrame>>;
-  LConsiderRestrictions: Boolean;
-begin
-  LFrameInfos := FFrameInfos.Values.ToArray;
-  LConsiderRestrictions := Length(ARestrictTo) > 0;
-
-  for LFrameInfo in LFrameInfos do
-  begin
-    if (not LConsiderRestrictions) or ClassInArray(LFrameInfo.Frame, ARestrictTo) then
-      LFrameInfo.HideAndClose;
-  end;
-end;
-
-procedure TFrameStand.HideAndCloseAllExcept(const AExceptions: TArray<TClass>);
-var
-  LFrameInfo: TFrameInfo<TFrame>;
-  LFrameInfos: TArray<TFrameInfo<TFrame>>;
-  LConsiderExceptions: Boolean;
-begin
-  LFrameInfos := FFrameInfos.Values.ToArray;
-  LConsiderExceptions := Length(AExceptions) > 0;
-
-  for LFrameInfo in LFrameInfos do
-  begin
-    if (not LConsiderExceptions) or not ClassInArray(LFrameInfo.Frame, AExceptions) then
-      LFrameInfo.HideAndClose;
-  end;
-end;
-
 function TFrameStand.LastShownFrame: TFrame;
 begin
-  Result := nil;
-  if FVisibleFrames.Count > 0 then
-    Result := FVisibleFrames.Last;
+  Result := LastShownSubject;
 end;
 
 function TFrameStand.New(const AFrameClassName: string;
@@ -357,20 +208,6 @@ begin
   Result.Show();
 end;
 
-procedure TFrameStand.Remove(ASubject: TSubject);
-var
-  LInfo: TFrameInfo<TFrame>;
-  LFrame: TFrame;
-begin
-  inherited;
-  LFrame := ASubject as TFrame;
-  if Assigned(LFrame) and FFrameInfos.TryGetValue(LFrame, LInfo) then
-  begin
-    FFrameInfos.Remove(LFrame);
-    LInfo.Free;
-  end;
-end;
-
 function TFrameStand.Use(const AFrame: TFrame; const AParent: TFmxObject;
   const AStandStyleName: string): TFrameInfo<TFrame>;
 begin
@@ -389,7 +226,7 @@ begin
   Result := TFrameInfo<T>.Create(Self, AFrame, LParent, LStandStyleName);
   try
     Result.InjectContext;
-    FFrameInfos.Add(Result.Frame, TFrameInfo<TFrame>(Result));
+    AddInfo(Result.Frame, TFrameInfo<TFrame>(Result));
   except
     Result.Free;
     raise;

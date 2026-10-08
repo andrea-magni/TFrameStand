@@ -257,6 +257,13 @@ type
     procedure DoClose(const ASubject: TSubject); virtual;
     function GetSubjectInfos: TArray<TSubjectInfo>; virtual; abstract;
     procedure SubjectComponentRemoved(const AComponent: TComponent); virtual;
+    /// <summary>True while AInfo belongs to this component (closing a subject
+    /// can free others: stands shown inside its controls).</summary>
+    function IsRegistered(const AInfo: TSubjectInfo): Boolean;
+    /// <summary>Closes (or hides and closes) the subjects whose class is, or
+    /// is not, in AClasses: the implementation of the CloseAll* and
+    /// HideAndCloseAll* methods.</summary>
+    procedure CloseSubjects(const AClasses: TArray<TClass>; const AExcept, AHide: Boolean);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -264,14 +271,14 @@ type
     procedure Remove(ASubject: TSubject); virtual; abstract;
     function DeviceAndPlatformInfo(const AForm: TForm = nil): TDeviceAndPlatformInfo;
     procedure CloseAll; overload; virtual;
-    procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; virtual; abstract;
+    procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; virtual;
     procedure CloseAll(const ARestrictTo: TClass); overload; virtual;
-    procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual; abstract;
+    procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual;
     procedure CloseAllExcept(const AException: TClass); overload; virtual;
     procedure HideAndCloseAll; overload; virtual;
-    procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; virtual; abstract;
+    procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; virtual;
     procedure HideAndCloseAll(const ARestrictTo: TClass); overload; virtual;
-    procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual; abstract;
+    procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual;
     procedure HideAndCloseAllExcept(const AException: TClass); overload; virtual;
 
     property Count: Integer read GetCount;
@@ -299,6 +306,30 @@ type
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
     property OnBeforeStartAnimation: TOnBeforeStartAnimationEvent read FOnBeforeStartAnimation write FOnBeforeStartAnimation;
     property OnBindCommonActionList: TOnBindCommonActionList read FOnBindCommonActionList write FOnBindCommonActionList;
+  end;
+
+  /// <summary>Registry of the subjects of one kind, shared by TFrameStand
+  /// (TFrame, TFrameInfo<TFrame>) and TFormStand (TForm, TFormInfo<TForm>):
+  /// infos by subject, Show/Hide history, lookups.</summary>
+  TSubjectStandBase<S: TSubject; I: TSubjectInfo> = class(TSubjectStand)
+  private
+    FVisibleSubjects: TList<S>;
+  protected
+    FInfos: TObjectDictionary<S, I>;
+    function GetCount: Integer; override;
+    function GetSubjectInfos: TArray<TSubjectInfo>; override;
+    procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
+    procedure DoBeforeShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
+    procedure DoClose(const ASubject: TSubject); override;
+    procedure AddInfo(const ASubject: S; const AInfo: I);
+    function FindInfo(const ASubject: S): I; overload;
+    function FindInfo(const AClass: TClass): I; overload;
+    function LastShownSubject: S;
+    property VisibleSubjects: TList<S> read FVisibleSubjects;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Remove(ASubject: TSubject); override;
   end;
 
   function ClassInArray(const AObject: TObject; const AArray: TArray<TClass>): Boolean; overload;
@@ -479,6 +510,55 @@ begin
 end;
 
 { TSubjectStand }
+
+procedure TSubjectStand.CloseSubjects(const AClasses: TArray<TClass>;
+  const AExcept, AHide: Boolean);
+var
+  LInfo: TSubjectInfo;
+begin
+  for LInfo in GetSubjectInfos do
+  begin
+    // closing a subject frees the subjects shown inside its controls too:
+    // skip the infos already gone (do not even read them)
+    if not IsRegistered(LInfo) then
+      Continue;
+    if (Length(AClasses) = 0) or (ClassInArray(LInfo.Subject, AClasses) <> AExcept) then
+      if AHide then
+        LInfo.HideAndClose
+      else
+        LInfo.Close;
+  end;
+end;
+
+function TSubjectStand.IsRegistered(const AInfo: TSubjectInfo): Boolean;
+var
+  LInfo: TSubjectInfo;
+begin
+  Result := False;
+  for LInfo in GetSubjectInfos do
+    if LInfo = AInfo then
+      Exit(True);
+end;
+
+procedure TSubjectStand.CloseAll(const ARestrictTo: TArray<TClass>);
+begin
+  CloseSubjects(ARestrictTo, False, False);
+end;
+
+procedure TSubjectStand.CloseAllExcept(const AExceptions: TArray<TClass>);
+begin
+  CloseSubjects(AExceptions, True, False);
+end;
+
+procedure TSubjectStand.HideAndCloseAll(const ARestrictTo: TArray<TClass>);
+begin
+  CloseSubjects(ARestrictTo, False, True);
+end;
+
+procedure TSubjectStand.HideAndCloseAllExcept(const AExceptions: TArray<TClass>);
+begin
+  CloseSubjects(AExceptions, True, True);
+end;
 
 procedure TSubjectStand.CloseAll(const ARestrictTo: TClass);
 begin
@@ -1655,6 +1735,109 @@ function TCommonActionDictionary<Info>.TryGetValue(const APattern: string;
   out AAction: TProc<Info>): Boolean;
 begin
   Result := FDictionary.TryGetValue(APattern, AAction);
+end;
+
+{ TSubjectStandBase<S, I> }
+
+constructor TSubjectStandBase<S, I>.Create(AOwner: TComponent);
+begin
+  inherited;
+  FInfos := TObjectDictionary<S, I>.Create;
+  FVisibleSubjects := TList<S>.Create;
+end;
+
+destructor TSubjectStandBase<S, I>.Destroy;
+var
+  LSubject: S;
+begin
+  for LSubject in FInfos.Keys.ToArray do
+    Remove(LSubject);
+  FreeAndNil(FInfos);
+  FreeAndNil(FVisibleSubjects);
+  inherited;
+end;
+
+procedure TSubjectStandBase<S, I>.AddInfo(const ASubject: S; const AInfo: I);
+begin
+  FInfos.Add(ASubject, AInfo);
+end;
+
+function TSubjectStandBase<S, I>.GetCount: Integer;
+begin
+  Result := FInfos.Count;
+end;
+
+function TSubjectStandBase<S, I>.GetSubjectInfos: TArray<TSubjectInfo>;
+var
+  LInfo: I;
+begin
+  Result := [];
+  if Assigned(FInfos) then
+    for LInfo in FInfos.Values do
+      Result := Result + [LInfo];
+end;
+
+procedure TSubjectStandBase<S, I>.DoBeforeShow(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
+begin
+  inherited;
+  FVisibleSubjects.Add(S(ASubjectInfo.Subject));
+end;
+
+procedure TSubjectStandBase<S, I>.DoAfterHide(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
+var
+  LIndex: Integer;
+begin
+  inherited;
+  // the visible list tracks the Show/Hide history: a subject shown twice is
+  // listed twice, a Hide takes back its most recent Show
+  LIndex := FVisibleSubjects.LastIndexOf(S(ASubjectInfo.Subject));
+  if LIndex <> -1 then
+    FVisibleSubjects.Delete(LIndex);
+end;
+
+procedure TSubjectStandBase<S, I>.DoClose(const ASubject: TSubject);
+begin
+  // the subject is going away: remove every entry, not just one
+  while FVisibleSubjects.Remove(S(ASubject)) <> -1 do
+    ;
+  inherited;
+end;
+
+function TSubjectStandBase<S, I>.FindInfo(const ASubject: S): I;
+begin
+  Result := nil;
+  FInfos.TryGetValue(ASubject, Result);
+end;
+
+function TSubjectStandBase<S, I>.FindInfo(const AClass: TClass): I;
+var
+  LPair: TPair<S, I>;
+begin
+  Result := nil;
+  for LPair in FInfos do
+    if LPair.Key is AClass then
+      Exit(LPair.Value);
+end;
+
+function TSubjectStandBase<S, I>.LastShownSubject: S;
+begin
+  Result := nil;
+  if FVisibleSubjects.Count > 0 then
+    Result := FVisibleSubjects.Last;
+end;
+
+procedure TSubjectStandBase<S, I>.Remove(ASubject: TSubject);
+var
+  LInfo: I;
+begin
+  inherited;
+  if Assigned(ASubject) and FInfos.TryGetValue(S(ASubject), LInfo) then
+  begin
+    FInfos.Remove(S(ASubject));
+    LInfo.Free;
+  end;
 end;
 
 initialization

@@ -30,6 +30,8 @@ type
     [Test] procedure AdoptedFrameFreedByTheApplication;
     [Test] procedure ComponentOwnedElsewhereRemovesItsStands;
     [Test] procedure CyclesDoNotGrowMemory;
+    [TestCase('CloseAll', 'False')] [TestCase('HideAndCloseAll', 'True')]
+    procedure CloseAllWithNestedStands(const AHideFirst: Boolean);
   end;
 
   // StandBook, CommonActionList, DefaultParent freed elsewhere (B7)
@@ -243,6 +245,33 @@ begin
   LAfter := AllocatedBytes;
   Assert.AreEqual(0, LFrameStand.Count + LFormStand.Count);
   Assert.IsTrue(LAfter - LBefore < 4096, Format('memory grew by %d bytes', [LAfter - LBefore]));
+end;
+
+procedure TTeardownFixture.CloseAllWithNestedStands(const AHideFirst: Boolean);
+var
+  LFrameStand: TFrameStand;
+  LOuter: TFrameInfo<TButtonFrame>;
+  LIndex: Integer;
+begin
+  // frames shown inside a control of another frame: closing the outer one
+  // destroys the inner stands too, while CloseAll is iterating
+  LFrameStand := TFrameStand.Create(FMain);
+  LFrameStand.DefaultHideAndCloseDeferTimeMS := 0;
+  for LIndex := 1 to 5 do
+  begin
+    LOuter := LFrameStand.New<TButtonFrame>(FLayout);
+    LOuter.Show;
+    LFrameStand.New<TCountFrame>(LOuter.Frame.CloseButton).Show;
+    LFrameStand.New<TCountFrame>(LOuter.Frame.CloseButton).Show;
+  end;
+  Assert.AreEqual(15, LFrameStand.Count);
+  if AHideFirst then
+    LFrameStand.HideAndCloseAll
+  else
+    LFrameStand.CloseAll;
+  Pump(200);
+  Assert.AreEqual(0, LFrameStand.Count);
+  Assert.AreEqual(10, FramesDestroyed);
 end;
 
 { TReferencesFixture }

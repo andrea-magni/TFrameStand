@@ -72,28 +72,14 @@ type
   TOnGetFormClassEvent = procedure (const ASender: TFormStand; var AParent: TFmxObject;
     var AStandStyleName: string; var AFormClass: TFormClass) of object;
 
-  TFormStand = class(TSubjectStand)
+  TFormStand = class(TSubjectStandBase<TForm, TFormInfo<TForm>>)
   private
     FOnGetFormClass: TOnGetFormClassEvent;
-    FVisibleForms : TList<TForm>;
   protected
-    FFormInfos: TObjectDictionary<TForm, TFormInfo<TForm>>;
-    function GetCount: Integer; override;
-    function GetSubjectInfos: TArray<TSubjectInfo>; override;
     function GetFormClass<T: TForm>(var AParent: TFmxObject; var AStandStyleName: string): TFormClass;
-    procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
-    procedure DoBeforeShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
-    procedure DoClose(const ASubject: TFmxObject); override;
   public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-
     function LastShownForm: TForm;
-    procedure Remove(ASubject: TSubject); override;
-    procedure CloseAll(const ARestrictTo: TArray<TClass>); overload; override;
-    procedure CloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
-    procedure HideAndCloseAll(const ARestrictTo: TArray<TClass>); overload; override;
-    procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; override;
+    function GetVisibleForms: TList<TForm>;
 
     function FormInfo(const AForm: TForm): TFormInfo<TForm>; overload;
     function FormInfo(const AFormClass: TFormClass): TFormInfo<TForm>; overload;
@@ -111,8 +97,8 @@ type
       const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil;
       const AConfigFIProc: TProc<TFormInfo<T>> = nil): TFormInfo<T>; overload;
 
-    property FormInfos: TObjectDictionary<TForm, TFormInfo<TForm>> read FFormInfos;
-    property VisibleForms: TList<TForm> read FVisibleForms;
+    property FormInfos: TObjectDictionary<TForm, TFormInfo<TForm>> read FInfos;
+    property VisibleForms: TList<TForm> read GetVisibleForms;
   published
     property OnGetSubjectClass: TOnGetFormClassEvent read FOnGetFormClass write FOnGetFormClass;
   end;
@@ -124,119 +110,19 @@ uses
 
 { TFormStand }
 
-procedure TFormStand.CloseAll(const ARestrictTo: TArray<TClass>);
-var
-  LFormInfo: TFormInfo<TForm>;
-  LFormInfos: TArray<TFormInfo<TForm>>;
-  LConsiderRestrictions: Boolean;
-begin
-  LFormInfos := FFormInfos.Values.ToArray;
-  LConsiderRestrictions := Length(ARestrictTo) > 0;
-
-  for LFormInfo in LFormInfos do
-  begin
-    if (not LConsiderRestrictions) or ClassInArray(LFormInfo.Form, ARestrictTo) then
-      LFormInfo.Close;
-  end;
-end;
-
-procedure TFormStand.CloseAllExcept(const AExceptions: TArray<TClass>);
-var
-  LFormInfo: TFormInfo<TForm>;
-  LFormInfos: TArray<TFormInfo<TForm>>;
-  LConsiderExceptions: Boolean;
-begin
-  LFormInfos := FFormInfos.Values.ToArray;
-  LConsiderExceptions := Length(AExceptions) > 0;
-
-  for LFormInfo in LFormInfos do
-  begin
-    if (not LConsiderExceptions) or (not ClassInArray(LFormInfo.Form, AExceptions)) then
-      LFormInfo.Close;
-  end;
-end;
-
-constructor TFormStand.Create(AOwner: TComponent);
-begin
-  inherited;
-  FFormInfos := TObjectDictionary<TForm, TFormInfo<TForm>>.Create();
-  FVisibleForms := TList<TForm>.Create;
-end;
-
-destructor TFormStand.Destroy;
-var
-  LKey: TForm;
-begin
-  for LKey in FFormInfos.Keys.ToArray do
-    Remove(LKey);
-  FreeAndNil(FFormInfos);
-  FreeAndNil(FVisibleForms);
-
-  inherited;
-end;
-
-procedure TFormStand.DoAfterHide(const ASender: TSubjectStand;
-  const ASubjectInfo: TSubjectInfo);
-var
-  LIndex: Integer;
-begin
-  inherited;
-  // VisibleForms tracks the Show/Hide history: a form shown twice is listed twice,
-  // a Hide takes back its most recent Show
-  LIndex := FVisibleForms.LastIndexOf(ASubjectInfo.Subject as TForm);
-  if LIndex <> -1 then
-    FVisibleForms.Delete(LIndex);
-end;
-
-procedure TFormStand.DoBeforeShow(const ASender: TSubjectStand;
-  const ASubjectInfo: TSubjectInfo);
-begin
-  inherited;
-  FVisibleForms.Add(ASubjectInfo.Subject as TForm);
-end;
-
-procedure TFormStand.DoClose(const ASubject: TFmxObject);
-begin
-  // the subject is going away: remove every entry, not just one
-  while FVisibleForms.Remove(ASubject as TForm) <> -1 do
-    ;
-  inherited;
-end;
-
 function TFormStand.FormInfo(const AFormClass: TFormClass): TFormInfo<TForm>;
-var
-  LPair: TPair<TForm, TFormInfo<TForm>>;
 begin
-  Result := nil;
-  for LPair in FFormInfos do
-  begin
-    if LPair.Key is AFormClass then
-    begin
-      Result := LPair.Value;
-      Break;
-    end;
-  end;
+  Result := FindInfo(AFormClass);
 end;
 
 function TFormStand.FormInfo(const AForm: TForm): TFormInfo<TForm>;
 begin
-  Result := nil;
-  FFormInfos.TryGetValue(AForm, Result);
+  Result := FindInfo(AForm);
 end;
 
-function TFormStand.GetCount: Integer;
+function TFormStand.GetVisibleForms: TList<TForm>;
 begin
-  Result := FFormInfos.Count;
-end;
-
-function TFormStand.GetSubjectInfos: TArray<TSubjectInfo>;
-var
-  LInfo: TFormInfo<TForm>;
-begin
-  Result := [];
-  if Assigned(FFormInfos) then
-    for LInfo in FFormInfos.Values do
-      Result := Result + [LInfo];
+  Result := VisibleSubjects;
 end;
 
 function TFormStand.GetFormClass<T>(var AParent: TFmxObject;
@@ -256,43 +142,9 @@ begin
     Result := New<T>(AParent, AStandStyleName);
 end;
 
-procedure TFormStand.HideAndCloseAll(const ARestrictTo: TArray<TClass>);
-var
-  LFormInfo: TFormInfo<TForm>;
-  LFormInfos: TArray<TFormInfo<TForm>>;
-  LConsiderRestrictions: Boolean;
-begin
-  LFormInfos := FFormInfos.Values.ToArray;
-  LConsiderRestrictions := Length(ARestrictTo) > 0;
-
-  for LFormInfo in LFormInfos do
-  begin
-    if (not LConsiderRestrictions) or ClassInArray(LFormInfo.Form, ARestrictTo) then
-      LFormInfo.HideAndClose;
-  end;
-end;
-
-procedure TFormStand.HideAndCloseAllExcept(const AExceptions: TArray<TClass>);
-var
-  LFormInfo: TFormInfo<TForm>;
-  LFormInfos: TArray<TFormInfo<TForm>>;
-  LConsiderExceptions: Boolean;
-begin
-  LFormInfos := FFormInfos.Values.ToArray;
-  LConsiderExceptions := Length(AExceptions) > 0;
-
-  for LFormInfo in LFormInfos do
-  begin
-    if (not LConsiderExceptions) or (not ClassInArray(LFormInfo.Form, AExceptions)) then
-      LFormInfo.HideAndClose;
-  end;
-end;
-
 function TFormStand.LastShownForm: TForm;
 begin
-  Result := nil;
-  if FVisibleForms.Count > 0 then
-    Result := FVisibleForms.Last;
+  Result := LastShownSubject;
 end;
 
 function TFormStand.New<T>(const AParent: TFmxObject; const AStandStyleName: string): TFormInfo<T>;
@@ -326,20 +178,6 @@ begin
   Result.Show();
 end;
 
-procedure TFormStand.Remove(ASubject: TSubject);
-var
-  LInfo: TFormInfo<TForm>;
-  LForm: TForm;
-begin
-  inherited;
-  LForm := ASubject as TForm;
-  if Assigned(LForm) and FFormInfos.TryGetValue(LForm, LInfo) then
-  begin
-    FFormInfos.Remove(LForm);
-    LInfo.Free;
-  end;
-end;
-
 function TFormStand.Use<T>(const AForm: T; const AParent: TFmxObject;
   const AStandStyleName: string): TFormInfo<T>;
 var
@@ -352,7 +190,7 @@ begin
   Result := TFormInfo<T>.Create(Self, AForm, LParent, LStandStyleName);
   try
     Result.InjectContext;
-    FFormInfos.Add(Result.Form, TFormInfo<TForm>(Result));
+    AddInfo(Result.Form, TFormInfo<TForm>(Result));
   except
     Result.Free;
     raise;

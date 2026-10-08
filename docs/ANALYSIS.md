@@ -54,7 +54,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B10 Common Actions | fixed (`c08459c`): registration order, Add replaces an existing pattern, life guard after an action closing the subject. Replacing OnClick kept by decision (documented, including the effect on controls with an Action). Test: 7 checks (4 failed before) |
 | E5 HelloWorld demo closes a frame inside its own click, keeps freed infos | fixed (`658ec5a`) |
 | E4 tests and build script | done: `tests\` (DUnitX, 54 tests, all the scenarios verified for v.2.0.1 and v.2.1; mutation-checked) and `build.cmd` (packages, demos, tests; output in `build\`, `.res` untouched via `SkipResGeneration`) |
-| B13 duplication TFrameStand/TFormStand | fixed (`d1ff316`): generic `TSubjectStandBase<S, I>` (registry, history, lookups), bulk close in `TSubjectStand`. Found while unifying: `CloseAll`/`HideAndCloseAll` reached infos freed meanwhile by FreeNotification (subjects shown inside the controls of another subject; regression of the unreleased B15 fix): `IsRegistered` check, test with nested stands |
+| B13 duplication TFrameStand/TFormStand | fixed (`cf152e0`): generic `TSubjectStandBase<S, I>` (registry, history, lookups), bulk close in `TSubjectStand`. Found while unifying: `CloseAll`/`HideAndCloseAll` reached infos freed meanwhile by FreeNotification (subjects shown inside the controls of another subject; regression of the unreleased B15 fix): `IsRegistered` check, test with nested stands |
 
 All 16 demos build for Win32 with Delphi 13 with no warnings.
 

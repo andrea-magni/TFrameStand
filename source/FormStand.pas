@@ -521,7 +521,7 @@ begin
       FreeFormContainer;
     end;
   end
-  else
+  else if Assigned(FFormContainer) then // no form container when the form has no controls
   begin
     UnparentAll(FForm);
     Container.RemoveObject(FFormContainer);
@@ -536,7 +536,8 @@ begin
   Assert(Assigned(AForm));
   Assert(Assigned(FFormContainer));
 
-  for LChild in FFormContainer.Children do
+  // ToArray: setting Parent removes the child from FFormContainer.Children
+  for LChild in FFormContainer.Children.ToArray do
   begin
     if LChild.Parent = FFormContainer then
       LChild.Parent := AForm;

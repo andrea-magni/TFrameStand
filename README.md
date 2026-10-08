@@ -16,10 +16,13 @@ _Supported: Delphi 10.4 Sydney to Delphi 13 Florence, all the FMX platforms. All
 ## Installation - Setup
 Download `TFrameStand_<version>_Setup.exe` from the [latest release](https://github.com/andrea-magni/TFrameStand/releases/latest): it builds and installs the packages in the RAD Studio versions you choose (10.4 to 13) and sets the library path for all the platforms. See [Installation](https://andrea-magni.github.io/TFrameStand/guide/installation#setup).
 
+## Installation - TMS Smart Setup
+`tms install andreamagni.tframestand` builds and installs the packages for every supported Delphi version on your machine. See [TMS Smart Setup](https://andrea-magni.github.io/TFrameStand/guide/installation#tms-smart-setup).
+
 ## Installation - Manual
-1. Open the package group for your Delphi version, e.g. “packages\FrameStand_13.groupproj” (Delphi 13) or “packages\FrameStand_12.groupproj” (Delphi 12)
+1. Open the package group for your Delphi version, e.g. “packages\13Florence\FrameStand.groupproj” (Delphi 13) or “packages\12Athens\FrameStand.groupproj” (Delphi 12)
 2. Build both contained packages
-3. Install the design time package (“dclFrameStandPackage_13”, the BPL is “dclFrameStandPackage_13370.bpl”)
+3. Install the design time package (“dclFrameStandPackage”, the BPL is “dclFrameStandPackage370.bpl” for Delphi 13)
 4. Add “source\” library path for Delphi (repeat this for each platform you need to support)
 
 Details in the [installation guide](https://andrea-magni.github.io/TFrameStand/guide/installation).

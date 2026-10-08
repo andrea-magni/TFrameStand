@@ -1,0 +1,55 @@
+# TMS Smart Setup definition file for TFrameStand
+# See https://doc.tmssoftware.com/smartsetup/guide/creating-bundles.html
+# yaml-language-server: $schema=https://raw.githubusercontent.com/tmssoftware/smartsetup/refs/heads/main/tms/example-config/tmsbuild.schema.json
+
+minimum required tmsbuild version: 3.5
+
+application:
+  id: andreamagni.tframestand
+  name: TFrameStand
+  description: FireMonkey components to show frames and forms on a "stand" (a style that wraps them, with animations, lifecycle events and responsive layouts) for every FMX platform.
+  company name: Andrea Magni
+  copyright: Andrea Magni
+  license: MIT
+  license url: https://github.com/andrea-magni/TFrameStand/blob/master/LICENSE
+  url: https://github.com/andrea-magni/TFrameStand
+  docs: https://andrea-magni.github.io/TFrameStand/
+  version file: version.txt
+
+supported frameworks:
+  # the runtime package, for every FMX platform: Smart Setup skips the platforms
+  # that are not installed in the IDE. Linux64 needs FMXLinux, which is not a
+  # Smart Setup product, so it is left out.
+  fmx:
+    ide since: delphisydney
+    platforms:
+      - win32intel
+      - win64intel
+      - win64xintel
+      - macos64intel
+      - macos64arm
+      - iosdevice64
+      - iossimulator64arm
+      - android32
+      - android64
+
+  # the design-time package: 32-bit IDE, and the 64-bit IDE of Delphi 12.2 and later
+  ide:
+    ide since: delphisydney
+    platforms:
+      - win32intel
+      - win64xintel
+
+packages:
+  - FrameStandPackage: [runtime, fmx]
+  - dclFrameStandPackage: [design, ide]
+
+package options:
+  # the platforms enabled in the .dproj files differ between Delphi versions:
+  # build for the platforms listed above
+  ignore dproj platforms: true
+  package folders:
+    delphisydney: 104Sydney
+    delphi11: 11Alexandria
+    delphi12: 12Athens
+    delphi13: 13Florence

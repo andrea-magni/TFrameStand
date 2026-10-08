@@ -157,10 +157,8 @@ Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl,.\InnoSetupSc
 #ifdef VclStyle
   Source: ".\InnoSetupScripts\Style\*"; DestDir: "{app}\{#SetupFolder}\Style"; Flags: ignoreversion
 #endif
-; packages: Delphi 10.4 to 13; FrameStand_11 (11.0 Alexandria, fixed LIBSUFFIX) is left out, RAD
-; Studio 11 uses FrameStand_11_1: both have the same product version and would register the
-; components twice
-Source: "..\{#LibraryPackagesFolder}\*"; Excludes: "{#CommonRADStudioFilesExcludes},FrameStand_11.groupproj,FrameStandPackage_11.*,dclFrameStandPackage_11.*"; DestDir: "{app}\{#LibraryPackagesFolder}"; Flags: recursesubdirs ignoreversion
+; packages: one folder per Delphi version (10.4 to 13), each with FrameStand.groupproj
+Source: "..\{#LibraryPackagesFolder}\*"; Excludes: "{#CommonRADStudioFilesExcludes}"; DestDir: "{app}\{#LibraryPackagesFolder}"; Flags: recursesubdirs ignoreversion
 Source: "..\*"; Excludes: "{#CommonRADStudioFilesExcludes},*.gitattributes,*.gitignore,\.git\*,\.github\*,\.claude\*,\{#LibraryDCUFolder}\*,\{#SetupFolder}\*,\{#LibraryPackagesFolder}\*,\build\*,\docs\node_modules\*,\docs\.vitepress\cache\*,\docs\.vitepress\dist\*,\docs\public\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 [Icons]

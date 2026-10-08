@@ -16,7 +16,7 @@ build.cmd 12 all
 
 | Argument | Meaning |
 |---|---|
-| version (first) | package suffix of the Delphi version: `13` (default), `12`, `11_1`, `11`, `10_4` |
+| version (first) | Delphi version: `13` (default), `12`, `11` (11.1 or later), `10_4`; the packages are taken from `packages\13Florence`, `12Athens`, `11Alexandria`, `104Sydney` |
 | `all` (second) | also build the runtime package for Android64, iOSDevice64 and OSXARM64 (the SDKs must be installed in the IDE) |
 
 The script, with the `rsvars.bat` of the chosen Delphi:

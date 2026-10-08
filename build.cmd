@@ -4,8 +4,9 @@ REM  TFrameStand - build and test
 REM
 REM  build.cmd [version] [all]
 REM
-REM    version  package suffix of the Delphi version to use:
-REM             13 (default, Delphi 13 Florence), 12, 11_1, 11, 10_4
+REM    version  Delphi version to use: 13 (default, Delphi 13 Florence), 12,
+REM             11 (11.1 or later; 11_1 is accepted too), 10_4; the packages
+REM             are in packages\13Florence, 12Athens, 11Alexandria, 104Sydney
 REM    all      also build the runtime package for Android64, iOSDevice64
 REM             and OSXARM64 (the SDKs must be installed in the IDE)
 REM
@@ -22,15 +23,16 @@ set "ROOT=%~dp0"
 set "VER=%~1"
 if "%VER%"=="" set "VER=13"
 
-if "%VER%"=="13"   set "BDSVER=37.0"
-if "%VER%"=="12"   set "BDSVER=23.0"
-if "%VER%"=="11_1" set "BDSVER=22.0"
-if "%VER%"=="11"   set "BDSVER=22.0"
-if "%VER%"=="10_4" set "BDSVER=21.0"
+if "%VER%"=="11_1" set "VER=11"
+if "%VER%"=="13"   (set "BDSVER=37.0" & set "PKG=13Florence")
+if "%VER%"=="12"   (set "BDSVER=23.0" & set "PKG=12Athens")
+if "%VER%"=="11"   (set "BDSVER=22.0" & set "PKG=11Alexandria")
+if "%VER%"=="10_4" (set "BDSVER=21.0" & set "PKG=104Sydney")
 if not defined BDSVER (
-  echo Unknown version "%VER%": use 13, 12, 11_1, 11 or 10_4
+  echo Unknown version "%VER%": use 13, 12, 11 or 10_4
   exit /b 2
 )
+set "PKGDIR=%ROOT%packages\%PKG%"
 
 set "RSVARS=%ProgramFiles(x86)%\Embarcadero\Studio\%BDSVER%\bin\rsvars.bat"
 if not exist "%RSVARS%" (
@@ -57,16 +59,16 @@ REM --- runtime package -------------------------------------------------------
 for %%P in (%PLATFORMS%) do (
   set "PO=%OUT%\packages\%%P"
   echo.
-  echo --- FrameStandPackage_%VER% [%%P]
-  %MSB% "%ROOT%packages\FrameStandPackage_%VER%.dproj" /t:Build /p:Platform=%%P ^
+  echo --- %PKG%\FrameStandPackage [%%P]
+  %MSB% "%PKGDIR%\FrameStandPackage.dproj" /t:Build /p:Platform=%%P ^
     /p:DCC_BplOutput="!PO!" /p:DCC_DcpOutput="!PO!" /p:DCC_DcuOutput="!PO!\dcu" ^
     /p:DCC_HppOutput="!PO!\hpp" /p:DCC_ObjOutput="!PO!\hpp" /p:DCC_BpiOutput="!PO!\hpp"
   call :result !ERRORLEVEL! "runtime package %%P"
 )
 
 REM the iOS build writes its non-shared static library next to the project
-if exist "%ROOT%packages\FrameStandPackage_%VER%_nonshared.a" (
-  move /y "%ROOT%packages\FrameStandPackage_%VER%_nonshared.a" "%OUT%\packages\iOSDevice64\" >nul
+if exist "%PKGDIR%\FrameStandPackage_nonshared.a" (
+  move /y "%PKGDIR%\FrameStandPackage_nonshared.a" "%OUT%\packages\iOSDevice64\" >nul
 )
 
 REM --- design-time package (needs the runtime package of the same platform) --
@@ -75,13 +77,13 @@ for %%P in (%DCLPLATFORMS%) do (
   set "RT=!PO!"
   if /i "%%P"=="Win64x" set "RT=%OUT%\packages\Win64x-runtime"
   if /i "%%P"=="Win64x" (
-    %MSB% "%ROOT%packages\FrameStandPackage_%VER%.dproj" /t:Build /p:Platform=Win64x ^
+    %MSB% "%PKGDIR%\FrameStandPackage.dproj" /t:Build /p:Platform=Win64x ^
       /p:DCC_BplOutput="!RT!" /p:DCC_DcpOutput="!RT!" /p:DCC_DcuOutput="!RT!\dcu" ^
       /p:DCC_HppOutput="!RT!\hpp" /p:DCC_ObjOutput="!RT!\hpp" /p:DCC_BpiOutput="!RT!\hpp"
   )
   echo.
-  echo --- dclFrameStandPackage_%VER% [%%P]
-  %MSB% "%ROOT%packages\dclFrameStandPackage_%VER%.dproj" /t:Build /p:Platform=%%P ^
+  echo --- %PKG%\dclFrameStandPackage [%%P]
+  %MSB% "%PKGDIR%\dclFrameStandPackage.dproj" /t:Build /p:Platform=%%P ^
     /p:DCC_UnitSearchPath="!RT!" ^
     /p:DCC_BplOutput="!PO!" /p:DCC_DcpOutput="!PO!" /p:DCC_DcuOutput="!PO!\dcl-dcu" ^
     /p:DCC_HppOutput="!PO!\hpp" /p:DCC_ObjOutput="!PO!\hpp" /p:DCC_BpiOutput="!PO!\hpp"

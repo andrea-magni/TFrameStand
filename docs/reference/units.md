@@ -23,11 +23,13 @@ The design-time units use the IDE's `DesignEditors` and `DesignIntf` units and m
 
 ## Packages (`packages\`)
 
-For each supported Delphi version:
+One folder for each supported Delphi version (`104Sydney`, `11Alexandria`, `12Athens`, `13Florence`), with the same files:
 
-- `FrameStandPackage_XX` — runtime package, `{$RUNONLY}`, requires `rtl` and `fmx`;
-- `dclFrameStandPackage_XX` — design-time package, requires the runtime package;
-- `FrameStand_XX.groupproj` — the group with both.
+- `FrameStandPackage` — runtime package, `{$RUNONLY}`, requires `rtl` and `fmx`;
+- `dclFrameStandPackage` — design-time package, requires the runtime package;
+- `FrameStand.groupproj` — the group with both.
+
+`tmsbuild.yaml`, in the root of the repository, describes the packages to [TMS Smart Setup](/guide/installation#tms-smart-setup).
 
 See [Installation](/guide/installation#supported-delphi-versions) for the list of versions.
 

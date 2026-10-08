@@ -71,3 +71,6 @@ OSX32
 # setup: the VCL styles plugin is part of the setup sources; ISCC output
 !setup/InnoSetupScripts/Style/Setup.Styles.dll
 /setup/Output/
+
+# package output (lib\<Delphi version>\...)
+/lib/

@@ -13,4 +13,4 @@ The window lists the stands found in the style book and shows a sample subject i
 
 It is the quickest way to tune durations, interpolations and layouts of a stand: edit the style book, double-click the component, try, repeat.
 
-The editor lives in the design-time package (`dclFrameStandPackage_XX`), which also registers the two components in the **Andrea Magni** page of the Tool Palette.
+The editor lives in the design-time package (`dclFrameStandPackage`), which also registers the two components in the **Andrea Magni** page of the Tool Palette.

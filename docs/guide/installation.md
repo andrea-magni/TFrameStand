@@ -29,29 +29,51 @@ TFrameStand_2.1_Setup.exe /DIR="C:\Dev\TFrameStand" /SILENT /RADStudioVersions=a
 
 `/RADStudioVersions` takes `all` or a comma-separated list of product versions (`37.0` for Delphi 13, `23.0` for 12, `22.0` for 11, `21.0` for 10.4); by default the newest version found is used.
 
-::: info RAD Studio 11
-For RAD Studio 11 Alexandria the setup installs the `FrameStand_11_1` packages, that need 11.1 or later. On 11.0 install the packages of `FrameStand_11.groupproj` manually.
+## TMS Smart Setup
+
+[TMS Smart Setup](https://doc.tmssoftware.com/smartsetup/) is a free, open-source command-line tool that downloads, builds and registers Delphi libraries. TFrameStand ships a `tmsbuild.yaml`, so Smart Setup can build it from sources for every supported Delphi version installed on your machine (**10.4 Sydney** and newer), for all the FMX platforms installed in the IDE (Linux excluded, since it needs FMXLinux).
+
+1. [Download and install Smart Setup](https://doc.tmssoftware.com/smartsetup/download/) (version 3.5 or later).
+2. The community server, where open-source libraries are listed, is disabled by default. Enable it once:
+
+   ```bash
+   tms server-enable community true
+   ```
+
+3. Install TFrameStand:
+
+   ```bash
+   tms install andreamagni.tframestand
+   ```
+
+Smart Setup clones the repository, compiles the runtime and design-time packages (Debug and Release), installs the design-time package in the IDE and adds the compiled units to the library path. Later on, `tms update andreamagni.tframestand` gets the latest version and rebuilds it, and `tms uninstall andreamagni.tframestand` removes it.
+
+::: info Listing in progress
+TFrameStand is being added to the Smart Setup community server: until `tms install andreamagni.tframestand` finds it, use the setup or the manual installation.
 :::
 
 ## Manual installation
 
 1. Clone or download the repository from [GitHub](https://github.com/andrea-magni/TFrameStand).
-2. Open the package group for your Delphi version from the `packages` folder, for example `packages\FrameStand_13.groupproj` for Delphi 13 Florence.
-3. Build both packages of the group: the runtime package `FrameStandPackage_XX` and the design-time package `dclFrameStandPackage_XX`.
+2. Open the package group for your Delphi version from the `packages` folder, for example `packages\13Florence\FrameStand.groupproj` for Delphi 13 Florence.
+3. Build both packages of the group: the runtime package `FrameStandPackage` and the design-time package `dclFrameStandPackage`.
 4. Right-click the design-time package and choose **Install**. `TFrameStand` and `TFormStand` appear in the **Andrea Magni** page of the Tool Palette.
 5. Add the `source` folder to the library path (**Tools ▸ Options ▸ Language ▸ Delphi ▸ Library**), for **each platform** you target (Windows 32/64, Android, iOS, macOS, Linux).
 
 ## Supported Delphi versions
 
-| Delphi | Package group | Runtime package | Design-time package |
-|---|---|---|---|
-| 13 Florence | `FrameStand_13.groupproj` | `FrameStandPackage_13` | `dclFrameStandPackage_13` |
-| 12 Athens | `FrameStand_12.groupproj` | `FrameStandPackage_12` | `dclFrameStandPackage_12` |
-| 11.1+ Alexandria | `FrameStand_11_1.groupproj` | `FrameStandPackage_11_1` | `dclFrameStandPackage_11_1` |
-| 11.0 Alexandria | `FrameStand_11.groupproj` | `FrameStandPackage_11` | `dclFrameStandPackage_11` |
-| 10.4 Sydney | `FrameStand_10_4.groupproj` | `FrameStandPackage_10_4` | `dclFrameStandPackage_10_4` |
+| Delphi | Package group |
+|---|---|
+| 13 Florence | `packages\13Florence\FrameStand.groupproj` |
+| 12 Athens | `packages\12Athens\FrameStand.groupproj` |
+| 11 Alexandria (11.1 or later) | `packages\11Alexandria\FrameStand.groupproj` |
+| 10.4 Sydney | `packages\104Sydney\FrameStand.groupproj` |
 
-The packages use `{$LIBSUFFIX AUTO}`, so the BPL file name carries the IDE version (for example `dclFrameStandPackage_13370.bpl` for Delphi 13, whose package version is 370).
+Each group has the runtime package `FrameStandPackage` and the design-time package `dclFrameStandPackage`. The packages use `{$LIBSUFFIX AUTO}`, so the BPL file name carries the IDE version (for example `dclFrameStandPackage370.bpl` for Delphi 13, whose package version is 370). The compiled files go to `lib\<folder>` (for example `lib\13Florence`), so the packages of different Delphi versions do not overwrite each other.
+
+::: tip Upgrading from v.2.1 or earlier
+Up to v.2.1 the package names carried the Delphi version (`FrameStandPackage_13`, `dclFrameStandPackage_13`, ...). Before installing the new packages, remove the old design-time package in **Component ▸ Install Packages**. Projects built with runtime packages must list `FrameStandPackage` instead of `FrameStandPackage_XX`.
+:::
 
 ::: warning Older versions
 Delphi 10.4 Sydney is the minimum: the units stop the compilation with a clear message on older compilers. For Delphi 10.3 Rio use [v.2.0.1](https://github.com/andrea-magni/TFrameStand/releases/tag/v.2.0.1), for XE8 to 10.2 Tokyo use [v.1.8](https://github.com/andrea-magni/TFrameStand/releases/tag/v.1.8).

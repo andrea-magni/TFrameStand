@@ -28,12 +28,13 @@ package dclFrameStandPackage_11;
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'TFrameStand and TFormStand Designtime Package'}
 {$LIBSUFFIX '_280'}
-{$DESIGNONLY}
+{$DESIGNONLY ON}
 {$IMPLICITBUILD ON}
 
 requires
   rtl,
   fmx,
+  designide,
   FrameStandPackage_11;
 
 contains

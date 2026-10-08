@@ -91,7 +91,7 @@
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
         <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;fmx.dex.jar;google-analytics-v2.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar;google-play-services-ads-7.0.0.dex.jar;google-play-services-analytics-7.0.0.dex.jar;google-play-services-base-7.0.0.dex.jar;google-play-services-gcm-7.0.0.dex.jar;google-play-services-identity-7.0.0.dex.jar;google-play-services-maps-7.0.0.dex.jar;google-play-services-panorama-7.0.0.dex.jar;google-play-services-plus-7.0.0.dex.jar;google-play-services-wallet-7.0.0.dex.jar</EnabledSysJars>
-        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_3;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
         <Android_LauncherIcon192>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png</Android_LauncherIcon192>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android64)'!=''">
@@ -102,7 +102,7 @@
         <Base>true</Base>
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
         <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;fmx.dex.jar;google-analytics-v2.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar;google-play-services-ads-7.0.0.dex.jar;google-play-services-analytics-7.0.0.dex.jar;google-play-services-base-7.0.0.dex.jar;google-play-services-gcm-7.0.0.dex.jar;google-play-services-identity-7.0.0.dex.jar;google-play-services-maps-7.0.0.dex.jar;google-play-services-panorama-7.0.0.dex.jar;google-play-services-plus-7.0.0.dex.jar;google-play-services-wallet-7.0.0.dex.jar</EnabledSysJars>
-        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_3;$(DCC_UsePackage);FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
         <Android_LauncherIcon192>$(BDS)\bin\Artwork\Android\FM_LauncherIcon_192x192.png</Android_LauncherIcon192>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_iOSDevice64)'!=''">
@@ -124,17 +124,17 @@
         <Base_OSX32>true</Base_OSX32>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
-        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_3;$(DCC_UsePackage);FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <BT_BuildType>Debug</BT_BuildType>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_3;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_3;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;fmx;FrameStandPackage_10_4;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -163,6 +163,7 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="fmx.dcp"/>
+        <DCCReference Include="designide.dcp"/>
         <DCCReference Include="FrameStandPackage_10_4.dcp"/>
         <DCCReference Include="..\source\ComponentRegistration.pas"/>
         <DCCReference Include="..\source\Forms.Test.pas">

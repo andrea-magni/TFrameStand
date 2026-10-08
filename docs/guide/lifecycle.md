@@ -100,8 +100,13 @@ When the component is destroyed (with its form), all the remaining subjects are 
 
 ## Timing and threads
 
-Hide delays are implemented with a short-lived background thread that sleeps and then goes back to the main thread with `TThread.Synchronize`; every callback (`[Hide]` methods, `AThen`, `OnAfterHide`, the close of `HideAndClose`) runs in the **main thread**.
+Hide delays use the FMX platform timer (`TDelayedAction`, no background threads): every callback (`[Hide]` methods, `AThen`, `OnAfterHide`, the close of `HideAndClose`) runs in the **main thread**, after the delay.
 
-Because these callbacks run later, avoid destroying the parent, or the form, while a subject is still hiding: close the subjects first (`CloseAll`) when you tear down a form programmatically.
+The pending callbacks belong to the info: when the subject is closed, or the component is destroyed with its form, before the delay has elapsed, they are cancelled. In particular:
+
+- `Close` during a `Hide` (or a `HideAndClose`) cancels it: its `AThen` and `OnAfterHide` are not called;
+- if `AThen` (or a `[Hide]` method) closes the subject, `OnAfterHide` is not fired, since the info no longer exists.
+
+Callbacks still pending when the application terminates are dropped.
 
 All the methods of the components must be called from the main thread. See [Background Work](/features/background-work) for the pattern to use with tasks.

@@ -37,9 +37,31 @@ type
 
   TSubjectStand = class; //fwd
 
+  /// <summary>A delayed action scheduled with TDelayedAction.Schedule.</summary>
+  IDelayedAction = interface
+    ['{2ECED4AE-D92A-4F2E-BA3F-15348B22095B}']
+    function GetPending: Boolean;
+    /// <summary>Cancels the action if it has not run yet (main thread only).</summary>
+    procedure Cancel;
+    property Pending: Boolean read GetPending;
+  end;
+
+  /// <summary>Runs a procedure in the main thread after a delay, using the
+  /// FMX platform timer (no background thread involved).</summary>
   TDelayedAction = class
   public
+    /// <summary>Runs AAction after ADelay ms (immediately, in the calling
+    /// thread, when ADelay is 0).</summary>
     class procedure Execute(const ADelay: Integer; const AAction: TProc);
+    /// <summary>Same as Execute, returns a handle to cancel the action.</summary>
+    class function Schedule(const ADelay: Integer; const AAction: TProc): IDelayedAction;
+  end;
+
+  /// <summary>Tells callbacks whether the object that scheduled them still exists.</summary>
+  ILifeGuard = interface
+    ['{8D7971D3-0B0D-4AFF-AEFC-29FCAE7B2EF9}']
+    function IsAlive: Boolean;
+    procedure Kill;
   end;
 
   TSubjectStatus = (Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing);
@@ -57,6 +79,8 @@ type
     FStandStyleName: string;
     FHiding: Boolean;
     FStatus: TSubjectStatus;
+    FGuard: ILifeGuard;
+    FPendingActions: TList<IDelayedAction>;
     function GetIsVisible: Boolean;
   protected
     function GetSubject: TSubject; virtual; abstract;
@@ -97,6 +121,10 @@ type
     procedure TeardownSubjectContainer; virtual;
     procedure TeardownStandParent; virtual;
     procedure TeardownStand; virtual;
+    // delayed actions: cancelled when the info is destroyed
+    procedure Track(const AAction: IDelayedAction);
+    procedure CancelPendingActions;
+    procedure CompleteHide(const AThen: TProc); virtual;
   public
     procedure DefaultShow; virtual;
     procedure DefaultHide; virtual;
@@ -236,8 +264,155 @@ type
 implementation
 
 uses
-    FMX.Layouts, FMX.StdCtrls
+    FMX.Layouts, FMX.StdCtrls, FMX.Platform
   ;
+
+type
+  TLifeGuard = class(TInterfacedObject, ILifeGuard)
+  private
+    FAlive: Boolean;
+  public
+    constructor Create;
+    function IsAlive: Boolean;
+    procedure Kill;
+  end;
+
+  TDelayedActionItem = class(TInterfacedObject, IDelayedAction)
+  private
+    class var FActiveItems: TList<TDelayedActionItem>;
+  private
+    FAction: TProc;
+    FDelay: Integer;
+    FPending: Boolean;
+    FTimerService: IFMXTimerService;
+    FTimerHandle: TFmxHandle;
+    FTimerActive: Boolean;
+    FSelfRef: IDelayedAction; // keeps the item alive while its timer is active
+    procedure Start;
+    procedure TimerProc;
+    procedure Stop;
+  public
+    constructor Create(const ADelay: Integer; const AAction: TProc);
+    function GetPending: Boolean;
+    procedure Cancel;
+    class procedure CancelAll;
+  end;
+
+{ TLifeGuard }
+
+constructor TLifeGuard.Create;
+begin
+  inherited Create;
+  FAlive := True;
+end;
+
+function TLifeGuard.IsAlive: Boolean;
+begin
+  Result := FAlive;
+end;
+
+procedure TLifeGuard.Kill;
+begin
+  FAlive := False;
+end;
+
+{ TDelayedActionItem }
+
+constructor TDelayedActionItem.Create(const ADelay: Integer; const AAction: TProc);
+begin
+  inherited Create;
+  FDelay := ADelay;
+  FAction := AAction;
+  FPending := True;
+end;
+
+function TDelayedActionItem.GetPending: Boolean;
+begin
+  Result := FPending;
+end;
+
+procedure TDelayedActionItem.Start;
+var
+  LSelf: IDelayedAction;
+begin
+  if not FPending then
+    Exit;
+
+  if TPlatformServices.Current.SupportsPlatformService(IFMXTimerService, FTimerService) then
+  begin
+    FTimerHandle := FTimerService.CreateTimer(FDelay, TimerProc);
+    if FTimerHandle = 0 then // the application is terminating
+    begin
+      FPending := False;
+      FAction := nil;
+      Exit;
+    end;
+    FTimerActive := True;
+    FSelfRef := Self;
+    FActiveItems.Add(Self);
+  end
+  else
+  begin
+    // no FMX timer service (not expected in an FMX application)
+    LSelf := Self;
+    TThread.CreateAnonymousThread(
+      procedure
+      begin
+        Sleep(FDelay);
+        TThread.Queue(nil,
+          procedure
+          begin
+            (LSelf as TDelayedActionItem).TimerProc;
+            LSelf := nil;
+          end);
+      end
+    ).Start;
+  end;
+end;
+
+procedure TDelayedActionItem.Stop;
+begin
+  if FTimerActive then
+  begin
+    FTimerActive := False;
+    FTimerService.DestroyTimer(FTimerHandle);
+    FActiveItems.Remove(Self);
+  end;
+  FSelfRef := nil; // may free Self: keep it last
+end;
+
+procedure TDelayedActionItem.TimerProc;
+var
+  LKeep: IDelayedAction;
+  LAction: TProc;
+begin
+  LKeep := Self; // Stop releases the self-reference
+  Stop;          // one-shot: destroy the platform timer
+  if not FPending then
+    Exit;
+  FPending := False;
+  LAction := FAction;
+  FAction := nil;
+  LAction();
+end;
+
+procedure TDelayedActionItem.Cancel;
+var
+  LKeep: IDelayedAction;
+begin
+  LKeep := Self;
+  FPending := False;
+  FAction := nil;
+  Stop;
+end;
+
+class procedure TDelayedActionItem.CancelAll;
+var
+  LItem: TDelayedActionItem;
+begin
+  for LItem in FActiveItems.ToArray do
+    LItem.Cancel;
+end;
 
 function ClassInArray(const AObject: TObject; const AArray: TArray<TClass>): Boolean;
 begin
@@ -512,6 +687,9 @@ begin
 
   inherited Create;
 
+  FGuard := TLifeGuard.Create;
+  FPendingActions := TList<IDelayedAction>.Create;
+
   FStatus := Initializing;
   FSubjectStand := ASubjectStand;
   Subject := ASubject;
@@ -543,10 +721,39 @@ end;
 
 destructor TSubjectInfo.Destroy;
 begin
+  // pending hides and closes must not run on a destroyed info
+  if Assigned(FGuard) then
+    FGuard.Kill;
+  CancelPendingActions;
+
   TeardownSubjectContainer;
   TeardownStandParent;
   TeardownStand;
+
+  FreeAndNil(FPendingActions);
   inherited;
+end;
+
+procedure TSubjectInfo.Track(const AAction: IDelayedAction);
+var
+  LIndex: Integer;
+begin
+  for LIndex := FPendingActions.Count - 1 downto 0 do
+    if not FPendingActions[LIndex].Pending then
+      FPendingActions.Delete(LIndex);
+  if Assigned(AAction) and AAction.Pending then
+    FPendingActions.Add(AAction);
+end;
+
+procedure TSubjectInfo.CancelPendingActions;
+var
+  LAction: IDelayedAction;
+begin
+  if not Assigned(FPendingActions) then
+    Exit;
+  for LAction in FPendingActions.ToArray do
+    LAction.Cancel;
+  FPendingActions.Clear;
 end;
 
 procedure TSubjectInfo.DoCommonActionClick(Sender: TObject);
@@ -797,44 +1004,66 @@ function TSubjectInfo.Hide(const ADelay: Integer = 0; const AThen: TProc = nil):
 var
   LAutoDelayS: Single;
   LDelay: Integer;
+  LGuard: ILifeGuard;
 begin
   Result := False;
-  if not FHiding then
-  begin
-    if Assigned(SubjectStand) then
-      SubjectStand.DoBeforeHide(SubjectStand, Self);
+  if FHiding then
+    Exit;
 
-    FStatus := TSubjectStatus.Hiding;
-    Result := True;
-    FHiding := True;
+  LGuard := FGuard;
+  if Assigned(SubjectStand) then
+    SubjectStand.DoBeforeHide(SubjectStand, Self);
+  if not LGuard.IsAlive then // closed by OnBeforeHide
+    Exit;
 
-    FireHideAnimations(LAutoDelayS);
-    LDelay := Round(LAutoDelayS * 1000);
-    if ADelay <> 0 then
-      LDelay := ADelay;
+  FStatus := TSubjectStatus.Hiding;
+  Result := True;
+  FHiding := True;
 
-    TDelayedAction.Execute(LDelay
+  FireHideAnimations(LAutoDelayS);
+  LDelay := Round(LAutoDelayS * 1000);
+  if ADelay <> 0 then
+    LDelay := ADelay;
+
+  if LDelay <= 0 then
+    CompleteHide(AThen)
+  else
+    Track(TDelayedAction.Schedule(LDelay
     , procedure
       begin
-        if not FireCustomHideMethods then
-          DefaultHide;
-
-        FHiding := False;
-        FStatus := TSubjectStatus.Hidden;
-
-        if Assigned(AThen) then
-          AThen();
-
-        if Assigned(SubjectStand) {and Assigned(SubjectStand.OnAfterHide)} then
-          SubjectStand.DoAfterHide(SubjectStand, Self);
+        CompleteHide(AThen);
       end
-    );
-  end;
+    ));
+end;
+
+procedure TSubjectInfo.CompleteHide(const AThen: TProc);
+var
+  LGuard: ILifeGuard;
+  LSubjectStand: TSubjectStand;
+begin
+  LGuard := FGuard;
+  if not FireCustomHideMethods then
+    DefaultHide;
+  if not LGuard.IsAlive then // closed by a [Hide] method
+    Exit;
+
+  FHiding := False;
+  FStatus := TSubjectStatus.Hidden;
+  LSubjectStand := SubjectStand;
+
+  // AThen may close (free) this info: from here on, check LGuard before
+  // touching Self
+  if Assigned(AThen) then
+    AThen();
+
+  if LGuard.IsAlive and Assigned(LSubjectStand) then
+    LSubjectStand.DoAfterHide(LSubjectStand, Self);
 end;
 
 procedure TSubjectInfo.HideAndClose(const ADeferExecutionMS: Integer; const AThen: TProc);
 var
   LDeferExecutionMS: Integer;
+  LGuard: ILifeGuard;
 begin
   LDeferExecutionMS := 100;
   if Assigned(SubjectStand) then
@@ -842,17 +1071,27 @@ begin
   if ADeferExecutionMS <> 0 then
     LDeferExecutionMS := ADeferExecutionMS;
 
+  LGuard := FGuard;
   Hide(0
   , procedure
     begin
-      TDelayedAction.Execute(LDeferExecutionMS
-      , procedure
-        begin
-          Close;
-          if Assigned(AThen) then
-            AThen();
-        end
-      );
+      if not LGuard.IsAlive then
+        Exit;
+      if LDeferExecutionMS <= 0 then
+      begin
+        Close; // frees Self
+        if Assigned(AThen) then
+          AThen();
+      end
+      else
+        Track(TDelayedAction.Schedule(LDeferExecutionMS
+        , procedure
+          begin
+            Close; // frees Self
+            if Assigned(AThen) then
+              AThen();
+          end
+        ));
     end
   );
 end;
@@ -1032,16 +1271,38 @@ end;
 class procedure TDelayedAction.Execute(const ADelay: Integer;
   const AAction: TProc);
 begin
-  if ADelay = 0 then
-    AAction()
+  Schedule(ADelay, AAction);
+end;
+
+class function TDelayedAction.Schedule(const ADelay: Integer;
+  const AAction: TProc): IDelayedAction;
+var
+  LItem: TDelayedActionItem;
+  LResult: IDelayedAction;
+begin
+  LItem := TDelayedActionItem.Create(ADelay, AAction);
+  Result := LItem;
+
+  if ADelay <= 0 then
+  begin
+    LItem.FPending := False;
+    LItem.FAction := nil;
+    AAction();
+  end
+  else if TThread.CurrentThread.ThreadID = MainThreadID then
+    LItem.Start
   else
-    TThread.CreateAnonymousThread(
-      procedure
+  begin
+    // timers live in the main thread
+    LResult := Result;
+    TThread.Queue(nil
+    , procedure
       begin
-        Sleep(ADelay);
-        TThread.Synchronize(nil, TThreadProcedure(AAction));
+        (LResult as TDelayedActionItem).Start;
+        LResult := nil;
       end
-    ).Start;
+    );
+  end;
 end;
 
 { TCommonActionDictionary<Info> }
@@ -1079,5 +1340,13 @@ function TCommonActionDictionary<Info>.TryGetValue(const APattern: string;
 begin
   Result := FDictionary.TryGetValue(APattern, AAction);
 end;
+
+initialization
+  TDelayedActionItem.FActiveItems := TList<TDelayedActionItem>.Create;
+
+finalization
+  // drop the actions still waiting (their platform timers included)
+  TDelayedActionItem.CancelAll;
+  FreeAndNil(TDelayedActionItem.FActiveItems);
 
 end.

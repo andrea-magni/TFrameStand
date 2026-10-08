@@ -35,6 +35,13 @@ See [Installation](/guide/installation#supported-delphi-versions) for the list o
 
 ```pascal
 TDelayedAction.Execute(500, procedure begin ... end);
+
+// cancellable
+FPending := TDelayedAction.Schedule(500, procedure begin ... end);
+...
+FPending.Cancel;   // if it has not run yet
 ```
 
-Runs a procedure in the main thread after a delay in milliseconds (immediately, when the delay is 0). The components use it to wait for the hide animations; the `Stand3D` demo uses it to open a frame half a second after the form is shown.
+Runs a procedure in the main thread after a delay in milliseconds, using the FMX platform timer; with a delay of 0 the procedure runs immediately, in the calling thread. It can be called from any thread. `Schedule` returns an `IDelayedAction` with `Pending` and `Cancel` (to be called from the main thread). Actions still pending when the application terminates are dropped.
+
+The components use it to wait for the hide animations, and cancel their pending actions when a subject is closed; the `Stand3D` demo uses it to open a frame half a second after the form is shown.

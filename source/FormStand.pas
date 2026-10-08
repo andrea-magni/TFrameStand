@@ -50,6 +50,7 @@ type
     procedure UnparentAll(const AForm: TForm); virtual;
     procedure SetupSubjectContainer; override;
     procedure TeardownSubjectContainer; override;
+    procedure ComponentDestroyed(const AComponent: TComponent); override;
     function ResolveContext(const AAttribute: ContextAttribute;
       const AType: TRttiInstanceType; out AObject: TObject): Boolean; override;
     procedure FreeFormContainer;
@@ -78,6 +79,7 @@ type
   protected
     FFormInfos: TObjectDictionary<TForm, TFormInfo<TForm>>;
     function GetCount: Integer; override;
+    function GetSubjectInfos: TArray<TSubjectInfo>; override;
     function GetFormClass<T: TForm>(var AParent: TFmxObject; var AStandStyleName: string): TFormClass;
     procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
     procedure DoBeforeShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); override;
@@ -225,6 +227,16 @@ end;
 function TFormStand.GetCount: Integer;
 begin
   Result := FFormInfos.Count;
+end;
+
+function TFormStand.GetSubjectInfos: TArray<TSubjectInfo>;
+var
+  LInfo: TFormInfo<TForm>;
+begin
+  Result := [];
+  if Assigned(FFormInfos) then
+    for LInfo in FFormInfos.Values do
+      Result := Result + [LInfo];
 end;
 
 function TFormStand.GetFormClass<T>(var AParent: TFmxObject;
@@ -493,7 +505,7 @@ end;
 
 procedure TFormInfo<T>.FreeFormContainer;
 begin
-  if Assigned(FFormContainer) then
+  if IsUsable(FFormContainer) then
   begin
     {$IFDEF AUTOREFCOUNT}
       FFormContainer.DisposeOf;
@@ -508,25 +520,35 @@ end;
 procedure TFormInfo<T>.TeardownSubjectContainer;
 begin
 //  inherited;
-  if FormIsOwned and Assigned(FForm) then
+  if IsUsable(FForm) then
+    FForm.RemoveFreeNotification(FormStand);
+
+  if FormIsOwned and IsUsable(FForm) then
   begin
-    if not (csDestroying in FormStand.ComponentState) then
-    begin
+    // the form owns its controls: they go with it
     {$IFDEF AUTOREFCOUNT}
       FForm.DisposeOf;
       FForm := nil;
     {$ELSE}
       FreeAndNil(FForm);
     {$ENDIF}
-      FreeFormContainer;
-    end;
   end
-  else if Assigned(FFormContainer) then // no form container when the form has no controls
-  begin
+  else if IsUsable(FForm) and IsUsable(FFormContainer) then
+    // a form adopted with Use gets its controls back
     UnparentAll(FForm);
-    Container.RemoveObject(FFormContainer);
-    FreeFormContainer;
-  end;
+
+  // no form container when the form had no controls; its controls are freed
+  // with it when the form itself is being destroyed
+  FreeFormContainer;
+  FFormContainer := nil;
+end;
+
+procedure TFormInfo<T>.ComponentDestroyed(const AComponent: TComponent);
+begin
+  // the form container is a child of the stand
+  if AComponent = Stand then
+    FFormContainer := nil;
+  inherited;
 end;
 
 procedure TFormInfo<T>.UnparentAll(const AForm: TForm);

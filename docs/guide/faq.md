@@ -28,6 +28,8 @@ A control matched by a Common Action gets its `OnClick` replaced. Use a name tha
 
 `Close` (and `HideAndClose`, when it completes) frees the info object, and the frame too when it is owned. Clear your references, and don't use the info in code that runs after closing. See [Lifecycle & Ownership](/guide/lifecycle#closing-close-and-hideandclose).
 
+The info is also freed when its stand or its subject is destroyed by someone else (the parent or the form freed, an adopted frame freed by your code): see [When the parent or the subject is destroyed](/guide/lifecycle#when-the-parent-or-the-subject-is-destroyed). Use `FrameInfo(...)` / `GetFrameInfo<T>` instead of keeping references across such events.
+
 ### How do I show the same frame several times?
 
 Call `New<T>` several times: each call creates a new frame and a new clone of the stand. To reuse one instance, keep the info and call `Show`/`Hide` on it, or retrieve it with `FrameInfo<T>` / `GetFrameInfo<T>`.

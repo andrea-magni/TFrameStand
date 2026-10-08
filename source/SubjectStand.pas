@@ -87,6 +87,8 @@ type
     FHideContinuations: TList<TProc>;
     FCloseRequested: Boolean;
     FCloseContinuations: TList<TProc>;
+    FTearingDown: Boolean;
+    FDeferStandFree: Boolean;
     function GetIsVisible: Boolean;
   protected
     function GetSubject: TSubject; virtual; abstract;
@@ -135,6 +137,10 @@ type
     procedure TeardownSubjectContainer; virtual;
     procedure TeardownStandParent; virtual;
     procedure TeardownStand; virtual;
+    // stand and subject destroyed by someone else (e.g. with their parent)
+    procedure WatchComponents; virtual;
+    procedure ComponentDestroyed(const AComponent: TComponent); virtual;
+    class function IsUsable(const AObject: TFmxObject): Boolean; static;
     // delayed actions: cancelled when the info is destroyed
     procedure Track(const AAction: IDelayedAction);
     procedure CancelPendingActions;
@@ -229,6 +235,8 @@ type
     procedure DoAfterHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); virtual;
     procedure DoBeforeHide(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo); virtual;
     procedure DoClose(const ASubject: TSubject); virtual;
+    function GetSubjectInfos: TArray<TSubjectInfo>; virtual; abstract;
+    procedure SubjectComponentRemoved(const AComponent: TComponent); virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -599,7 +607,28 @@ begin
       FCommonActionList := nil
     else if (AComponent = FDefaultParent) then
       FDefaultParent := nil;
+
+    SubjectComponentRemoved(AComponent);
   end;
+end;
+
+procedure TSubjectStand.SubjectComponentRemoved(const AComponent: TComponent);
+var
+  LInfo: TSubjectInfo;
+  LSubject: TSubject;
+begin
+  // a stand or a subject is being destroyed by someone else (typically by
+  // FMX, with its parent or its form): forget it and drop the info, without
+  // touching the objects already gone
+  for LInfo in GetSubjectInfos do
+    if (not LInfo.FTearingDown)
+      and ((AComponent = LInfo.FStand) or (AComponent = LInfo.Subject)) then
+    begin
+      LSubject := LInfo.Subject;
+      LInfo.ComponentDestroyed(AComponent);
+      DoClose(LSubject); // frees LInfo
+      Break;
+    end;
 end;
 
 procedure TSubjectStand.SetResponsiveBreakpoints(
@@ -721,6 +750,7 @@ begin
   SetupSubjectContainer;
   SetupCommonActions(FStand);
 
+  WatchComponents;
   FStatus := Ready;
 end;
 
@@ -738,6 +768,7 @@ end;
 
 destructor TSubjectInfo.Destroy;
 begin
+  FTearingDown := True;
   // pending hides and closes must not run on a destroyed info
   if Assigned(FGuard) then
     FGuard.Kill;
@@ -1332,35 +1363,86 @@ begin
     SubjectStand.DoAfterShow(SubjectStand, Self);
 end;
 
-procedure TSubjectInfo.TeardownStand;
+// Objects destroyed by someone else have already been reported through
+// ComponentDestroyed (references cleared); objects being destroyed right now
+// (csDestroying) are left to their destructor.
+
+class function TSubjectInfo.IsUsable(const AObject: TFmxObject): Boolean;
 begin
-  if not (csDestroying in FSubjectStand.ComponentState) then
+  Result := Assigned(AObject) and not (csDestroying in AObject.ComponentState);
+end;
+
+procedure TSubjectInfo.TeardownStand;
+var
+  LStand: TControl;
+begin
+  if IsUsable(FStand) then
   begin
-    Stand.Free;
-    Stand := nil;
+    if FDeferStandFree then
+    begin
+      // the subject is being destroyed and still references the stand (its
+      // former parent): detach the stand now, free it once the subject is gone
+      LStand := FStand;
+      LStand.Visible := False;
+      LStand.Parent := nil;
+      TThread.ForceQueue(nil
+      , procedure
+        begin
+          LStand.Free;
+        end
+      );
+    end
+    else
+      FStand.Free; // also removes it from its parent
   end;
+  FStand := nil;
+  FContainer := nil;
 end;
 
 procedure TSubjectInfo.TeardownStandParent;
 begin
-  if not (csDestroying in FSubjectStand.ComponentState) then
-    Parent.RemoveObject(Stand);
-  Parent := nil;
+  // the stand is a child of the parent: if the stand is usable, so is the parent
+  if IsUsable(FStand) and IsUsable(FParent) and (FStand.Parent = FParent) then
+    FParent.RemoveObject(FStand);
+  FParent := nil;
 end;
 
 procedure TSubjectInfo.TeardownSubjectContainer;
 begin
-  if SubjectIsOwned and Assigned(Subject) then
+  if not IsUsable(Subject) then
+    Exit;
+
+  Subject.RemoveFreeNotification(FSubjectStand);
+  if SubjectIsOwned then
   begin
-    if not (csDestroying in FSubjectStand.ComponentState) then
-    begin
-      Subject.Free;
-      Subject := nil;
-    end;
+    Subject.Free;
+    Subject := nil;
   end
-  else
-  begin
+  else if IsUsable(FStand) and IsUsable(FContainer) then
     FContainer.RemoveObject(Subject);
+end;
+
+procedure TSubjectInfo.WatchComponents;
+begin
+  if Assigned(FStand) then
+    FStand.FreeNotification(FSubjectStand);
+  if Assigned(Subject) then
+    Subject.FreeNotification(FSubjectStand);
+end;
+
+procedure TSubjectInfo.ComponentDestroyed(const AComponent: TComponent);
+begin
+  if AComponent = FStand then
+  begin
+    // its children (the container and what it held) are gone too
+    FStand := nil;
+    FContainer := nil;
+    FParent := nil;
+  end;
+  if AComponent = Subject then
+  begin
+    Subject := nil;
+    FDeferStandFree := True;
   end;
 end;
 

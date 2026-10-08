@@ -84,4 +84,5 @@ The non-generic overloads `New(AClassName)` and `Use(AFrame)` exist only on TFra
 - Form-level events tied to the window (`OnShow`, `OnActivate`, `OnClose`, `OnResize`...) do not fire, because the form is never shown. `OnCreate` and `OnDestroy` do. Use the [lifecycle methods](/features/injection#lifecycle-methods) instead.
 - Properties of the form itself (`Fill`, its `StyleBook`, `Caption`...) are not carried over: only its children are moved. Put a `TRectangle` aligned to the client as the first child if you need a background.
 - Non-visual components (data modules, action lists, bindings) stay on the form and keep working.
+- While a form adopted with `Use` is shown, its controls are children of the stand: if the parent of the stand is destroyed, they are destroyed with it (the form itself survives, empty). Close the subject first if you want to show the form again.
 - The `TFormStand_HelloWorld`, `TFormStand_ActionList` and `TFormStand_LiveBindings` demos show Fire UI views, actions and LiveBindings working inside a form shown on a stand.

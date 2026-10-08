@@ -54,6 +54,7 @@ type
   protected
     FFrameInfos: TObjectDictionary<TFrame, TFrameInfo<TFrame>>;
     function GetCount: Integer; override;
+    function GetSubjectInfos: TArray<TSubjectInfo>; override;
     function GetFrameClass<T: TFrame>(var AParent: TFmxObject;
       var AStandStyleName: string): TFrameClass; overload;
     function GetFrameClass(const AClassName: string; var AParent: TFmxObject;
@@ -214,6 +215,16 @@ end;
 function TFrameStand.GetCount: Integer;
 begin
   Result := FFrameInfos.Count;
+end;
+
+function TFrameStand.GetSubjectInfos: TArray<TSubjectInfo>;
+var
+  LInfo: TFrameInfo<TFrame>;
+begin
+  Result := [];
+  if Assigned(FFrameInfos) then
+    for LInfo in FFrameInfos.Values do
+      Result := Result + [LInfo];
 end;
 
 function TFrameStand.GetFrameClass(const AClassName: string;

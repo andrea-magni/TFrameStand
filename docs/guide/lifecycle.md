@@ -98,7 +98,15 @@ FrameStand1.HideAndCloseAll([TDetailsFrame, TEditFrame]);
 FrameStand1.HideAndCloseAllExcept([TMenuFrame]);
 ```
 
-When the component is destroyed (with its form), all the remaining subjects are closed.
+When the component is destroyed, all the remaining subjects are closed: stands removed from their parents and freed, owned subjects freed, adopted ones detached and left to you. This holds also when the component lives elsewhere than the parents of its stands (on a data module, or on another form).
+
+## When the parent or the subject is destroyed
+
+The stand is a child of its parent, so FMX destroys it, with the subject inside, when the parent (or the whole form) is destroyed. The component is notified (through `FreeNotification`) and simply forgets the subject: the info is freed, the subject leaves `FrameInfos` and `VisibleFrames`, and nothing already destroyed is touched again. The same happens when your code frees an adopted frame or form that is on a stand.
+
+- Freeing a form with subjects still on screen is safe, in any order with respect to the component.
+- A frame adopted with `Use` is a child of the stand while it is shown: if its parent is destroyed, FMX destroys the frame too. Close it first (`Close`, `CloseAll`) if you want to keep it.
+- The controls of a form adopted by `TFormStand` live in the stand while it is shown: they share the same fate. A form created with `New` is freed with its owner component.
 
 ## Timing and threads
 

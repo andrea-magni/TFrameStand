@@ -158,7 +158,7 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
 
 ## Platform review (v.2.1)
 
-Done on request, before B6/B7, re-checking B1 and B15. Sources: `sourcemx` and `sourcetl` of Delphi 13.
+Done on request, before B6/B7, re-checking B1 and B15. Sources: `source\fmx` and `source\rtl` of Delphi 13.
 
 | Topic | Finding | How |
 |---|---|---|

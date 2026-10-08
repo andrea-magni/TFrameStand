@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Objects, FrameStand, FMX.Controls.Presentation
+  FMX.Objects, FrameStand, SubjectStand, FMX.Controls.Presentation
 , Frames.ColorDialog, FMX.Ani, FMX.Effects
 ;
 
@@ -91,10 +91,10 @@ begin
   // element in StyleBook1 and also tied to Button_cancel TButton
   // on the frame
   FrameStand1.CommonActions.Add('*_cancel'
-  , procedure (AInfo: TFrameInfo<TFrame>)
+  , procedure (AInfo: TSubjectInfo)
     begin
-      if (AInfo.Frame is TColorDialogFrame) then
-        TColorDialogFrame(AInfo.Frame).Cancel;
+      if (AInfo.Subject is TColorDialogFrame) then
+        TColorDialogFrame(AInfo.Subject).Cancel;
     end
   );
 end;

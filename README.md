@@ -13,6 +13,9 @@ _Supported: Delphi 10.4 Sydney to Delphi 13 Florence, all the FMX platforms. All
 **TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
 [Link on GetIt website](https://getitnow.embarcadero.com/?q=TFrameStand)
 
+## Installation - Setup
+Download `TFrameStand_<version>_Setup.exe` from the [latest release](https://github.com/andrea-magni/TFrameStand/releases/latest): it builds and installs the packages in the RAD Studio versions you choose (10.4 to 13) and sets the library path for all the platforms. See [Installation](https://andrea-magni.github.io/TFrameStand/guide/installation#setup).
+
 ## Installation - Manual
 1. Open the package group for your Delphi version, e.g. “packages\FrameStand_13.groupproj” (Delphi 13) or “packages\FrameStand_12.groupproj” (Delphi 12)
 2. Build both contained packages

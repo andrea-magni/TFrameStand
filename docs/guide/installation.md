@@ -10,6 +10,29 @@ You can also browse it on the [GetIt website](https://getitnow.embarcadero.com/?
 The GetIt version is the latest release. Installing from the repository gives you the latest commits, including fixes not released yet.
 :::
 
+## Setup
+
+Each [GitHub release](https://github.com/andrea-magni/TFrameStand/releases/latest) has a setup, `TFrameStand_<version>_Setup.exe`, that installs the library in one or more RAD Studio versions found on the computer (10.4 Sydney to 13 Florence). Close RAD Studio, run the setup, choose the folder and the RAD Studio versions. The setup:
+
+- copies the library (sources, packages, demos, tests, documentation sources) to the folder you choose, by default `Documents\TFrameStand`;
+- builds the runtime and design-time packages with the compiler of each selected RAD Studio version, and installs the design-time package (the components appear in the **Andrea Magni** page of the Tool Palette);
+- defines the IDE environment variable `TFRAMESTANDDIR` and adds `$(TFRAMESTANDDIR)\source` to the library path of **every platform** configured in the IDE: Windows (Win32, Win64, Win64x, WinArm64EC), Android, iOS, macOS and Linux;
+- uninstalls a previous version installed by the setup, and tries to remove a TFrameStand installed with GetIt in the same RAD Studio versions (if GetIt still lists it afterwards, uninstall it from GetIt: two copies of the components cannot be installed together).
+
+Uninstall it from **Settings ▸ Apps** (or with `unins000.exe` in the installation folder): packages, environment variable and library paths are removed; folders you created in `demos` are left in place.
+
+The setup can also run unattended:
+
+```bash
+TFrameStand_2.1_Setup.exe /DIR="C:\Dev\TFrameStand" /SILENT /RADStudioVersions=all
+```
+
+`/RADStudioVersions` takes `all` or a comma-separated list of product versions (`37.0` for Delphi 13, `23.0` for 12, `22.0` for 11, `21.0` for 10.4); by default the newest version found is used.
+
+::: info RAD Studio 11
+For RAD Studio 11 Alexandria the setup installs the `FrameStand_11_1` packages, that need 11.1 or later. On 11.0 install the packages of `FrameStand_11.groupproj` manually.
+:::
+
 ## Manual installation
 
 1. Clone or download the repository from [GitHub](https://github.com/andrea-magni/TFrameStand).

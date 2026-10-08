@@ -28,6 +28,18 @@ The script, with the `rsvars.bat` of the chosen Delphi:
 
 Everything is written under `build\<version>` (ignored by git): the `lib` folder and the `.res` files of the projects are not touched. At the end a summary lists each step; the exit code is 0 only if all of them succeeded, so the script can run in a CI job on a machine with Delphi.
 
+## The setup
+
+`setup\build-setup.cmd` builds the setup (Inno Setup 6) into `build\setup`:
+
+```bash
+setup\build-setup.cmd
+```
+
+It compiles a clean export of `HEAD` (`git archive`), so local changes and untracked files are never shipped: commit first. `ISCC.exe` is looked for in the `ISCC` environment variable, in the `PATH` and in the default Inno Setup 6 folders. The version is the `LibraryVersion` define at the top of `setup\Setup.iss`.
+
+`setup\Setup.iss` is based on the InnoSetupScripts library by Ethea (MIT license, derived from the Skia4Delphi setup), the same used by MARS-Curiosity: the shared code is in `setup\InnoSetupScripts`, the TFrameStand-specific parts (folders, library paths for all the platforms, demo folders) are in `Setup.iss`.
+
 ## The test suite
 
 `tests\TFrameStandTests.dpr` is a DUnitX console application. FireMonkey runs headless enough on Windows for these tests: frames and forms are created, shown, hidden and closed without showing any window.

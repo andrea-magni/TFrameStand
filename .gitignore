@@ -67,3 +67,7 @@ OSX32
 
 # build.cmd output
 /build/
+
+# setup: the VCL styles plugin is part of the setup sources; ISCC output
+!setup/InnoSetupScripts/Style/Setup.Styles.dll
+/setup/Output/

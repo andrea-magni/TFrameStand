@@ -37,7 +37,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B8 deprecated aliases streamed | fixed (`afe2905`), streaming test (old forms still load) |
 | B9 VisibleFrames history | fixed (`b5b736d`): Hide removes the *last* entry, Close removes all; duplicates are intended (Show/Hide history). FMX console test, 12 checks (6 fail on the previous code) |
 | B11 locale / uninitialized record | fixed (`690e5d6`), console test |
-| E3, E4, P7, B5, B6, B7, B10, B12, B13, B14, B15 | open: v.2.1 |
+| E3, E4, P7, B6, B7, B10, B12, B13, B14, B15 | open: v.2.1 |
 
 ## Status v.2.1 (in progress)
 
@@ -45,6 +45,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 |---|---|
 | B1 delayed actions on freed objects | fixed (`5fbd43a`): FMX timer service, cancellation on destroy, life guard. Tests: callbacks after Close / component freed, background-thread Execute, Schedule+Cancel, 1000 hide/close cycles with no memory growth, real `OnHide*` animation (hide after 314 ms for a 300 ms animation) |
 | B2 HideAndClose dropped while hiding | fixed (`fff9260`): continuations queued; double HideAndClose closes once and calls every AThen |
+| B5 method-parameter injection | fixed (`bbc8982`): one ResolveContext for fields and parameters, `[FrameInfo]`/`[FrameStand]`/`[FormInfo]`/`[FormStand]` on parameters, `ESubjectStandError` at New/Use naming field/parameter. Test: 21 checks, only 10 pass on v.2.0.1. Generic infos after responsive substitution: clear error with the right type (was EInvalidCast) |
 
 All 16 demos build for Win32 with Delphi 13 with no warnings.
 

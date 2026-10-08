@@ -27,7 +27,7 @@ package FrameStandPackage_11_1;
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'TFrameStand and TFormStand Runtime Package'}
 {$LIBSUFFIX AUTO}
-{$RUNONLY}
+{$RUNONLY ON}
 {$IMPLICITBUILD ON}
 
 requires

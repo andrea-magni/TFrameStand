@@ -67,7 +67,6 @@
         <DCC_BpiOutput>..\lib\cpp</DCC_BpiOutput>
         <DCC_HppOutputARM>true</DCC_HppOutputARM>
         <DCC_HppOutput>..\lib\cpp</DCC_HppOutput>
-        <DCC_AdditionalSwitches>-LUDesignIDE</DCC_AdditionalSwitches>
         <DCC_BplOutput>..\lib\bpl</DCC_BplOutput>
         <DCC_DcpOutput>..\lib\dcp</DCC_DcpOutput>
         <VerInfo_Locale>1040</VerInfo_Locale>

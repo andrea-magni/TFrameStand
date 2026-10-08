@@ -27,7 +27,7 @@ package FrameStandPackage_11;
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'TFrameStand and TFormStand Runtime Package'}
 {$LIBSUFFIX '_280'}
-{$RUNONLY}
+{$RUNONLY ON}
 {$IMPLICITBUILD ON}
 
 requires

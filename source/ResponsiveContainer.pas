@@ -238,11 +238,12 @@ var
   LFound: Boolean;
 begin
   Result := ASourceDef;
+  LMatch := Default(TResponsiveDefinition);
   LFound := False;
   for LOption in FOptions do
     if LOption.Matches(ASourceDef, ABreakpoint, Breakpoints) then
     begin
-      LMatch := LOption.Target;
+      LMatch := LOption.Target; // the last matching option wins
       LFound := True;
     end;
 
@@ -250,9 +251,9 @@ begin
   begin
     if Assigned(LMatch.SubjectClass) then
       Result.SubjectClass := LMatch.SubjectClass;
-    if (LOption.Target.StandName <> '') then
+    if (LMatch.StandName <> '') then
       Result.StandName := LMatch.StandName;
-    if Assigned(LOption.Target.Parent) then
+    if Assigned(LMatch.Parent) then
       Result.Parent := LMatch.Parent;
   end;
 end;

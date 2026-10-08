@@ -61,10 +61,6 @@ FrameStand1.Responsive.Define(
 
 In the target, an empty class, stand name or parent means "keep the requested one".
 
-::: warning Known issue (v.2.0)
-When more than one definition exists, the stand name and the parent of the matching target are applied only if the **last** definition in the list also has a non-empty stand name / parent. Substituting the class is not affected. Until this is fixed, keep definitions that change stand or parent as the last ones you add.
-:::
-
 ## When the substitution happens
 
 The lookup runs in `New` (not in `Use`, which receives an already created frame) and uses the width of the parent **at that moment**. A frame already on screen is not replaced when the window is resized: if you want that, close it and create it again when the breakpoint changes, as the `Responsive` demo does.

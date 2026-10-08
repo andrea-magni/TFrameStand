@@ -2,7 +2,7 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
-## Unreleased (v.2.1)
+## v.2.1 — October 2026
 
 **Delphi 10.4 Sydney is now the minimum version.** The packages for XE8 to 10.3 are removed, together with the code for the ARC compilers (Android and iOS up to 10.3), which could no longer be tested. Delphi 10.3 users can stay on v.2.0.1.
 

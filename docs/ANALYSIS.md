@@ -39,7 +39,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B11 locale / uninitialized record | fixed (`690e5d6`), console test |
 | E3, P7 | open (low priority) |
 
-## Status v.2.1 (in progress)
+## Status v.2.1 (released)
 
 | Item | Status |
 |---|---|

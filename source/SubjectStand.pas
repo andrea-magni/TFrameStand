@@ -224,6 +224,9 @@ type
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetDefaultParent: TFmxObject; virtual;
+    procedure SetStandBook(const AValue: TStyleBook);
+    procedure SetCommonActionList(const AValue: TActionList);
+    procedure SetDefaultParent(const AValue: TFmxObject);
     function GetStandStyleName(AStandStyleName: string): string;
     function GetCount: Integer; virtual; abstract;
     function GetResponsiveBreakpoint(const AName: string): TBreakpoint;
@@ -264,14 +267,14 @@ type
   published
     property AnimationShow: string read FAnimationShow write FAnimationShow;
     property AnimationHide: string read FAnimationHide write FAnimationHide;
-    property CommonActionList: TActionList read FCommonActionList write FCommonActionList;
+    property CommonActionList: TActionList read FCommonActionList write SetCommonActionList;
     property CommonActionPrefix: string read FCommonActionPrefix write FCommonActionPrefix;
     property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
     property DefaultStyleName: string read FDefaultStandName write FDefaultStandName stored False; // deprecated: use DefaultStandName
     property DefaultStandName: string read FDefaultStandName write FDefaultStandName;
-    property DefaultParent: TFmxObject read FDefaultParent write FDefaultParent;
-    property StyleBook: TStyleBook read FStandBook write FStandBook stored False; // deprecated: use StandBook
-    property StandBook: TStyleBook read FStandBook write FStandBook;
+    property DefaultParent: TFmxObject read FDefaultParent write SetDefaultParent;
+    property StyleBook: TStyleBook read FStandBook write SetStandBook stored False; // deprecated: use StandBook
+    property StandBook: TStyleBook read FStandBook write SetStandBook;
 
     // Events
     property OnAfterHide: TOnAfterHideEvent read FOnAfterHide write FOnAfterHide;
@@ -553,6 +556,42 @@ begin
   ASubjectClass := FTarget.SubjectClass;
   AStandStyleName := FTarget.StandName;
   AParent := FTarget.Parent;
+end;
+
+// The referenced components may live elsewhere (another form, a data module)
+// and be freed before this one: FreeNotification clears the references.
+
+procedure TSubjectStand.SetCommonActionList(const AValue: TActionList);
+begin
+  if FCommonActionList = AValue then
+    Exit;
+  if Assigned(FCommonActionList) then
+    FCommonActionList.RemoveFreeNotification(Self);
+  FCommonActionList := AValue;
+  if Assigned(FCommonActionList) then
+    FCommonActionList.FreeNotification(Self);
+end;
+
+procedure TSubjectStand.SetDefaultParent(const AValue: TFmxObject);
+begin
+  if FDefaultParent = AValue then
+    Exit;
+  if Assigned(FDefaultParent) then
+    FDefaultParent.RemoveFreeNotification(Self);
+  FDefaultParent := AValue;
+  if Assigned(FDefaultParent) then
+    FDefaultParent.FreeNotification(Self);
+end;
+
+procedure TSubjectStand.SetStandBook(const AValue: TStyleBook);
+begin
+  if FStandBook = AValue then
+    Exit;
+  if Assigned(FStandBook) then
+    FStandBook.RemoveFreeNotification(Self);
+  FStandBook := AValue;
+  if Assigned(FStandBook) then
+    FStandBook.FreeNotification(Self);
 end;
 
 function TSubjectStand.GetDefaultParent: TFmxObject;

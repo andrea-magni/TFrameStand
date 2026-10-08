@@ -23,6 +23,8 @@ Members are listed for `TFrameStand`; `TFormStand` has the same ones with `Form`
 | `StyleBook` | `TStyleBook` | | Old name of `StandBook`. |
 | `DefaultStyleName` | `string` | | Old name of `DefaultStandName`. |
 
+`StandBook`, `CommonActionList` and `DefaultParent` may refer to components on other forms or data modules: when one of them is freed, the property is cleared.
+
 Events: `OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide`, `OnBeforeStartAnimation`, `OnBindCommonActionList`, `OnGetSubjectClass`. See [Events](/reference/events).
 
 ## Public properties

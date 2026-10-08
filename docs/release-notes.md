@@ -9,6 +9,7 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 - `HideAndClose` called while a `Hide` (or another `HideAndClose`) is in progress now closes the subject when it completes; before, the close was silently dropped.
 - Lifecycle methods (`[BeforeShow]`, `[Show]`, `[AfterShow]`, `[Hide]`) accept `[FrameInfo]`, `[FrameStand]`, `[FormInfo]` and `[FormStand]` parameters, like fields. Injection problems raise an `ESubjectStandError` naming the field or parameter, when the subject is created (before: "Parameter count mismatch" or "Invalid class typecast", at `Show`).
 - Freeing a form, or a parent, with subjects still on screen no longer crashes: the components watch their stands and subjects (`FreeNotification`) and forget those destroyed by FMX or by the application. The same for adopted frames or forms freed while shown. Forms created with `New` are now freed with their owner (they leaked), and a component destroyed while its stands live on another form removes them.
+- `StandBook`, `CommonActionList` and `DefaultParent` can live on another form or a data module: they are cleared when that component is freed (before, the next `New` used a freed object).
 - `TFormStand`: closing an adopted form without controls no longer raises an assertion, and an adopted form gets back all its controls (about half of them were freed with the stand).
 
 ## v.2.0.1 — October 2026

@@ -25,8 +25,6 @@ type
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
-    FFrameInfo: TFrameInfo<THelloWorldFrame>;
-    FCodeRageFrameInfo: TFrameInfo<TCodeRageXFrame>;
   public
     { Public declarations }
   end;
@@ -40,14 +38,14 @@ implementation
 
 procedure TMainForm.CloseButtonClick(Sender: TObject);
 begin
-  FFrameInfo.Hide();
-  FFrameInfo.Close;
+  // no reference to keep: the frames can be shown many times, and the
+  // CodeRage X frame closes itself
+  FrameStand1.HideAndCloseAll([THelloWorldFrame]);
 end;
 
 procedure TMainForm.CloseCodeRageXButtonClick(Sender: TObject);
 begin
-  FCodeRageFrameInfo.Hide;
-  FCodeRageFrameInfo.Close;
+  FrameStand1.HideAndCloseAll([TCodeRageXFrame]);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -63,16 +61,12 @@ end;
 
 procedure TMainForm.ShowButtonClick(Sender: TObject);
 begin
-  FFrameInfo := FrameStand1.New<THelloWorldFrame>(Layout1, 'bluestand');
-
-  FFrameInfo.Show();
+  FrameStand1.NewAndShow<THelloWorldFrame>(Layout1, 'bluestand');
 end;
 
 procedure TMainForm.ShowCodeRageXButtonClick(Sender: TObject);
 begin
-  FCodeRageFrameInfo := FrameStand1.New<TCodeRageXFrame>(Layout1, 'bluestand');
-
-  FCodeRageFrameInfo.Show();
+  FrameStand1.NewAndShow<TCodeRageXFrame>(Layout1, 'bluestand');
 end;
 
 end.

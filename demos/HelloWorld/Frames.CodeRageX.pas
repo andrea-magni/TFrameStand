@@ -26,8 +26,9 @@ implementation
 
 procedure TCodeRageXFrame.Image1Click(Sender: TObject);
 begin
-  FInfo.Hide();
-  FInfo.Close;
+  // not Close: it would free the frame, Image1 included, while FMX is still
+  // processing the click on Image1
+  FInfo.HideAndClose;
 end;
 
 procedure TCodeRageXFrame.MyBeforeShow;

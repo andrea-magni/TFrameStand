@@ -37,7 +37,8 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B8 deprecated aliases streamed | fixed (`afe2905`), streaming test (old forms still load) |
 | B9 VisibleFrames history | fixed (`b5b736d`): Hide removes the *last* entry, Close removes all; duplicates are intended (Show/Hide history). FMX console test, 12 checks (6 fail on the previous code) |
 | B11 locale / uninitialized record | fixed (`690e5d6`), console test |
-| E3, P7 | open (low priority) |
+| E3 | not a defect: FMX style lookups ignore case (`TStyleIndexer` lowercases names and lookups), so `'viewport3d'` finds `viewport3D`. Verified with Delphi 13: the `stand3D` stand shows and gets its camera |
+| P7 | open (low priority) |
 
 ## Status v.2.1 (released)
 
@@ -76,7 +77,7 @@ All 16 demos build for Win32 with Delphi 13 with no warnings.
 |---|---|---|---|
 | E1 | `demos\Dialog` does not compile: `E2010 Incompatible types: 'TProc<TSubjectInfo>' and 'Procedure'` (`Forms.Main.pas(99)`). It is the regression reported in #84. | ✅ dcc32 | `procedure (AInfo: TSubjectInfo)` and `AInfo.Subject`. |
 | E2 | `Dialog` and `HelloWorld` are not in `AllDemosProjectGroup`. | ✅ | Add them. |
-| E3 | `Stand3D`: the `stand3D` branch of `OnBeforeShow` looks up `'viewport3d'`, a style name that does not exist in the stand (nil → AV if that stand is ever used). | ✅ decoded the style resource | Give the `TViewport3D` that `StyleName`. |
+| E3 | ~~`Stand3D`: the `stand3D` branch of `OnBeforeShow` looks up `'viewport3d'`, a style name that does not exist in the stand.~~ Wrong: the stand's `TViewport3D` is named `viewport3D` and FMX style lookups ignore case. | ✅ decoded the style resource; ✅ shown with Delphi 13 | None. |
 | E4 | No build check for the demos: E1 went unnoticed for 3 years. | | A `build.cmd` running msbuild on the package group and on `AllDemosProjectGroup` (see §5). |
 
 ## 3. Runtime defects

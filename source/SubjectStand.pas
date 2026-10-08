@@ -193,10 +193,13 @@ type
   TCommonActionDictionary<Info: TSubjectInfo> = class
   private
     FDictionary: TDictionary<string, TProc<Info>>;
+    FPatterns: TList<string>; // registration order
     function GetCount: Integer;
     function GetKeys: TArray<string>;
   protected
   public
+    /// <summary>Registers AAction for the controls matching APattern. Adding
+    /// a pattern again replaces its action (it keeps its place in the order).</summary>
     procedure Add(const APattern: string; const AAction: TProc<Info>);
     function TryGetValue(const APattern: string; out AAction: TProc<Info>): Boolean;
 
@@ -204,6 +207,8 @@ type
     destructor Destroy; override;
 
     property Count: Integer read GetCount;
+    /// <summary>The patterns, in registration order (the order the actions
+    /// matching the same control are run).</summary>
     property Keys: TArray<string> read GetKeys;
   end;
 
@@ -928,19 +933,23 @@ var
   LObj: TFmxObject;
   LPattern: string;
   LAction: TProc<TSubjectInfo>;
+  LGuard: ILifeGuard;
+  LCommonActions: TCommonActionDictionary<TSubjectInfo>;
 begin
   LObj := TFmxObject(Sender);
   LName := LObj.StyleName;
   if LName = '' then
     LName := LObj.Name;
 
-  for LPattern in SubjectStand.CommonActions.Keys do
+  LGuard := FGuard;
+  LCommonActions := SubjectStand.CommonActions;
+  // registration order; an action may close (free) this info: stop there
+  for LPattern in LCommonActions.Keys do
   begin
-    if MatchesMask(LName, LPattern) then
-    begin
-      if SubjectStand.CommonActions.TryGetValue(LPattern, LAction) then
-        LAction(Self);
-    end;
+    if not LGuard.IsAlive then
+      Break;
+    if MatchesMask(LName, LPattern) and LCommonActions.TryGetValue(LPattern, LAction) then
+      LAction(Self);
   end;
 end;
 
@@ -1613,17 +1622,21 @@ end;
 procedure TCommonActionDictionary<Info>.Add(const APattern: string;
   const AAction: TProc<Info>);
 begin
-  FDictionary.Add(APattern, AAction);
+  if not FDictionary.ContainsKey(APattern) then
+    FPatterns.Add(APattern);
+  FDictionary.AddOrSetValue(APattern, AAction);
 end;
 
 constructor TCommonActionDictionary<Info>.Create;
 begin
   inherited Create;
   FDictionary := TDictionary<string, TProc<Info>>.Create;
+  FPatterns := TList<string>.Create;
 end;
 
 destructor TCommonActionDictionary<Info>.Destroy;
 begin
+  FPatterns.Free;
   FDictionary.Free;
   inherited;
 end;
@@ -1635,7 +1648,7 @@ end;
 
 function TCommonActionDictionary<Info>.GetKeys: TArray<string>;
 begin
-  Result := FDictionary.Keys.ToArray;
+  Result := FPatterns.ToArray;
 end;
 
 function TCommonActionDictionary<Info>.TryGetValue(const APattern: string;

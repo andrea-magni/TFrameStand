@@ -34,8 +34,9 @@ FrameStand1.CommonActions.Add('*_cancel',
 
 ::: warning Things to know
 - Register Common Actions **before** creating the subjects: they are bound when the subject is created, and controls added to the frame later are not bound.
-- The matched control's `OnClick` is **replaced**. If a control needs its own handler, give it a name that does not match.
-- Patterns are kept in a dictionary: adding the same pattern twice raises an exception, and the order in which several matching actions run is not defined.
+- The matched control's `OnClick` is **replaced**. If a control needs its own handler, give it a name that does not match. This applies to controls with an `Action` too (set at design time or through `CommonActionList`): FMX runs the action only when `OnClick` is empty or is the action's `OnExecute`, so a matching Common Action takes its place.
+- When several patterns match the same control, their actions run in registration order. Adding a pattern again replaces its action, which keeps its place.
+- Dismiss the subject with `HideAndClose` (or `Hide`), not with `Close`: `Close` frees the frame, and with it the control being clicked, while FMX is still inside its `OnClick`. If an action closes the subject anyway, the following actions are not run.
 :::
 
 ## Stand elements as triggers

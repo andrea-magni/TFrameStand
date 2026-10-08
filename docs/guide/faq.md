@@ -22,7 +22,7 @@ Common Actions are bound when the subject is created (`New`/`Use`). Register the
 
 ### My OnClick handler is not called anymore
 
-A control matched by a Common Action gets its `OnClick` replaced. Use a name that does not match the pattern, or call your code from the Common Action.
+A control matched by a Common Action gets its `OnClick` replaced, and if it has an `Action`, the action is no longer executed either (FMX runs it only when `OnClick` is empty or is the action's own handler). Use a name that does not match the pattern, or call your code from the Common Action.
 
 ### An access violation after Close
 

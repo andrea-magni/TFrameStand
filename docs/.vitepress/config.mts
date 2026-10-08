@@ -60,6 +60,7 @@ const guideSidebar = [
       { text: 'Designing Stands', link: '/guide/stands' },
       { text: 'Lifecycle & Ownership', link: '/guide/lifecycle' },
       { text: 'FAQ & Troubleshooting', link: '/guide/faq' },
+      { text: 'Building & Testing', link: '/guide/building' },
     ],
   },
   {

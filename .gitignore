@@ -64,3 +64,6 @@ OSX32
 *.db
 
 .DS_Store
+
+# build.cmd output
+/build/

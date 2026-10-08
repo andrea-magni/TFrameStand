@@ -56,6 +56,9 @@ _Installing manually you get the latest updates (beware! :-) )_
 * **HelloWorld**: the minimal TFrameStand example (CodeRage X session).
 * **Dialog**: a color picker dialog with a Common Action bound to a button and to the stand background.
 
+## Building and testing
+`build.cmd [13|12|11_1|11|10_4] [all]` builds the packages, all the demos and the DUnitX test suite (`tests\`) for a Delphi version, and runs the tests; output in `build\`. See [Building & Testing](https://andrea-magni.github.io/TFrameStand/guide/building).
+
 # Related Links
 Embarcadero Delphi is a modern, powerful and effective language and development tool. Learn more about it at the following links:
  * https://www.embarcadero.com/

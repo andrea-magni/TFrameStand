@@ -37,7 +37,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B8 deprecated aliases streamed | fixed (`afe2905`), streaming test (old forms still load) |
 | B9 VisibleFrames history | fixed (`b5b736d`): Hide removes the *last* entry, Close removes all; duplicates are intended (Show/Hide history). FMX console test, 12 checks (6 fail on the previous code) |
 | B11 locale / uninitialized record | fixed (`690e5d6`), console test |
-| E3, E4, P7, B13 | open: v.2.1 |
+| E3, P7, B13 | open: v.2.1 |
 
 ## Status v.2.1 (in progress)
 
@@ -53,6 +53,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B6 3D parents, non-FMX owners | fixed (`903fc27`): lookup only with definitions, virtual GetParentWidth (3D layers: Width * Resolution, since LayerWidth is protected), ResolveParent with ESubjectStandError. Test: 4 scenarios (all failed before) |
 | B10 Common Actions | fixed (`c08459c`): registration order, Add replaces an existing pattern, life guard after an action closing the subject. Replacing OnClick kept by decision (documented, including the effect on controls with an Action). Test: 7 checks (4 failed before) |
 | E5 HelloWorld demo closes a frame inside its own click, keeps freed infos | fixed (`658ec5a`) |
+| E4 tests and build script | done: `tests\` (DUnitX, 54 tests, all the scenarios verified for v.2.0.1 and v.2.1; mutation-checked) and `build.cmd` (packages, demos, tests; output in `build\`, `.res` untouched via `SkipResGeneration`) |
 
 All 16 demos build for Win32 with Delphi 13 with no warnings.
 

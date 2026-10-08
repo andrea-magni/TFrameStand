@@ -215,10 +215,10 @@ type
     property CommonActionList: TActionList read FCommonActionList write FCommonActionList;
     property CommonActionPrefix: string read FCommonActionPrefix write FCommonActionPrefix;
     property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
-    property DefaultStyleName: string read FDefaultStandName write FDefaultStandName; // deprecated;
+    property DefaultStyleName: string read FDefaultStandName write FDefaultStandName stored False; // deprecated: use DefaultStandName
     property DefaultStandName: string read FDefaultStandName write FDefaultStandName;
     property DefaultParent: TFmxObject read FDefaultParent write FDefaultParent;
-    property StyleBook: TStyleBook read FStandBook write FStandBook; // deprecated
+    property StyleBook: TStyleBook read FStandBook write FStandBook stored False; // deprecated: use StandBook
     property StandBook: TStyleBook read FStandBook write FStandBook;
 
     // Events

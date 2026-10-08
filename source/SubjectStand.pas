@@ -141,6 +141,7 @@ type
     procedure WatchComponents; virtual;
     procedure ComponentDestroyed(const AComponent: TComponent); virtual;
     class function IsUsable(const AObject: TFmxObject): Boolean; static;
+    procedure DisposeComponent(const AComponent: TComponent);
     // delayed actions: cancelled when the info is destroyed
     procedure Track(const AAction: IDelayedAction);
     procedure CancelPendingActions;
@@ -1372,6 +1373,18 @@ begin
   Result := Assigned(AObject) and not (csDestroying in AObject.ComponentState);
 end;
 
+procedure TSubjectInfo.DisposeComponent(const AComponent: TComponent);
+begin
+  // drop the free notification first: under ARC (mobile, Delphi 10.3) the
+  // notification lists hold strong references
+  AComponent.RemoveFreeNotification(FSubjectStand);
+  {$IFDEF AUTOREFCOUNT}
+  AComponent.DisposeOf;
+  {$ELSE}
+  AComponent.Free;
+  {$ENDIF}
+end;
+
 procedure TSubjectInfo.TeardownStand;
 var
   LStand: TControl;
@@ -1383,17 +1396,23 @@ begin
       // the subject is being destroyed and still references the stand (its
       // former parent): detach the stand now, free it once the subject is gone
       LStand := FStand;
+      LStand.RemoveFreeNotification(FSubjectStand);
       LStand.Visible := False;
       LStand.Parent := nil;
       TThread.ForceQueue(nil
       , procedure
         begin
+          {$IFDEF AUTOREFCOUNT}
+          LStand.DisposeOf;
+          LStand := nil;
+          {$ELSE}
           LStand.Free;
+          {$ENDIF}
         end
       );
     end
     else
-      FStand.Free; // also removes it from its parent
+      DisposeComponent(FStand); // also removes it from its parent
   end;
   FStand := nil;
   FContainer := nil;
@@ -1412,14 +1431,17 @@ begin
   if not IsUsable(Subject) then
     Exit;
 
-  Subject.RemoveFreeNotification(FSubjectStand);
   if SubjectIsOwned then
   begin
-    Subject.Free;
+    DisposeComponent(Subject);
     Subject := nil;
   end
-  else if IsUsable(FStand) and IsUsable(FContainer) then
-    FContainer.RemoveObject(Subject);
+  else
+  begin
+    Subject.RemoveFreeNotification(FSubjectStand);
+    if IsUsable(FStand) and IsUsable(FContainer) then
+      FContainer.RemoveObject(Subject);
+  end;
 end;
 
 procedure TSubjectInfo.WatchComponents;

@@ -175,9 +175,15 @@ end;
 
 procedure TFormStand.DoAfterHide(const ASender: TSubjectStand;
   const ASubjectInfo: TSubjectInfo);
+var
+  LIndex: Integer;
 begin
   inherited;
-  FVisibleForms.Remove(ASubjectInfo.Subject as TForm);
+  // VisibleForms tracks the Show/Hide history: a form shown twice is listed twice,
+  // a Hide takes back its most recent Show
+  LIndex := FVisibleForms.LastIndexOf(ASubjectInfo.Subject as TForm);
+  if LIndex <> -1 then
+    FVisibleForms.Delete(LIndex);
 end;
 
 procedure TFormStand.DoBeforeShow(const ASender: TSubjectStand;
@@ -189,7 +195,9 @@ end;
 
 procedure TFormStand.DoClose(const ASubject: TFmxObject);
 begin
-  FVisibleForms.Remove(ASubject as TForm);
+  // the subject is going away: remove every entry, not just one
+  while FVisibleForms.Remove(ASubject as TForm) <> -1 do
+    ;
   inherited;
 end;
 

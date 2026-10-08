@@ -158,21 +158,29 @@ end;
 
 procedure TFrameStand.DoAfterHide(const ASender: TSubjectStand;
   const ASubjectInfo: TSubjectInfo);
+var
+  LIndex: Integer;
 begin
   inherited;
-  FVisibleFrames.Remove(ASubjectInfo.Subject as TFrame);
+  // VisibleFrames tracks the Show/Hide history: a frame shown twice is listed twice,
+  // a Hide takes back its most recent Show
+  LIndex := FVisibleFrames.LastIndexOf(ASubjectInfo.Subject as TFrame);
+  if LIndex <> -1 then
+    FVisibleFrames.Delete(LIndex);
 end;
 
 procedure TFrameStand.DoBeforeShow(const ASender: TSubjectStand;
   const ASubjectInfo: TSubjectInfo);
 begin
   inherited;
-   FVisibleFrames.Add(ASubjectInfo.Subject as TFrame);
+  FVisibleFrames.Add(ASubjectInfo.Subject as TFrame);
 end;
 
 procedure TFrameStand.DoClose(const ASubject: TFmxObject);
 begin
-  FVisibleFrames.Remove(ASubject as TFrame);
+  // the subject is going away: remove every entry, not just one
+  while FVisibleFrames.Remove(ASubject as TFrame) <> -1 do
+    ;
   inherited;
 end;
 

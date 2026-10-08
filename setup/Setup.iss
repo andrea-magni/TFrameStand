@@ -42,7 +42,7 @@
 
 #define LibraryName "TFrameStand"
 #define SetupName "TFrameStand"
-#define LibraryVersion "2.1"
+#define LibraryVersion "2.2"
 #define LibraryPublisher "Andrea Magni"
 #define LibraryCopyright "Copyright (c) Andrea Magni"
 #define LibraryURL "https://github.com/andrea-magni/TFrameStand"

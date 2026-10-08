@@ -24,7 +24,7 @@ Uninstall it from **Settings ▸ Apps** (or with `unins000.exe` in the installat
 The setup can also run unattended:
 
 ```bash
-TFrameStand_2.1_Setup.exe /DIR="C:\Dev\TFrameStand" /SILENT /RADStudioVersions=all
+TFrameStand_2.2_Setup.exe /DIR="C:\Dev\TFrameStand" /SILENT /RADStudioVersions=all
 ```
 
 `/RADStudioVersions` takes `all` or a comma-separated list of product versions (`37.0` for Delphi 13, `23.0` for 12, `22.0` for 11, `21.0` for 10.4); by default the newest version found is used.

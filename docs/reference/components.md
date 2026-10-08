@@ -31,7 +31,7 @@ Events: `OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide`, `OnBeforeS
 |---|---|---|
 | `Count` | `Integer` | Number of subjects handled. |
 | `FrameInfos` | `TObjectDictionary<TFrame, TFrameInfo<TFrame>>` | All the infos, keyed by frame. |
-| `VisibleFrames` | `TList<TFrame>` | Frames currently shown, in order of show. |
+| `VisibleFrames` | `TList<TFrame>` | History of the `Show`/`Hide` calls: each `Show` appends the frame (a frame shown twice is listed twice), each `Hide` removes its most recent entry, `Close` removes all its entries. |
 | `CommonActions` | `TCommonActionDictionary<TSubjectInfo>` | Registered [Common Actions](/features/common-actions). |
 | `Responsive` | `TResponsiveContainer` | Breakpoints and definitions for [responsive](/features/responsive) substitution. |
 | `ResponsiveBreakpoints` | `TArray<TBreakpoint>` | Read/replace all the breakpoints at once. |
@@ -73,7 +73,7 @@ function NewAndShow<T: TFrame>(const AParent: TFmxObject = nil;
 | `FrameInfo(AFrameClass: TFrameClass)` | the first info whose frame is of that class (or a descendant), or `nil` |
 | `FrameInfo<T>` | the same, typed |
 | `GetFrameInfo<T>(ANewIfNotFound = True; AParent = nil; AStandStyleName = '')` | `FrameInfo<T>`, or `New<T>(AParent, AStandStyleName)` when missing and `ANewIfNotFound` |
-| `LastShownFrame` | the last frame of `VisibleFrames`, or `nil` |
+| `LastShownFrame` | the last entry of `VisibleFrames` (the most recent `Show` not yet hidden), or `nil` |
 
 ## Closing subjects
 

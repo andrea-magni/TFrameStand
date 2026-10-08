@@ -2,9 +2,28 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
-## Unreleased (master)
+## v.2.0.1 — October 2026
 
-- Design-time packages for Delphi 12 and 13 fixed to require the runtime package of their own version ([#91](https://github.com/andrea-magni/TFrameStand/issues/91), [#94](https://github.com/andrea-magni/TFrameStand/issues/94)).
+Maintenance release: packages, demos and a few runtime fixes. No API changes.
+
+**Packages**
+- Runtime packages build again for every platform: the `-LUDesignIDE` switch is gone from them, it made Android, iOS and macOS builds fail with "Required package 'DesignIDE' not found" ([#90](https://github.com/andrea-magni/TFrameStand/issues/90)).
+- Design-time packages: `{$DESIGNONLY ON}` (the #92 fix had been lost for Delphi 13), `designide` in the `requires` clause, each project references only the runtime package of its own version ([#91](https://github.com/andrea-magni/TFrameStand/issues/91), [#92](https://github.com/andrea-magni/TFrameStand/issues/92), [#94](https://github.com/andrea-magni/TFrameStand/issues/94)).
+- Consistent CRLF line endings in the source archives ([#88](https://github.com/andrea-magni/TFrameStand/issues/88)).
+
+**Runtime**
+- Responsive: the stand name and the parent of a matching definition are applied even when it is not the last definition.
+- Responsive: breakpoints no longer depend on the order of the list (`SetBreakpoint` used to break `CurrentBreakpoint`).
+- `TBreakpoint` text format is locale-independent (`'xs (768.00)'`).
+- `VisibleFrames` / `VisibleForms` keep the Show/Hide history correctly: `Hide` takes back the most recent `Show` of the subject (it used to remove the oldest entry, so `LastShownFrame` / `LastShownForm` could return a hidden subject) and `Close` removes every entry of the subject.
+- The deprecated `StyleBook` and `DefaultStyleName` properties are no longer written to the `.fmx` files (still read).
+- `DeviceAndPlatformInfo` returns zeroed fields when the device information is not available.
+
+**Demos**
+- `Dialog` compiles again ([#84](https://github.com/andrea-magni/TFrameStand/issues/84)); `HelloWorld` calls its `[BeforeShow]` method; both are now in `AllDemosProjectGroup`.
+
+**Documentation**
+- New documentation site: <https://andrea-magni.github.io/TFrameStand/>.
 
 ## v.2.0 — March 2026
 

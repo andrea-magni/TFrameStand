@@ -77,7 +77,7 @@ The component keeps all the infos in `FrameInfos` (`FormInfos`), a dictionary ke
 FrameStand1.FrameInfo(MyFrame);                    // by instance
 FrameStand1.FrameInfo<TDetailsFrame>;              // first info whose frame is a TDetailsFrame
 FrameStand1.GetFrameInfo<TDetailsFrame>(True);     // the same, created with New<T> if missing
-FrameStand1.LastShownFrame;                         // the frame shown most recently and still visible
+FrameStand1.LastShownFrame;                         // the most recent Show not yet taken back by a Hide
 ```
 
 ## The component

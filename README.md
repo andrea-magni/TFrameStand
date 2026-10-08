@@ -1,23 +1,25 @@
 ![](https://img.shields.io/github/v/release/andrea-magni/TFrameStand)
 ![](https://img.shields.io/github/release-date/andrea-magni/TFrameStand)
-![](https://img.shields.io/github/commits-since/andrea-magni/TFrameStand/v.1.9)
+![](https://img.shields.io/github/commits-since/andrea-magni/TFrameStand/latest)
 
 ![TFrameStand](media/frame_stand_xhdpi.png)
 ![TFormStand](media/form_stand_xhdpi.png)
-#TFrameStand and TFormStand components (FMX)
+# TFrameStand and TFormStand components (FMX)
 Easily use TFrame or TForm descendants in your FireMonkey (FMX) applications to gain visual consistency though the whole user experience and easily add modern looking elements like effects and transitions.
 
-_All code and demos tested on Delphi XE8 and Delphi 12 Athens._
+_Supported: Delphi 10.3 Rio to Delphi 13 Florence, all the FMX platforms. All code and demos tested on Delphi 13 Florence._
 
 ## Installation - GetIt!
 **TFrameStand and TFormStand are [available on GetIt](https://blog.andreamagni.eu/2017/05/tframestand-v-1-3-available-on-github-and-getit/) (Embarcadero's Package Manager)**
 [Link on GetIt website](https://getitnow.embarcadero.com/?q=TFrameStand)
 
 ## Installation - Manual
-1. Open “packages\FrameStand_12.groupproj”
+1. Open the package group for your Delphi version, e.g. “packages\FrameStand_13.groupproj” (Delphi 13) or “packages\FrameStand_12.groupproj” (Delphi 12)
 2. Build both contained packages
-2. Install “dclFrameStandPackage_12_290.bpl” design time package
-3. Add “source\” library path for Delphi (repeat this for each platform you need to support)
+3. Install the design time package (“dclFrameStandPackage_13”, the BPL is “dclFrameStandPackage_13370.bpl”)
+4. Add “source\” library path for Delphi (repeat this for each platform you need to support)
+
+Details in the [installation guide](https://andrea-magni.github.io/TFrameStand/guide/installation).
 
 _Installing manually you get the latest updates (beware! :-) )_
 
@@ -51,6 +53,8 @@ _Installing manually you get the latest updates (beware! :-) )_
 * **FormStandActionList**: action list showcase with TFormStand.
 * **FormStandLiveBindings**: LiveBindings showcase with TFormStand.
 * **Stand3D**: example how to use a 3D container as stand for your frames
+* **HelloWorld**: the minimal TFrameStand example (CodeRage X session).
+* **Dialog**: a color picker dialog with a Common Action bound to a button and to the stand background.
 
 # Related Links
 Embarcadero Delphi is a modern, powerful and effective language and development tool. Learn more about it at the following links:

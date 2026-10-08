@@ -21,6 +21,26 @@ packaging, the responsive module) rather than in the core idea.
 
 Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 
+## Status after v.2.0.1 (branch `release/2.0.1`)
+
+| Item | Status |
+|---|---|
+| P1, P2, P6 design-time packages | fixed (`cdd4a61`), verified D13 Win32 + Win64x |
+| #90 `-LUDesignIDE` in the runtime packages (found while fixing P6) | fixed (`f043c4e`), verified D13 Win32, Win64, Android64, OSXARM64, iOSDevice64 |
+| P3 release | v.2.0.1 to be tagged |
+| P4 line endings | fixed: the whole index is LF, archives get CRLF |
+| P5 version claims | README and docs say 10.3 → 13; old packages left in place, unsupported |
+| E1 Dialog demo | fixed (`bed4b19`) |
+| E2 demo group | fixed (`e69dd53`). Correction: HelloWorld *does* have a .dproj; building it revealed `W1074` on `[BeforeShow]` (missing `SubjectStand` in uses), fixed in `e70c977` |
+| B3 Lookup | fixed (`26f8350`), console test |
+| B4 breakpoints order | fixed (`a04254e`), console test (18 cases) |
+| B8 deprecated aliases streamed | fixed (`afe2905`), streaming test (old forms still load) |
+| B9 VisibleFrames history | fixed (`b5b736d`): Hide removes the *last* entry, Close removes all; duplicates are intended (Show/Hide history). FMX console test, 12 checks (6 fail on the previous code) |
+| B11 locale / uninitialized record | fixed (`690e5d6`), console test |
+| E3, E4, P7, B1, B2, B5, B6, B7, B10, B12, B13, B14, B15 | open: v.2.1 |
+
+All 16 demos build for Win32 with Delphi 13 with no warnings.
+
 ## 1. Packaging and release
 
 | # | Finding | Evidence | Fix |
@@ -38,7 +58,7 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | # | Finding | Evidence | Fix |
 |---|---|---|---|
 | E1 | `demos\Dialog` does not compile: `E2010 Incompatible types: 'TProc<TSubjectInfo>' and 'Procedure'` (`Forms.Main.pas(99)`). It is the regression reported in #84. | ✅ dcc32 | `procedure (AInfo: TSubjectInfo)` and `AInfo.Subject`. |
-| E2 | `Dialog` and `HelloWorld` are not in `AllDemosProjectGroup`; `HelloWorld` has no `.dproj` at all. | ✅ | Add them (create the `.dproj`). |
+| E2 | `Dialog` and `HelloWorld` are not in `AllDemosProjectGroup`. | ✅ | Add them. |
 | E3 | `Stand3D`: the `stand3D` branch of `OnBeforeShow` looks up `'viewport3d'`, a style name that does not exist in the stand (nil → AV if that stand is ever used). | ✅ decoded the style resource | Give the `TViewport3D` that `StyleName`. |
 | E4 | No build check for the demos: E1 went unnoticed for 3 years. | | A `build.cmd` running msbuild on the package group and on `AllDemosProjectGroup` (see §5). |
 
@@ -54,10 +74,12 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 | B6 | Med | **`New` fails when the parent is not a `TControl` or a `TForm`** (e.g. the component on a `TForm3D`, or `DefaultParent` on a 3D object): `DoResponsiveLookup` raises "cannot determine parent Width" even when no responsive definition exists. `GetDefaultParent` does `Owner as TFmxObject` → `EInvalidCast` with a data-module owner. | 📖 | Skip the lookup when there are no definitions; use `TCommonCustomForm.ClientWidth`/`IControl`; give a clear error for non-FMX owners. |
 | B7 | Med | **No `FreeNotification`** on `StandBook`, `CommonActionList`, `DefaultParent`: if they live on another form or data module, freeing them leaves dangling pointers (`Notification` only works for components with the same owner). | 📖 | Property setters with `FreeNotification`/`RemoveFreeNotification`. |
 | B8 | Low | **Deprecated aliases are streamed twice**: `StyleBook`/`StandBook` and `DefaultStyleName`/`DefaultStandName` are both published and both written in every `.fmx`. | ✅ `lightbox\Forms.Main.fmx` | `stored False` on the deprecated ones (still read from old forms). |
-| B9 | Low | `VisibleFrames`/`VisibleForms` get duplicates when `Show` is called on an already visible subject; `Remove` drops only the first one, so `LastShownFrame` can return a hidden frame. | 📖 | Add only if absent (or move to the end). |
+| B9 | Low | `VisibleFrames`/`VisibleForms` are the Show/Hide history (duplicates intended), but `DoAfterHide` removed the *first* entry of the subject and `DoClose` only one: `LastShownFrame` could return a hidden frame, and a subject shown twice stayed listed after `Close`. | ✅ | Hide removes the last entry, Close all of them. |
 | B10 | Low | Common Actions overwrite the control's `OnClick` without notice; the pattern dictionary has no defined order; `Add` of an existing pattern raises. | 📖 | Chain the previous `OnClick`; ordered list; `AddOrSetValue`. |
 | B11 | Low | `TDeviceAndPlatformInfo.Retrieve` returns uninitialized fields when the behaviour service is not available. `TBreakpoint.ToString`/`Implicit` are locale dependent (`'xs (768,00)'` on an Italian system). | ✅ (locale) | `Result := Default(...)`; `FormatSettings.Invariant`. |
 | B12 | Info | `{$IFDEF AUTOREFCOUNT}` / `DisposeOf` branches are dead once the minimum version is 10.4. | 📖 | Remove with the next minimum-version bump. |
+| B14 | Med | `TFormInfo.TeardownSubjectContainer`: closing a form adopted with `Use` that has **no child controls** fails (`Assert(Assigned(FFormContainer))` in `UnparentAll`, AV without assertions), because `ParentAll` creates the form container only when there are children. | ✅ test | Skip unparenting when `FFormContainer` is nil. |
+| B15 | Med | Freeing the owner form while a form adopted with `Use` is still on its stand raises an access violation during teardown (the stand clones, children of the form, are already gone when `TFormStand` closes its subjects). Present before v.2.0.1 too. | ✅ test | Close the subjects (or detach the stands) from `Notification`/`BeforeDestruction`, or check `csDestroying` of the parent too. |
 | B13 | Info | `TFrameStand`/`TFormStand` duplicate ~150 lines (`CloseAll*`, `HideAndCloseAll*`, `New`, `Use`, `Remove`, `FrameInfo` overloads); `TFormStand` lacks the non-generic `New(AClassName)`/`Use` added for frames in #71. | 📖 | A generic intermediate class `TSubjectStand<S, I>` or shared protected helpers. |
 
 ## 4. Documentation (done)

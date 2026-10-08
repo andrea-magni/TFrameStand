@@ -31,7 +31,7 @@ echo === Exporting HEAD to %EXPORT%
 if exist "%EXPORT%" rmdir /s /q "%EXPORT%"
 mkdir "%EXPORT%"
 git -C "%ROOT%" archive --format=zip -o "%OUT%\source.zip" HEAD || exit /b 1
-tar -xf "%OUT%\source.zip" -C "%EXPORT%" || exit /b 1
+"%SystemRoot%\System32\tar.exe" -xf "%OUT%\source.zip" -C "%EXPORT%" || exit /b 1
 del "%OUT%\source.zip"
 
 echo === Compiling the setup with "%ISCC%"

@@ -5,5 +5,5 @@
 # against this commit, update only the affected pages, then move this
 # baseline forward to the new HEAD. See REGEN.md for the workflow.
 
-commit=8693c7e2918297ef896aa58b73d4029d2ed4f81f
+commit=34ad8bd5719ff4a335c8630e76d9fcfdaf8235ed
 date=2026-10-08

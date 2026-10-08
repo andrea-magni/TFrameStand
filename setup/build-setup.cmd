@@ -6,8 +6,9 @@ REM  The setup is built from a clean export of HEAD (committed files only):
 REM  local changes and untracked files are not included.
 REM  Output: build\setup\TFrameStand_<version>_Setup.exe
 REM
-REM  ISCC.exe is looked for in %ISCC%, in the PATH and in the default
-REM  Inno Setup 6 folders.
+REM  ISCC.exe is looked for in %ISCC%, in C:\Sviluppo\Inno Setup 6 (the
+REM  maintainer's machine), in the PATH and in the default Inno Setup 6
+REM  folders.
 REM ==========================================================================
 setlocal
 
@@ -16,6 +17,7 @@ for %%I in ("%ROOT%") do set "ROOT=%%~fI"
 set "OUT=%ROOT%\build\setup"
 set "EXPORT=%OUT%\source"
 
+if not defined ISCC if exist "C:\Sviluppo\Inno Setup 6\ISCC.exe" set "ISCC=C:\Sviluppo\Inno Setup 6\ISCC.exe"
 if not defined ISCC (
   for %%P in (ISCC.exe) do if not "%%~$PATH:P"=="" set "ISCC=%%~$PATH:P"
 )

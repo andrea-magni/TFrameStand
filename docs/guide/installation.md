@@ -48,10 +48,6 @@ TFrameStand_2.2_Setup.exe /DIR="C:\Dev\TFrameStand" /SILENT /RADStudioVersions=a
 
 Smart Setup clones the repository, compiles the runtime and design-time packages (Debug and Release), installs the design-time package in the IDE and adds the compiled units to the library path. Later on, `tms update andreamagni.tframestand` gets the latest version and rebuilds it, and `tms uninstall andreamagni.tframestand` removes it.
 
-::: info Listing in progress
-TFrameStand is being added to the Smart Setup community server: until `tms install andreamagni.tframestand` finds it, use the setup or the manual installation.
-:::
-
 ## Manual installation
 
 1. Clone or download the repository from [GitHub](https://github.com/andrea-magni/TFrameStand).

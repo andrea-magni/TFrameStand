@@ -2,12 +2,6 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
-## Unreleased
-
-**Installation**
-- TMS Smart Setup builds the runtime package for Linux64 too, when [FMXLinux](/guide/installation#tms-smart-setup) is installed (suggested by the Smart Setup maintainers).
-- The design-time package is built for Win64 too and installed in the 64-bit IDE of RAD Studio 12.3 and later, by the setup and by TMS Smart Setup (before, only the 32-bit IDE had the components). The design-time units use fully qualified unit names (`System.Classes`, `Winapi.Windows`).
-
 ## v.2.2 — October 2026
 
 Packaging release: setup, TMS Smart Setup, one package folder per Delphi version, TFrameStand in the About box and splash screen of the IDE. No changes to the runtime units.
@@ -15,10 +9,12 @@ Packaging release: setup, TMS Smart Setup, one package folder per Delphi version
 **Installation**
 - [Setup](/guide/installation#setup) (`TFrameStand_2.2_Setup.exe`, Inno Setup): builds and installs the packages in the RAD Studio versions you choose (10.4 to 13), defines `TFRAMESTANDDIR` and adds the source folder to the library path of every platform of the IDE. The setup attached to v.2.1 did not install anything (see below).
 - [TMS Smart Setup](/guide/installation#tms-smart-setup) support (`tmsbuild.yaml`, `version.txt`).
+- TMS Smart Setup builds the runtime package for Linux64 too, when [FMXLinux](/guide/installation#tms-smart-setup) is installed (suggested by the Smart Setup maintainers).
 
 **IDE**
 - TFrameStand is listed in the About box of RAD Studio and on its splash screen, with its version and license (as MARS-Curiosity).
 - The components are in the **TFrameStand - Andrea Magni** page of the Tool Palette (it was **Andrea Magni**).
+- The design-time package is built for Win64 too and installed in the 64-bit IDE of RAD Studio 12.3 and later, by the setup and by TMS Smart Setup. The design-time units use fully qualified unit names (`System.Classes`, `Winapi.Windows`).
 
 **Packages**
 - One folder per Delphi version (`packages\104Sydney`, `11Alexandria`, `12Athens`, `13Florence`) with the same package names in all of them: `FrameStandPackage` and `dclFrameStandPackage` (before: `FrameStandPackage_13`, `dclFrameStandPackage_13`, ...). Remove the old design-time package before installing the new one; projects built with runtime packages must list `FrameStandPackage`.

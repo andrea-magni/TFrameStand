@@ -3,7 +3,7 @@ unit FormStand.Editors;
 interface
 
 uses
-  Classes, SysUtils
+  System.Classes, System.SysUtils
   , DesignEditors
   , FormStand
   ;
@@ -23,7 +23,7 @@ implementation
 
 uses
   DesignIntf
-  , Windows, FormStand.Editors.Forms.Test;
+  , Winapi.Windows, FormStand.Editors.Forms.Test;
 
 procedure Register;
 begin

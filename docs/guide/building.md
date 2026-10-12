@@ -22,7 +22,7 @@ build.cmd 12 all
 The script, with the `rsvars.bat` of the chosen Delphi:
 
 1. builds the runtime package for Win32 and Win64 (and the mobile/macOS platforms with `all`);
-2. builds the design-time package for Win32 (and Win64x, the 64-bit IDE, with Delphi 13);
+2. builds the design-time package for Win32 (and Win64, for the 64-bit IDE, with Delphi 12 and 13);
 3. builds all the demos of `demos\AllDemosProjectGroup.groupproj` for Win32;
 4. builds and runs the test suite.
 

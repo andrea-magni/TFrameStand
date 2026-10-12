@@ -11,7 +11,8 @@ REM    all      also build the runtime package for Android64, iOSDevice64
 REM             and OSXARM64 (the SDKs must be installed in the IDE)
 REM
 REM  Steps: runtime package (Win32, Win64 [, mobile/macOS]), design-time
-REM  package (Win32 [, Win64x for Delphi 13]), all the demos (Win32), the
+REM  package (Win32 [, Win64 for the 64-bit IDE of Delphi 12 and 13]), all the
+REM  demos (Win32), the
 REM  DUnitX test suite (built and run).
 REM
 REM  Everything is written under build\<version>: lib\ and the .res files of
@@ -45,7 +46,8 @@ set "OUT=%ROOT%build\%VER%"
 set "PLATFORMS=Win32 Win64"
 if /i "%~2"=="all" set "PLATFORMS=Win32 Win64 Android64 iOSDevice64 OSXARM64"
 set "DCLPLATFORMS=Win32"
-if "%VER%"=="13" set "DCLPLATFORMS=Win32 Win64x"
+if "%VER%"=="13" set "DCLPLATFORMS=Win32 Win64"
+if "%VER%"=="12" set "DCLPLATFORMS=Win32 Win64"
 set "MSB=msbuild /nologo /v:minimal /p:Config=Release /p:SkipResGeneration=true"
 set "ERRORS=0"
 if not exist "%OUT%" mkdir "%OUT%"
@@ -74,17 +76,10 @@ if exist "%PKGDIR%\FrameStandPackage_nonshared.a" (
 REM --- design-time package (needs the runtime package of the same platform) --
 for %%P in (%DCLPLATFORMS%) do (
   set "PO=%OUT%\packages\%%P"
-  set "RT=!PO!"
-  if /i "%%P"=="Win64x" set "RT=%OUT%\packages\Win64x-runtime"
-  if /i "%%P"=="Win64x" (
-    %MSB% "%PKGDIR%\FrameStandPackage.dproj" /t:Build /p:Platform=Win64x ^
-      /p:DCC_BplOutput="!RT!" /p:DCC_DcpOutput="!RT!" /p:DCC_DcuOutput="!RT!\dcu" ^
-      /p:DCC_HppOutput="!RT!\hpp" /p:DCC_ObjOutput="!RT!\hpp" /p:DCC_BpiOutput="!RT!\hpp"
-  )
   echo.
   echo --- %PKG%\dclFrameStandPackage [%%P]
   %MSB% "%PKGDIR%\dclFrameStandPackage.dproj" /t:Build /p:Platform=%%P ^
-    /p:DCC_UnitSearchPath="!RT!" ^
+    /p:DCC_UnitSearchPath="!PO!" ^
     /p:DCC_BplOutput="!PO!" /p:DCC_DcpOutput="!PO!" /p:DCC_DcuOutput="!PO!\dcl-dcu" ^
     /p:DCC_HppOutput="!PO!\hpp" /p:DCC_ObjOutput="!PO!\hpp" /p:DCC_BpiOutput="!PO!\hpp"
   call :result !ERRORLEVEL! "design-time package %%P"

@@ -35,12 +35,13 @@ supported frameworks:
       - android64
       - linux64
 
-  # the design-time package: 32-bit IDE, and the 64-bit IDE of Delphi 12.2 and later
+  # the design-time package: 32-bit IDE, and the 64-bit IDE of Delphi 12.3 and later
+  # (it loads design-time packages built for Win64)
   ide:
     ide since: delphisydney
     platforms:
       - win32intel
-      - win64xintel
+      - win64intel
 
 packages:
   - FrameStandPackage: [runtime, fmx]

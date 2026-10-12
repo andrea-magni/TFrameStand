@@ -55,7 +55,7 @@
         <BuildGroupProject Include="dclFrameStandPackage.dproj">
             <ProjectGuid>{FA0F5B90-B67C-420B-AF4D-4AA3622FB029}</ProjectGuid>
             <Configurations>Release</Configurations>
-            <Platforms>Win32</Platforms>
+            <Platforms>Win32;Win64</Platforms>
             <Enabled>True</Enabled>
         </BuildGroupProject>
     </ItemGroup>

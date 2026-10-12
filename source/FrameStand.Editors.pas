@@ -3,7 +3,7 @@ unit FrameStand.Editors;
 interface
 
 uses
-  Classes, SysUtils
+  System.Classes, System.SysUtils
   , DesignEditors
   , FrameStand
   ;
@@ -23,7 +23,7 @@ implementation
 
 uses
   DesignIntf
-  , Windows, FrameStand.Editors.Forms.Test;
+  , Winapi.Windows, FrameStand.Editors.Forms.Test;
 
 procedure Register;
 begin

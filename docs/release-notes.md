@@ -6,6 +6,7 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 
 **Installation**
 - TMS Smart Setup builds the runtime package for Linux64 too, when [FMXLinux](/guide/installation#tms-smart-setup) is installed (suggested by the Smart Setup maintainers).
+- The design-time package is built for Win64 too and installed in the 64-bit IDE of RAD Studio 12.3 and later, by the setup and by TMS Smart Setup (before, only the 32-bit IDE had the components). The design-time units use fully qualified unit names (`System.Classes`, `Winapi.Windows`).
 
 ## v.2.2 — October 2026
 

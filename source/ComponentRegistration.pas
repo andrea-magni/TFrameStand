@@ -3,7 +3,7 @@ unit ComponentRegistration;
 interface
 
 uses
-  Classes, SysUtils
+  System.Classes, System.SysUtils
 ;
 
 procedure Register;

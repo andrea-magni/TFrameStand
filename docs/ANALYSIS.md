@@ -134,7 +134,7 @@ All 16 demos build for Win32 with Delphi 13 with no warnings.
 5. Package managers: SmartSetup `tmsbuild.yaml` (as for MARS), and a Boss/Delphinus manifest,
    which closes #17 after ten years.
 
-### v.3.0 — features (weeks)
+### v.2.3 — features (weeks)
 
 Ideas ordered by value for the users, as far as the issues and the demos suggest:
 
@@ -151,11 +151,14 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
    lower the entry barrier more than any API change.
 5. **Live responsive**: an opt-in `ResponsiveMode = rmLive` that re-creates (or re-parents) visible
    subjects when the breakpoint changes, instead of the manual close/new of the demo.
-6. Clean-ups that break compatibility: remove `Show(ABackgroundTask…)`, `StyleBook`,
-   `DefaultStyleName`, the `AUTOREFCOUNT` branches; minimum Delphi 10.4; merge the frame/form
-   duplication (B13).
+6. Deprecations: mark `Show(ABackgroundTask…)`, `StyleBook` and `DefaultStyleName` as
+   `deprecated` (removing them breaks compatibility: a future v.3.0). Already done in v.2.1: the
+   `AUTOREFCOUNT` branches, minimum Delphi 10.4, the frame/form duplication (B13).
 7. **AI agent skill** for TFrameStand, like the MARS skills (`mars-development`): the docs and
    `llms.txt` are a ready base.
+
+v.2.3 adds features without breaking existing code (the version was going to be v.3.0, renamed to keep
+the numbering close to v.2.2).
 
 ## Platform review (v.2.1)
 

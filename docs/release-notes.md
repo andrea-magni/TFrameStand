@@ -2,6 +2,11 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
+## Unreleased
+
+**Installation**
+- TMS Smart Setup builds the runtime package for Linux64 too, when [FMXLinux](/guide/installation#tms-smart-setup) is installed (suggested by the Smart Setup maintainers).
+
 ## v.2.2 — October 2026
 
 Packaging release: setup, TMS Smart Setup, one package folder per Delphi version, TFrameStand in the About box and splash screen of the IDE. No changes to the runtime units.

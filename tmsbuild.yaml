@@ -19,7 +19,8 @@ application:
 supported frameworks:
   # the runtime package, for every FMX platform: Smart Setup skips the platforms
   # that are not installed in the IDE. Linux64 needs FMXLinux, which is not a
-  # Smart Setup product, so it is left out.
+  # Smart Setup product (see "search paths to preserve" below): without it, only
+  # the Linux64 build fails, the other platforms are installed.
   fmx:
     ide since: delphisydney
     platforms:
@@ -32,6 +33,7 @@ supported frameworks:
       - iossimulator64arm
       - android32
       - android64
+      - linux64
 
   # the design-time package: 32-bit IDE, and the 64-bit IDE of Delphi 12.2 and later
   ide:
@@ -53,3 +55,9 @@ package options:
     delphi11: 11Alexandria
     delphi12: 12Athens
     delphi13: 13Florence
+
+paths:
+  # FMXLinux (FMX for Linux64) is installed from GetIt, not by Smart Setup: pass its
+  # library path to the compiler when it is there
+  search paths to preserve:
+    - '*fmxlinux*'

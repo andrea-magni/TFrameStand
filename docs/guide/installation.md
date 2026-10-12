@@ -31,7 +31,7 @@ TFrameStand_2.2_Setup.exe /DIR="C:\Dev\TFrameStand" /SILENT /RADStudioVersions=a
 
 ## TMS Smart Setup
 
-[TMS Smart Setup](https://doc.tmssoftware.com/smartsetup/) is a free, open-source command-line tool that downloads, builds and registers Delphi libraries. TFrameStand ships a `tmsbuild.yaml`, so Smart Setup can build it from sources for every supported Delphi version installed on your machine (**10.4 Sydney** and newer), for all the FMX platforms installed in the IDE (Linux excluded, since it needs FMXLinux).
+[TMS Smart Setup](https://doc.tmssoftware.com/smartsetup/) is a free, open-source command-line tool that downloads, builds and registers Delphi libraries. TFrameStand ships a `tmsbuild.yaml`, so Smart Setup can build it from sources for every supported Delphi version installed on your machine (**10.4 Sydney** and newer), for all the FMX platforms installed in the IDE.
 
 1. [Download and install Smart Setup](https://doc.tmssoftware.com/smartsetup/download/) (version 3.5 or later).
 2. The community server, where open-source libraries are listed, is disabled by default. Enable it once:
@@ -47,6 +47,18 @@ TFrameStand_2.2_Setup.exe /DIR="C:\Dev\TFrameStand" /SILENT /RADStudioVersions=a
    ```
 
 Smart Setup clones the repository, compiles the runtime and design-time packages (Debug and Release), installs the design-time package in the IDE and adds the compiled units to the library path. Later on, `tms update andreamagni.tframestand` gets the latest version and rebuilds it, and `tms uninstall andreamagni.tframestand` removes it.
+
+::: info Linux
+FireMonkey for Linux is [FMXLinux](https://getitnow.embarcadero.com/?q=fmxlinux), installed from GetIt: Smart Setup uses it when it is in the Linux64 library path of the IDE. If you have a Linux SDK configured but not FMXLinux (for example because you write Linux servers), the summary shows `linux64 -> FAILED` for TFrameStand: the other platforms are installed anyway. To skip Linux for TFrameStand, list the platforms you want in your `tms.config.yaml`:
+
+```yaml
+configuration for andreamagni.tframestand:
+  platforms:
+    - win32intel
+    - win64intel
+    - android64
+```
+:::
 
 ## Manual installation
 

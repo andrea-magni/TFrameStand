@@ -121,7 +121,9 @@ object MainForm: TMainForm
     CommonActionPrefix = 'ca_'
     DefaultHideAndCloseDeferTimeMS = 100
     DefaultStandName = 'framestand'
+    ResponsiveMode = rmLive
     OnBeforeShow = FrameStand1BeforeShow
+    OnResponsiveChange = FrameStand1ResponsiveChange
     Left = 200
     Top = 192
   end

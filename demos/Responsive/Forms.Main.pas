@@ -38,6 +38,8 @@ type
     procedure TextLGClick(Sender: TObject);
     procedure FrameStand1BeforeShow(const ASender: TSubjectStand;
       const ASubjectInfo: TSubjectInfo);
+    procedure FrameStand1ResponsiveChange(const ASender: TSubjectStand;
+      const AInfo: TSubjectInfo; const AOldSubject: TSubject);
   private
     { Private declarations }
     FBreakpoint: TBreakpoint;
@@ -133,16 +135,17 @@ begin
     FBreakpoint := LBreakpoint;
     Highlight(FBreakpoint.Name);
 
-    // close and reopen orders
-    if Assigned(FOrdersFI) then
-    begin
-      FOrdersFI.Close;
-      FOrdersFI := nil;
-
-      // new orders view
-      TSwitchToMessage.Send(maOrders, Self);
-    end;
+    // the orders view follows by itself (ResponsiveMode = rmLive): its frame
+    // is replaced in the same info, see FrameStand1ResponsiveChange
   end;
+end;
+
+procedure TMainForm.FrameStand1ResponsiveChange(const ASender: TSubjectStand;
+  const AInfo: TSubjectInfo; const AOldSubject: TSubject);
+begin
+  // the new orders frame gets the data module of the old one
+  if (AInfo.Subject is TOrdersFrame_xs) and (AOldSubject is TOrdersFrame_xs) then
+    TOrdersFrame_xs(AInfo.Subject).DM := TOrdersFrame_xs(AOldSubject).DM;
 end;
 
 procedure TMainForm.FrameStand1BeforeShow(const ASender: TSubjectStand;

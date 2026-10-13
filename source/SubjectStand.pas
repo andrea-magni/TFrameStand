@@ -75,7 +75,18 @@ type
 
   /// <summary>What Back (Android) and Esc do to a subject that is not a
   /// dialog (dialogs shown with ShowModal are cancelled).</summary>
-  TBackKeyAction = (baNone, baHide, baHideAndClose);
+  TBackKeyAction = (baNone, baHide, baHideAndClose,
+    /// <summary>Pop the navigation stack: set by Push on the pages above the root.</summary>
+    baPop);
+
+  /// <summary>What Push does to the page below: hides it and keeps it (shown
+  /// again, as it was, by Pop), leaves it visible under the new page, or
+  /// closes it (created again by Pop).</summary>
+  TPushMode = (pmHide, pmKeepVisible, pmClose);
+
+  /// <summary>The navigation operation in progress, for OnBeforeStartAnimation
+  /// (e.g. slide from the right on Push, from the left on Pop).</summary>
+  TStackOperation = (soNone, soPush, soPop);
 
   TSubjectInfo = class
   private
@@ -221,6 +232,16 @@ type
     property IsModal: Boolean read FModal;
   end;
 
+  /// <summary>A page of the navigation stack (Push/Pop).</summary>
+  TStackEntry = class
+  public
+    Info: TSubjectInfo; // nil while closed (PushMode = pmClose)
+    SubjectClass: TClass;
+    Parent: TFmxObject;
+    StandStyleName: string;
+    Config: TProc<TSubjectInfo>;
+  end;
+
   TOnAfterShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
   TOnBeforeShowEvent = TOnAfterShowEvent;
   TOnAfterHideEvent = TOnBeforeShowEvent;
@@ -270,14 +291,39 @@ type
     FDefaultHideAndCloseDeferTimeMS: Integer;
     FCatchBackKey: Boolean;
     FBackKeyHook: TComponent;
+    FPushMode: TPushMode;
+    FStack: TObjectList<TStackEntry>;
+    FStackOperation: TStackOperation;
+    FStackAction: IDelayedAction;
+    FBulkClosing: Boolean;
     procedure SetCatchBackKey(const AValue: Boolean);
     procedure UpdateBackKeyHook;
+    function GetStackCount: Integer;
+    function GetStackTop: TSubjectInfo;
+    function StackIndexOf(const AInfo: TSubjectInfo): Integer;
+    /// <summary>Shows the top page again (creates it again with pmClose).</summary>
+    procedure ShowStackTop;
+    /// <summary>Back to the page at AIndex: the pages above it are closed, the
+    /// top one with its hide animation.</summary>
+    function PopTo(const AIndex: Integer): Boolean;
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure Loaded; override;
     /// <summary>The subject Back/Esc acts on: the last shown one, still
     /// visible and not hiding, that is a dialog (ShowModal) or has a BackKeyAction.</summary>
     function BackKeyTarget: TSubjectInfo; virtual; abstract;
+    /// <summary>A new subject of class AClass (after responsive substitution
+    /// and OnGetSubjectClass), like New: used by Pop with PushMode = pmClose.</summary>
+    function NewSubject(const AClass: TClass; const AParent: TFmxObject;
+      const AStandStyleName: string): TSubjectInfo; virtual; abstract;
+    /// <summary>Puts AInfo on top of the navigation stack and shows it: the
+    /// implementation of Push.</summary>
+    procedure PushInfo(const AInfo: TSubjectInfo; const AClass: TClass;
+      const AParent: TFmxObject; const AStandStyleName: string;
+      const AConfig: TProc<TSubjectInfo>);
+    /// <summary>A subject is being destroyed: it leaves the stack; if it was
+    /// the top page, closed by someone else, the page below is shown again.</summary>
+    procedure StackInfoDestroyed(const AInfo: TSubjectInfo);
     function GetDefaultParent: TFmxObject; virtual;
     /// <summary>The parent for a new stand: AParent, else DefaultParent, else
     /// the owner when it is a FMX object. Raises ESubjectStandError if none.</summary>
@@ -334,7 +380,22 @@ type
     /// form, or set CatchBackKey.</summary>
     function HandleBackKey(var AKey: Word; var AKeyChar: Char): Boolean;
 
+    /// <summary>Closes the top page of the navigation stack (with its hide
+    /// animation) and shows the page below again. False when the stack has
+    /// one page or none: the root page is not popped.</summary>
+    function Pop: Boolean;
+    /// <summary>Back to the first page of the stack: the pages in between
+    /// are closed without animations.</summary>
+    function PopToRoot: Boolean;
+
     property Count: Integer read GetCount;
+    /// <summary>Pages in the navigation stack (Push/Pop).</summary>
+    property StackCount: Integer read GetStackCount;
+    /// <summary>The page on top of the navigation stack, nil when it is empty.</summary>
+    property StackTop: TSubjectInfo read GetStackTop;
+    /// <summary>soPush or soPop while Push or Pop show and hide pages (read
+    /// it in OnBeforeStartAnimation), soNone otherwise.</summary>
+    property StackOperation: TStackOperation read FStackOperation;
     property CommonActions: TCommonActionDictionary<TSubjectInfo> read FCommonActions;
     property Responsive: TResponsiveContainer read FResponsive;
     property ResponsiveBreakpoints: TArray<TBreakpoint> read GetResponsiveBreakpoints
@@ -350,6 +411,8 @@ type
     /// for the keys not handled. The owner must be a form; assigning OnKeyDown
     /// in code after the form is created replaces the hook.</summary>
     property CatchBackKey: Boolean read FCatchBackKey write SetCatchBackKey default False;
+    /// <summary>What Push does to the page below (see TPushMode).</summary>
+    property PushMode: TPushMode read FPushMode write FPushMode default pmHide;
     property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
     property DefaultStyleName: string read FDefaultStandName write FDefaultStandName stored False; // deprecated: use DefaultStandName
     property DefaultStandName: string read FDefaultStandName write FDefaultStandName;
@@ -686,17 +749,194 @@ procedure TSubjectStand.CloseSubjects(const AClasses: TArray<TClass>;
 var
   LInfo: TSubjectInfo;
 begin
-  for LInfo in GetSubjectInfos do
+  // closing everything: the navigation stack goes too (no page shown again)
+  if (Length(AClasses) = 0) and not AExcept then
+    FStack.Clear;
+  FBulkClosing := True;
+  try
+    for LInfo in GetSubjectInfos do
+    begin
+      // closing a subject frees the subjects shown inside its controls too:
+      // skip the infos already gone (do not even read them)
+      if not IsRegistered(LInfo) then
+        Continue;
+      if (Length(AClasses) = 0) or (ClassInArray(LInfo.Subject, AClasses) <> AExcept) then
+        if AHide then
+          LInfo.HideAndClose
+        else
+          LInfo.Close;
+    end;
+  finally
+    FBulkClosing := False;
+  end;
+end;
+
+function TSubjectStand.GetStackCount: Integer;
+begin
+  Result := 0;
+  if Assigned(FStack) then
+    Result := FStack.Count;
+end;
+
+function TSubjectStand.GetStackTop: TSubjectInfo;
+begin
+  Result := nil;
+  if GetStackCount > 0 then
+    Result := FStack.Last.Info;
+end;
+
+function TSubjectStand.StackIndexOf(const AInfo: TSubjectInfo): Integer;
+var
+  LIndex: Integer;
+begin
+  Result := -1;
+  if Assigned(FStack) then
+    for LIndex := FStack.Count - 1 downto 0 do
+      if FStack[LIndex].Info = AInfo then
+        Exit(LIndex);
+end;
+
+procedure TSubjectStand.PushInfo(const AInfo: TSubjectInfo; const AClass: TClass;
+  const AParent: TFmxObject; const AStandStyleName: string;
+  const AConfig: TProc<TSubjectInfo>);
+var
+  LEntry, LBelow: TStackEntry;
+  LBelowInfo: TSubjectInfo;
+begin
+  LBelow := nil;
+  if FStack.Count > 0 then
+    LBelow := FStack.Last;
+  LEntry := TStackEntry.Create;
+  LEntry.Info := AInfo;
+  LEntry.SubjectClass := AClass;
+  LEntry.Parent := AParent;
+  LEntry.StandStyleName := AStandStyleName;
+  LEntry.Config := AConfig;
+  FStack.Add(LEntry);
+  if Assigned(LBelow) then
+    AInfo.BackKeyAction := baPop; // the root page is left to the form
+
+  FStackOperation := soPush;
+  try
+    AInfo.SubjectShow;
+    if Assigned(LBelow) and Assigned(LBelow.Info) then
+      case FPushMode of
+        pmHide:
+          LBelow.Info.Hide;
+        pmClose:
+          begin
+            LBelowInfo := LBelow.Info;
+            LBelow.Info := nil; // closed on purpose: Pop creates it again
+            LBelowInfo.HideAndClose;
+          end;
+      end;
+  finally
+    FStackOperation := soNone;
+  end;
+end;
+
+procedure TSubjectStand.ShowStackTop;
+var
+  LEntry: TStackEntry;
+  LInfo: TSubjectInfo;
+begin
+  if GetStackCount = 0 then
+    Exit;
+  LEntry := FStack.Last;
+  if not Assigned(LEntry.Info) then
   begin
-    // closing a subject frees the subjects shown inside its controls too:
-    // skip the infos already gone (do not even read them)
-    if not IsRegistered(LInfo) then
-      Continue;
-    if (Length(AClasses) = 0) or (ClassInArray(LInfo.Subject, AClasses) <> AExcept) then
-      if AHide then
-        LInfo.HideAndClose
-      else
-        LInfo.Close;
+    LEntry.Info := NewSubject(LEntry.SubjectClass, LEntry.Parent, LEntry.StandStyleName);
+    if FStack.Count > 1 then
+      LEntry.Info.BackKeyAction := baPop;
+    if Assigned(LEntry.Config) then
+      LEntry.Config(LEntry.Info);
+  end;
+  LInfo := LEntry.Info;
+  if LInfo.FCloseRequested then // being closed by someone else
+    Exit;
+  if LInfo.Hiding then
+    // still hiding (a quick Push then Pop): shown again when the hide completes
+    LInfo.Hide(0,
+      procedure
+      begin
+        LInfo.SubjectShow;
+      end)
+  else if not LInfo.IsVisible then
+    LInfo.SubjectShow;
+end;
+
+function TSubjectStand.PopTo(const AIndex: Integer): Boolean;
+var
+  LTopInfo, LInfo: TSubjectInfo;
+begin
+  Result := (AIndex >= 0) and (AIndex < GetStackCount - 1);
+  if not Result then
+    Exit;
+  // the entries leave the stack before their subjects are closed: closing
+  // them is not "closed by someone else"
+  LTopInfo := FStack.Last.Info;
+  FStack.Delete(FStack.Count - 1);
+  while FStack.Count - 1 > AIndex do
+  begin
+    LInfo := FStack.Last.Info;
+    FStack.Delete(FStack.Count - 1);
+    if Assigned(LInfo) then
+      LInfo.Close;
+  end;
+
+  FStackOperation := soPop;
+  try
+    ShowStackTop;
+    if Assigned(LTopInfo) then
+    begin
+      // the page leaving stays in front during its hide animation
+      if TSubjectInfo.IsUsable(LTopInfo.Stand) then
+        LTopInfo.Stand.BringToFront;
+      LTopInfo.HideAndClose;
+    end;
+  finally
+    FStackOperation := soNone;
+  end;
+end;
+
+function TSubjectStand.Pop: Boolean;
+begin
+  Result := PopTo(GetStackCount - 2);
+end;
+
+function TSubjectStand.PopToRoot: Boolean;
+begin
+  Result := PopTo(0);
+end;
+
+procedure TSubjectStand.StackInfoDestroyed(const AInfo: TSubjectInfo);
+var
+  LIndex: Integer;
+  LWasTop: Boolean;
+begin
+  LIndex := StackIndexOf(AInfo);
+  if LIndex < 0 then
+    Exit;
+  LWasTop := LIndex = FStack.Count - 1;
+  FStack.Delete(LIndex);
+  if LWasTop and (FStack.Count > 0) and not FBulkClosing
+    and not (csDestroying in ComponentState) then
+  begin
+    // the top page closed by someone else (not by Pop): back to the page
+    // below, once this destruction is over
+    if Assigned(FStackAction) then
+      FStackAction.Cancel;
+    FStackAction := TDelayedAction.Schedule(1,
+      procedure
+      begin
+        FStackAction := nil;
+        FStackOperation := soPop;
+        try
+          ShowStackTop;
+        finally
+          FStackOperation := soNone;
+        end;
+      end);
   end;
 end;
 
@@ -755,12 +995,17 @@ begin
   FCommonActionPrefix := 'ca_';
   FCommonActions := TCommonActionDictionary<TSubjectInfo>.Create;
   FResponsive := TResponsiveContainer.Create;
+  FStack := TObjectList<TStackEntry>.Create(True);
 end;
 
 destructor TSubjectStand.Destroy;
 begin
   FCatchBackKey := False;
   UpdateBackKeyHook;
+  if Assigned(FStackAction) then
+    FStackAction.Cancel;
+  FStackAction := nil;
+  FreeAndNil(FStack);
   FreeAndNil(FCommonActions);
   FreeAndNil(FResponsive);
   inherited;
@@ -1040,6 +1285,8 @@ begin
   Result := True;
   if LTarget.IsModal then
     LTarget.ModalResult := mrCancel
+  else if (LTarget.BackKeyAction = baPop) and (LTarget = StackTop) then
+    Pop
   else if LTarget.BackKeyAction = baHide then
     LTarget.Hide
   else
@@ -1255,6 +1502,8 @@ end;
 
 destructor TSubjectInfo.Destroy;
 begin
+  if Assigned(FSubjectStand) then
+    FSubjectStand.StackInfoDestroyed(Self);
   FTearingDown := True;
   // pending hides and closes must not run on a destroyed info
   if Assigned(FGuard) then

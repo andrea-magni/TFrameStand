@@ -81,6 +81,8 @@ type
   private
     FOnGetFormClass: TOnGetFormClassEvent;
   protected
+    function NewSubject(const AClass: TClass; const AParent: TFmxObject;
+      const AStandStyleName: string): TSubjectInfo; override;
     function GetFormClass<T: TForm>(var AParent: TFmxObject; var AStandStyleName: string): TFormClass;
   public
     function LastShownForm: TForm;
@@ -97,6 +99,13 @@ type
 
     function New<T: TForm>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFormInfo<T>;
+
+    /// <summary>Navigation stack: creates a form of class T (like New), puts
+    /// it on top of the stack and shows it; the page below is hidden, left
+    /// visible or closed, as PushMode says. AConfigProc configures the form
+    /// (again when Pop creates it anew, with PushMode = pmClose).</summary>
+    function Push<T: TForm>(const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil): TFormInfo<T>;
 
     function NewAndShow<T: TForm>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil;
@@ -165,6 +174,50 @@ begin
     LForm.Name := '';
     Result := Use<T>(LForm, LParent, LStandName);
     Result.FormIsOwned := True;
+  except
+    LForm.Free;
+    raise;
+  end;
+end;
+
+function TFormStand.Push<T>(const AParent: TFmxObject;
+  const AStandStyleName: string; const AConfigProc: TProc<T>): TFormInfo<T>;
+var
+  LConfig: TProc<TSubjectInfo>;
+begin
+  LConfig := nil;
+  if Assigned(AConfigProc) then
+    LConfig :=
+      procedure (AInfo: TSubjectInfo)
+      begin
+        if AInfo.Subject is T then
+          AConfigProc(T(AInfo.Subject));
+      end;
+  Result := New<T>(AParent, AStandStyleName);
+  if Assigned(LConfig) then
+    LConfig(Result);
+  PushInfo(Result, TClass(T), AParent, AStandStyleName, LConfig);
+end;
+
+function TFormStand.NewSubject(const AClass: TClass; const AParent: TFmxObject;
+  const AStandStyleName: string): TSubjectInfo;
+var
+  LClass: TFormClass;
+  LParent: TFmxObject;
+  LStandName: string;
+  LForm: TForm;
+begin
+  LParent := ResolveParent(AParent);
+  LStandName := AStandStyleName;
+  LClass := TFormClass(AClass);
+  DoResponsiveLookup(TSubjectClass(LClass), LStandName, LParent);
+  if Assigned(FOnGetFormClass) then
+    FOnGetFormClass(Self, LParent, LStandName, LClass);
+  LForm := LClass.Create(nil);
+  try
+    LForm.Name := '';
+    Result := Use<TForm>(LForm, LParent, LStandName);
+    TFormInfo<TForm>(Result).FormIsOwned := True;
   except
     LForm.Free;
     raise;

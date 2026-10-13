@@ -56,6 +56,8 @@ type
   private
     FOnGetFrameClass: TOnGetFrameClassEvent;
   protected
+    function NewSubject(const AClass: TClass; const AParent: TFmxObject;
+      const AStandStyleName: string): TSubjectInfo; override;
     function GetFrameClass<T: TFrame>(var AParent: TFmxObject;
       var AStandStyleName: string): TFrameClass; overload;
     function GetFrameClass(const AClassName: string; var AParent: TFmxObject;
@@ -82,6 +84,13 @@ type
     function New(const AFrameClassName: string; const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''): TFrameInfo<TFrame>; overload;
 
+
+    /// <summary>Navigation stack: creates a frame of class T (like New), puts
+    /// it on top of the stack and shows it; the page below is hidden, left
+    /// visible or closed, as PushMode says. AConfigProc configures the frame
+    /// (again when Pop creates it anew, with PushMode = pmClose).</summary>
+    function Push<T: TFrame>(const AParent: TFmxObject = nil;
+      const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil): TFrameInfo<T>;
 
     function NewAndShow<T: TFrame>(const AParent: TFmxObject = nil;
       const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil;
@@ -195,6 +204,50 @@ begin
     LFrame.Name := '';
     Result := Use<T>(LFrame, LParent, LStandName);
     Result.FrameIsOwned := True;
+  except
+    LFrame.Free;
+    raise;
+  end;
+end;
+
+function TFrameStand.Push<T>(const AParent: TFmxObject;
+  const AStandStyleName: string; const AConfigProc: TProc<T>): TFrameInfo<T>;
+var
+  LConfig: TProc<TSubjectInfo>;
+begin
+  LConfig := nil;
+  if Assigned(AConfigProc) then
+    LConfig :=
+      procedure (AInfo: TSubjectInfo)
+      begin
+        if AInfo.Subject is T then
+          AConfigProc(T(AInfo.Subject));
+      end;
+  Result := New<T>(AParent, AStandStyleName);
+  if Assigned(LConfig) then
+    LConfig(Result);
+  PushInfo(Result, TClass(T), AParent, AStandStyleName, LConfig);
+end;
+
+function TFrameStand.NewSubject(const AClass: TClass; const AParent: TFmxObject;
+  const AStandStyleName: string): TSubjectInfo;
+var
+  LClass: TFrameClass;
+  LParent: TFmxObject;
+  LStandName: string;
+  LFrame: TFrame;
+begin
+  LParent := ResolveParent(AParent);
+  LStandName := AStandStyleName;
+  LClass := TFrameClass(AClass);
+  DoResponsiveLookup(TSubjectClass(LClass), LStandName, LParent);
+  if Assigned(FOnGetFrameClass) then
+    FOnGetFrameClass(Self, LParent, LStandName, LClass);
+  LFrame := LClass.Create(nil);
+  try
+    LFrame.Name := '';
+    Result := Use(LFrame, LParent, LStandName);
+    TFrameInfo<TFrame>(Result).FrameIsOwned := True;
   except
     LFrame.Free;
     raise;

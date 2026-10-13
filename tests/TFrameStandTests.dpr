@@ -24,7 +24,8 @@ uses
   Tests.Teardown in 'Tests.Teardown.pas',
   Tests.CommonActions in 'Tests.CommonActions.pas',
   Tests.ModalResult in 'Tests.ModalResult.pas',
-  Tests.BackKey in 'Tests.BackKey.pas';
+  Tests.BackKey in 'Tests.BackKey.pas',
+  Tests.Stack in 'Tests.Stack.pas';
 
 var
   LResults: IRunResults;

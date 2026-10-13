@@ -24,7 +24,7 @@ A floating button that slides in over the form or over another control. The stan
 
 ### ViewAndDialogs
 
-Material Design-like transitions to open a view (the details of an employee) and a dialog (rate a picture) from a `TListView`.
+Material Design-like transitions to open a view (the details of an employee) and a dialog (rate a picture) from a `TListView`. Back and Esc hide them (`CatchBackKey`, `BackKeyAction = baHide`).
 
 <img class="demo-gif" src="/gifs/demos_viewsdialogs.gif" alt="ViewAndDialogs demo" />
 
@@ -34,7 +34,7 @@ The minimal example: two frames in a `bluestand`, a `SayHello*` Common Action, `
 
 ### Dialog
 
-A colour picker shown with `ShowModal`: the frame sets `ModalResult` through its injected info, and a `*_cancel` Common Action, bound both to a button of the frame and to the background of the stand, cancels it. See [Dialog Results](/features/dialogs).
+A colour picker shown with `ShowModal`: the frame sets `ModalResult` through its injected info, and a `*_cancel` Common Action, bound both to a button of the frame and to the background of the stand, cancels it, as do Back and Esc (`CatchBackKey`). See [Dialog Results](/features/dialogs).
 
 ### PictureWall
 

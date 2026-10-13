@@ -142,7 +142,7 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
    `FrameStand1.NewAndShow<TConfirmFrame>(...).OnClose(procedure(AResult: TModalResult) ...)`,
    with `[FrameInfo] FInfo` + `FInfo.Close(mrOk)` in the frame. Most uses of TFrameStand are dialogs,
    and today every app reinvents the result plumbing.
-2. **Back/Escape handling**: an option to close the topmost subject (`VisibleFrames.Last`) on
+2. ✅ **Back/Escape handling** (done: `CatchBackKey`, `HandleBackKey`, `BackKeyAction`): an option to close the topmost subject (`VisibleFrames.Last`) on
    `vkHardwareBack`/`Esc`, the most common chore in mobile apps (see the `Responsive` demo).
 3. **Navigation stack**: `Push<T>`/`Pop` with stand-based transitions, for wizards and master/detail
    flows (the `Wizard` demo does it by hand).

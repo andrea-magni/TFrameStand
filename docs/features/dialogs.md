@@ -3,7 +3,7 @@
 Most frames shown with TFrameStand are dialogs: pick a colour, confirm a deletion, rate an item. `ShowModal` and `ModalResult` give them the result plumbing of FMX modal forms: the dialog sets a result, the caller gets it in a procedure.
 
 ::: info Since v.2.3
-`ShowModal` and `ModalResult` are new in v.2.3 (not released yet).
+`ShowModal`, `ModalResult` and the Back/Esc handling are new in v.2.3 (not released yet).
 :::
 
 ## Showing a dialog
@@ -92,6 +92,41 @@ FRatingDialog.ShowModal(
       SaveRating(AFrame.Rating);
   end,
   False);
+```
+
+## Back and Esc
+
+The Back button of Android and the Esc key close the dialog on top: set `CatchBackKey` on the component (in the Object Inspector) and they cancel the topmost dialog, which reports `mrCancel`.
+
+```pascal
+FrameStand1.CatchBackKey := True; // usually set at design time
+```
+
+Subjects that are not dialogs are left alone, so toolbars, overlays and button sets stay on screen. A page that should go away on Back too says so with `BackKeyAction`:
+
+| `BackKeyAction` | Back / Esc |
+|---|---|
+| `baNone` (default) | nothing: the key goes to the form |
+| `baHide` | `Hide`: for a subject kept in a field and shown again |
+| `baHideAndClose` | `HideAndClose` |
+
+```pascal
+FDetails := FrameStand1.New<TEmployeeDetailsFrame>(ListView1);
+FDetails.BackKeyAction := baHide;
+```
+
+Back acts on the subject shown last, still visible and not hiding, that is a dialog or has a `BackKeyAction`; with a `TFrameStand` and a `TFormStand` on the same form, on the one shown last of the two. When it acts, the key is cleared, so Android does not close the form; otherwise the key goes on to the form as usual.
+
+`CatchBackKey` hooks the `OnKeyDown` event of the owner form, and calls the handler of the form for the keys it does not handle. If you assign `OnKeyDown` in code after the form is created, or prefer to keep the control, call `HandleBackKey` from your handler instead:
+
+```pascal
+procedure TMainForm.FormKeyDown(Sender: TObject; var Key: Word;
+  var KeyChar: Char; Shift: TShiftState);
+begin
+  if FrameStand1.HandleBackKey(Key, KeyChar) then
+    Exit; // a dialog or a page was closed
+  // ... your keys
+end;
 ```
 
 ## Things to know

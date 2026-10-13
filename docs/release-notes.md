@@ -6,6 +6,7 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 
 **Dialogs**
 - [Dialog results](/features/dialogs): `ShowModal(AResultProc, AClose = True)` on frame and form infos, with a result procedure that receives the result (and the frame or the form), and a `ModalResult` property that dismisses the dialog. Dialogs hidden or closed without a result report `mrCancel`. The Dialog demo uses them.
+- [Back and Esc](/features/dialogs#back-and-esc): with `CatchBackKey` the Back button of Android and the Esc key cancel the topmost dialog; other subjects opt in with `BackKeyAction` (`baHide`, `baHideAndClose`). `HandleBackKey` does the same from your own `OnKeyDown`. The Dialog and ViewAndDialogs demos use it.
 
 **Demos**
 - HelloWorld and Dialog find the units in `..\..\source`, like the other demos, instead of relying on the library path of the IDE.

@@ -20,6 +20,7 @@ Members are listed for `TFrameStand`; `TFormStand` has the same ones with `Form`
 | `CommonActionList` | `TActionList` | | Action list for prefix-based binding. |
 | `CommonActionPrefix` | `string` | `ca_` | Prefix of the controls bound to `CommonActionList`. |
 | `DefaultHideAndCloseDeferTimeMS` | `Integer` | `100` | Pause between hide and close in `HideAndClose`. |
+| `CatchBackKey` | `Boolean` | `False` | Back (Android) and Esc, caught in `OnKeyDown` of the owner form, close the topmost dialog or subject: see `HandleBackKey` and [Back and Esc](/features/dialogs#back-and-esc). |
 | `StyleBook` | `TStyleBook` | | Old name of `StandBook`. |
 | `DefaultStyleName` | `string` | | Old name of `DefaultStandName`. |
 
@@ -92,4 +93,5 @@ function NewAndShow<T: TFrame>(const AParent: TFmxObject = nil;
 
 | Method | Description |
 |---|---|
+| `HandleBackKey(var AKey: Word; var AKeyChar: Char): Boolean` | on `vkHardwareBack` or `vkEscape`, cancels the topmost dialog (`ShowModal`) or runs the `BackKeyAction` of the topmost subject; returns `True` and clears the key when it does. Call it from `OnKeyDown` of the form, or set `CatchBackKey`. |
 | `DeviceAndPlatformInfo(AForm: TForm = nil)` | platform, device class, device name and display metrics of the device (uses `Application.MainForm` when `AForm` is nil). |

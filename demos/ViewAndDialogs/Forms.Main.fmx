@@ -96,9 +96,7 @@ object MainForm: TMainForm
     CatchBackKey = True
     CommonActionPrefix = 'ca_'
     DefaultHideAndCloseDeferTimeMS = 100
-    DefaultStyleName = 'expand'
     DefaultStandName = 'expand'
-    StyleBook = StyleBook1
     StandBook = StyleBook1
     OnBeforeShow = FrameStand1BeforeShow
     Left = 176

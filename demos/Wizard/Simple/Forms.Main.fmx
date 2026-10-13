@@ -132,10 +132,8 @@ object MainForm: TMainForm
     CatchBackKey = True
     CommonActionPrefix = 'ca_'
     DefaultHideAndCloseDeferTimeMS = 100
-    DefaultStyleName = 'framestand'
     DefaultStandName = 'framestand'
     DefaultParent = Layout1
-    StyleBook = Stands
     StandBook = Stands
     OnBeforeStartAnimation = FrameStand1BeforeStartAnimation
     Left = 176

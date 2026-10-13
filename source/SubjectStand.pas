@@ -188,7 +188,8 @@ type
 
     function SubjectShow(const ABackgroundTask: TProc<TSubjectInfo>;
       const AOnTaskComplete: TProc<TSubjectInfo> = nil;
-      const AOnTaskCompleteSynchronized: Boolean = True): ITask; overload; deprecated;
+      const AOnTaskCompleteSynchronized: Boolean = True): ITask; overload;
+      deprecated 'Run the task with TTask.Run and call Show/Hide from it (see Background Work in the docs)';
 
     procedure SubjectShow; overload;
 
@@ -414,10 +415,10 @@ type
     /// <summary>What Push does to the page below (see TPushMode).</summary>
     property PushMode: TPushMode read FPushMode write FPushMode default pmHide;
     property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
-    property DefaultStyleName: string read FDefaultStandName write FDefaultStandName stored False; // deprecated: use DefaultStandName
+    property DefaultStyleName: string read FDefaultStandName write FDefaultStandName stored False; // deprecated: use DefaultStandName (hidden in the Object Inspector)
     property DefaultStandName: string read FDefaultStandName write FDefaultStandName;
     property DefaultParent: TFmxObject read FDefaultParent write SetDefaultParent;
-    property StyleBook: TStyleBook read FStandBook write SetStandBook stored False; // deprecated: use StandBook
+    property StyleBook: TStyleBook read FStandBook write SetStandBook stored False; // deprecated: use StandBook (hidden in the Object Inspector)
     property StandBook: TStyleBook read FStandBook write SetStandBook;
 
     // Events

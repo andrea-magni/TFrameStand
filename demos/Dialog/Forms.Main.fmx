@@ -83,8 +83,8 @@ object MainForm: TMainForm
     AnimationHide = 'OnHide*'
     CatchBackKey = True
     CommonActionPrefix = 'ca_'
-    DefaultStyleName = 'simple'
-    StyleBook = StyleBook1
+    DefaultStandName = 'simple'
+    StandBook = StyleBook1
     Left = 312
     Top = 104
   end

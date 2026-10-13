@@ -123,9 +123,7 @@ object MainForm: TMainForm
     AnimationHide = 'OnHide*'
     CommonActionPrefix = 'ca_'
     DefaultHideAndCloseDeferTimeMS = 100
-    DefaultStyleName = 'lightbox'
     DefaultStandName = 'lightbox'
-    StyleBook = StyleBook1
     StandBook = StyleBook1
     OnAfterHide = FrameStand1AfterHide
     OnBeforeShow = FrameStand1BeforeShow

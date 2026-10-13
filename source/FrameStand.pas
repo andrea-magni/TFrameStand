@@ -34,7 +34,8 @@ type
 
     function Show(const ABackgroundTask: TProc<TFrameInfo<T>> = nil;
       const AOnTaskComplete: TProc<TFrameInfo<T>> = nil;
-      const AOnTaskCompleteSynchronized: Boolean = True): ITask; overload; deprecated;
+      const AOnTaskCompleteSynchronized: Boolean = True): ITask; overload;
+      deprecated 'Run the task with TTask.Run and call Show/Hide from it (see Background Work in the docs)';
 
     procedure Show(); overload;
 

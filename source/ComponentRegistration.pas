@@ -14,11 +14,11 @@ implementation
 // resources of the design-time package (dclFrameStandPackage.dres)
 
 uses
-  Winapi.Windows, Vcl.Graphics, ToolsAPI
+  Winapi.Windows, Vcl.Graphics, ToolsAPI, DesignIntf
 {$IF CompilerVersion >= 35} // Delphi 11 Alexandria
 , Vcl.Imaging.pngimage
 {$ENDIF}
-, FrameStand, FormStand;
+, SubjectStand, FrameStand, FormStand;
 
 const
   // keep in sync with LibraryVersion in setup\Setup.iss and with version.txt
@@ -105,6 +105,10 @@ procedure Register;
 begin
   RegisterWithSplashScreen;
   RegisterComponents('TFrameStand - Andrea Magni', [TFrameStand, TFormStand]);
+  // deprecated, still published to load old forms (stored False: saved with
+  // the new names): not shown in the Object Inspector
+  UnlistPublishedProperty(TSubjectStand, 'StyleBook');
+  UnlistPublishedProperty(TSubjectStand, 'DefaultStyleName');
 end;
 
 initialization

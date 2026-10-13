@@ -49,4 +49,4 @@ Do not close the form, or free the parent, while the task can still call back in
 
 ## The deprecated `Show(ABackgroundTask, ...)` overload
 
-Up to version 1.4, `Show` accepted an anonymous method to run in a `TTask` and a completion callback. The overload is still there, marked `deprecated`, but non-UI concerns have been left out of the components since version 1.5: write the task yourself as above, it gives you full control over errors and cancellation.
+Up to version 1.4, `Show` accepted an anonymous method to run in a `TTask` and a completion callback. The overload is still there, marked `deprecated` (the compiler warning says what to use instead), but non-UI concerns have been left out of the components since version 1.5: write the task yourself as above, it gives you full control over errors and cancellation.

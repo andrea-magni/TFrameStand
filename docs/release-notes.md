@@ -11,6 +11,10 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 **Navigation**
 - [Navigation stack](/features/navigation): `Push<T>`, `Pop`, `PopToRoot`, `StackCount`, `StackTop` on `TFrameStand` and `TFormStand`. `PushMode` says what happens to the page below (`pmHide`: hidden and kept, the default; `pmKeepVisible`; `pmClose`: created again by `Pop`). `StackOperation` tells `OnBeforeStartAnimation` whether pages move forward or back. Back and Esc pop the stack. The Wizard demo uses it.
 
+**Deprecations** (nothing removed: existing code and forms work as before)
+- `Show(ABackgroundTask, ...)`: the compiler warning now says what to use instead.
+- `StyleBook` and `DefaultStyleName` (old names of `StandBook` and `DefaultStandName`) are no longer shown in the Object Inspector. They still load from old forms, which the IDE saves with the new names. The demos use the new names.
+
 **Demos**
 - HelloWorld and Dialog find the units in `..\..\source`, like the other demos, instead of relying on the library path of the IDE.
 

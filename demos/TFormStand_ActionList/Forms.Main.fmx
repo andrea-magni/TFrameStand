@@ -81,9 +81,7 @@ object MainForm: TMainForm
     AnimationHide = 'OnHide*'
     CommonActionPrefix = 'ca_'
     DefaultHideAndCloseDeferTimeMS = 100
-    DefaultStyleName = 'formstand'
     DefaultStandName = 'formstand'
-    StyleBook = StyleBook1
     StandBook = StyleBook1
     Left = 440
     Top = 120

@@ -116,7 +116,7 @@ function TFrameStandTestForm.GetStyleBook: TStyleBook;
 begin
   Result := nil;
   if Assigned(FFrameStand) then
-    Result := FFrameStand.StyleBook;
+    Result := FFrameStand.StandBook;
 end;
 
 procedure TFrameStandTestForm.HideActionExecute(Sender: TObject);

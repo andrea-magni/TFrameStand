@@ -57,8 +57,8 @@ object Form1: TForm1
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
     CommonActionPrefix = 'ca_'
-    DefaultStyleName = 'framestand'
-    StyleBook = StyleBook1
+    DefaultStandName = 'framestand'
+    StandBook = StyleBook1
     Left = 32
     Top = 128
   end

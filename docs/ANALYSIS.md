@@ -151,7 +151,7 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
    lower the entry barrier more than any API change.
 5. **Live responsive**: an opt-in `ResponsiveMode = rmLive` that re-creates (or re-parents) visible
    subjects when the breakpoint changes, instead of the manual close/new of the demo.
-6. Deprecations: mark `Show(ABackgroundTask…)`, `StyleBook` and `DefaultStyleName` as
+6. ✅ Deprecations (done: message on `Show(ABackgroundTask...)`, the two properties hidden in the Object Inspector, since Delphi has no `deprecated` for properties): mark `Show(ABackgroundTask…)`, `StyleBook` and `DefaultStyleName` as
    `deprecated` (removing them breaks compatibility: a future v.3.0). Already done in v.2.1: the
    `AUTOREFCOUNT` branches, minimum Delphi 10.4, the frame/form duplication (B13).
 7. **AI agent skill** for TFrameStand, like the MARS skills (`mars-development`): the docs and

@@ -55,6 +55,7 @@ LInfo.HideAndClose; // hide animations, then free stand, frame and info
 
 Read the reference matching the task:
 
+- `references/api.md` — exact declarations (types, enums, units, signatures, events) and behaviors the declarations don't tell: read it before writing code against an API you are not sure about.
 - `references/lifecycle.md` — New/Use/Show/Hide/HideAndClose/Close, ownership, timing, events, lifecycle methods (`[BeforeShow]`...), context injection, Common Actions.
 - `references/stands.md` — designing stands, the stand gallery, animations, values from the stand size (`TStyleTag`).
 - `references/dialogs-and-navigation.md` — `ShowModal`/`ModalResult`, Back/Esc (`CatchBackKey`, `BackKeyAction`), navigation stack (`Push`/`Pop`, `PushMode`, `StackOperation`).

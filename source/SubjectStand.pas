@@ -73,6 +73,10 @@ type
 
   TSubjectStatus = (Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing);
 
+  /// <summary>What Back (Android) and Esc do to a subject that is not a
+  /// dialog (dialogs shown with ShowModal are cancelled).</summary>
+  TBackKeyAction = (baNone, baHide, baHideAndClose);
+
   TSubjectInfo = class
   private
     FSubjectStand: TSubjectStand;
@@ -97,6 +101,9 @@ type
     FModal: Boolean;
     FCloseOnResult: Boolean;
     FResultProc: TProc<TModalResult>;
+    FBackKeyAction: TBackKeyAction;
+    FShownAt: Int64;
+    class var FShowCount: Int64;
     function GetIsVisible: Boolean;
     procedure SetModalResult(const AValue: TModalResult);
   protected
@@ -205,6 +212,13 @@ type
     /// with AClose = False). The first result set wins. On a subject not shown
     /// with ShowModal it is just stored.</summary>
     property ModalResult: TModalResult read FModalResult write SetModalResult;
+    /// <summary>What Back (Android) and Esc do to this subject when it is the
+    /// topmost one (see TSubjectStand.HandleBackKey): nothing (default), Hide
+    /// (a subject kept to be shown again) or HideAndClose. Dialogs shown with
+    /// ShowModal are cancelled anyway.</summary>
+    property BackKeyAction: TBackKeyAction read FBackKeyAction write FBackKeyAction;
+    /// <summary>Shown with ShowModal and waiting for its result.</summary>
+    property IsModal: Boolean read FModal;
   end;
 
   TOnAfterShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
@@ -254,8 +268,16 @@ type
     FDefaultParent: TFmxObject;
     FResponsive: TResponsiveContainer;
     FDefaultHideAndCloseDeferTimeMS: Integer;
+    FCatchBackKey: Boolean;
+    FBackKeyHook: TComponent;
+    procedure SetCatchBackKey(const AValue: Boolean);
+    procedure UpdateBackKeyHook;
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure Loaded; override;
+    /// <summary>The subject Back/Esc acts on: the last shown one, still
+    /// visible and not hiding, that is a dialog (ShowModal) or has a BackKeyAction.</summary>
+    function BackKeyTarget: TSubjectInfo; virtual; abstract;
     function GetDefaultParent: TFmxObject; virtual;
     /// <summary>The parent for a new stand: AParent, else DefaultParent, else
     /// the owner when it is a FMX object. Raises ESubjectStandError if none.</summary>
@@ -305,6 +327,13 @@ type
     procedure HideAndCloseAllExcept(const AExceptions: TArray<TClass>); overload; virtual;
     procedure HideAndCloseAllExcept(const AException: TClass); overload; virtual;
 
+    /// <summary>Back (vkHardwareBack) and Esc: cancels the topmost dialog
+    /// (ModalResult := mrCancel) or runs the BackKeyAction of the topmost
+    /// subject. Returns True and clears AKey and AKeyChar when it does,
+    /// so that Android does not close the form. Call it from OnKeyDown of the
+    /// form, or set CatchBackKey.</summary>
+    function HandleBackKey(var AKey: Word; var AKeyChar: Char): Boolean;
+
     property Count: Integer read GetCount;
     property CommonActions: TCommonActionDictionary<TSubjectInfo> read FCommonActions;
     property Responsive: TResponsiveContainer read FResponsive;
@@ -316,6 +345,11 @@ type
     property AnimationHide: string read FAnimationHide write FAnimationHide;
     property CommonActionList: TActionList read FCommonActionList write SetCommonActionList;
     property CommonActionPrefix: string read FCommonActionPrefix write FCommonActionPrefix;
+    /// <summary>Handles Back (Android) and Esc in the OnKeyDown of the owner
+    /// form (see HandleBackKey); the handler of the form is called afterwards,
+    /// for the keys not handled. The owner must be a form; assigning OnKeyDown
+    /// in code after the form is created replaces the hook.</summary>
+    property CatchBackKey: Boolean read FCatchBackKey write SetCatchBackKey default False;
     property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
     property DefaultStyleName: string read FDefaultStandName write FDefaultStandName stored False; // deprecated: use DefaultStandName
     property DefaultStandName: string read FDefaultStandName write FDefaultStandName;
@@ -349,6 +383,7 @@ type
     function FindInfo(const ASubject: S): I; overload;
     function FindInfo(const AClass: TClass): I; overload;
     function LastShownSubject: S;
+    function BackKeyTarget: TSubjectInfo; override;
     property VisibleSubjects: TList<S> read FVisibleSubjects;
   public
     constructor Create(AOwner: TComponent); override;
@@ -395,6 +430,117 @@ type
     procedure Cancel;
     class procedure CancelAll;
   end;
+
+  /// <summary>One per form (owned by it): hooks OnKeyDown once for all the
+  /// components of the form with CatchBackKey. Back/Esc go to the component
+  /// whose target subject was shown last, then to the previous handler.</summary>
+  TBackKeyHook = class(TComponent)
+  private
+    FForm: TCommonCustomForm;
+    FPreviousKeyDown: TKeyEvent;
+    FStands: TList<TSubjectStand>;
+    procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar;
+      Shift: TShiftState);
+  protected
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+  public
+    constructor Create(const AForm: TCommonCustomForm); reintroduce;
+    destructor Destroy; override;
+    class function ForForm(const AForm: TCommonCustomForm): TBackKeyHook;
+    procedure Add(const AStand: TSubjectStand);
+    procedure Remove(const AStand: TSubjectStand);
+  end;
+
+{ TBackKeyHook }
+
+constructor TBackKeyHook.Create(const AForm: TCommonCustomForm);
+begin
+  inherited Create(AForm);
+  FForm := AForm;
+  FStands := TList<TSubjectStand>.Create;
+  FPreviousKeyDown := AForm.OnKeyDown;
+  AForm.OnKeyDown := FormKeyDown;
+end;
+
+destructor TBackKeyHook.Destroy;
+var
+  LHandler: TKeyEvent;
+begin
+  // put the previous handler back, if nobody replaced this one meanwhile
+  if Assigned(FForm) and not (csDestroying in FForm.ComponentState) then
+  begin
+    LHandler := FormKeyDown;
+    if TMethod(FForm.OnKeyDown) = TMethod(LHandler) then
+      FForm.OnKeyDown := FPreviousKeyDown;
+  end;
+  FreeAndNil(FStands);
+  inherited;
+end;
+
+class function TBackKeyHook.ForForm(const AForm: TCommonCustomForm): TBackKeyHook;
+var
+  LIndex: Integer;
+begin
+  for LIndex := 0 to AForm.ComponentCount - 1 do
+    if AForm.Components[LIndex] is TBackKeyHook then
+      Exit(TBackKeyHook(AForm.Components[LIndex]));
+  Result := TBackKeyHook.Create(AForm);
+end;
+
+procedure TBackKeyHook.Add(const AStand: TSubjectStand);
+begin
+  if not FStands.Contains(AStand) then
+  begin
+    FStands.Add(AStand);
+    AStand.FreeNotification(Self);
+  end;
+end;
+
+procedure TBackKeyHook.Remove(const AStand: TSubjectStand);
+begin
+  if FStands.Remove(AStand) >= 0 then
+    AStand.RemoveFreeNotification(Self);
+  // no component left: the handler of the form is put back (destructor)
+  if FStands.Count = 0 then
+    Free;
+end;
+
+procedure TBackKeyHook.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  inherited;
+  if (Operation = opRemove) and Assigned(FStands) and (AComponent is TSubjectStand) then
+    FStands.Remove(TSubjectStand(AComponent));
+end;
+
+procedure TBackKeyHook.FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar;
+  Shift: TShiftState);
+var
+  LStand, LBestStand: TSubjectStand;
+  LTarget: TSubjectInfo;
+  LBestShownAt: Int64;
+begin
+  if (Key = vkHardwareBack) or (Key = vkEscape) then
+  begin
+    // the component whose target was shown last (dialogs of a TFrameStand and
+    // of a TFormStand on the same form)
+    LBestStand := nil;
+    LBestShownAt := -1;
+    for LStand in FStands do
+    begin
+      LTarget := LStand.BackKeyTarget;
+      if Assigned(LTarget) and (LTarget.FShownAt > LBestShownAt) then
+      begin
+        LBestStand := LStand;
+        LBestShownAt := LTarget.FShownAt;
+      end;
+    end;
+    if Assigned(LBestStand) then
+      LBestStand.HandleBackKey(Key, KeyChar);
+  end;
+
+  if Assigned(FPreviousKeyDown) and ((Key <> 0) or (KeyChar <> #0)) then
+    FPreviousKeyDown(Sender, Key, KeyChar, Shift);
+end;
 
 { TLifeGuard }
 
@@ -613,6 +759,8 @@ end;
 
 destructor TSubjectStand.Destroy;
 begin
+  FCatchBackKey := False;
+  UpdateBackKeyHook;
   FreeAndNil(FCommonActions);
   FreeAndNil(FResponsive);
   inherited;
@@ -831,10 +979,71 @@ begin
     else if (AComponent = FCommonActionList) then
       FCommonActionList := nil
     else if (AComponent = FDefaultParent) then
-      FDefaultParent := nil;
+      FDefaultParent := nil
+    else if (AComponent = FBackKeyHook) then
+      FBackKeyHook := nil;
 
     SubjectComponentRemoved(AComponent);
   end;
+end;
+
+procedure TSubjectStand.Loaded;
+begin
+  inherited;
+  UpdateBackKeyHook;
+end;
+
+procedure TSubjectStand.SetCatchBackKey(const AValue: Boolean);
+begin
+  FCatchBackKey := AValue;
+  if not (csLoading in ComponentState) then
+    UpdateBackKeyHook;
+end;
+
+procedure TSubjectStand.UpdateBackKeyHook;
+var
+  LHook: TBackKeyHook;
+begin
+  if csDesigning in ComponentState then
+    Exit;
+  if FCatchBackKey then
+  begin
+    if not Assigned(FBackKeyHook) and (Owner is TCommonCustomForm) then
+    begin
+      FBackKeyHook := TBackKeyHook.ForForm(TCommonCustomForm(Owner));
+      FBackKeyHook.FreeNotification(Self);
+      TBackKeyHook(FBackKeyHook).Add(Self);
+    end;
+  end
+  else if Assigned(FBackKeyHook) then
+  begin
+    LHook := TBackKeyHook(FBackKeyHook);
+    FBackKeyHook := nil;
+    LHook.RemoveFreeNotification(Self);
+    LHook.Remove(Self); // frees the hook when no component is left
+  end;
+end;
+
+function TSubjectStand.HandleBackKey(var AKey: Word; var AKeyChar: Char): Boolean;
+var
+  LTarget: TSubjectInfo;
+begin
+  Result := False;
+  if (AKey <> vkHardwareBack) and (AKey <> vkEscape) then
+    Exit;
+  LTarget := BackKeyTarget;
+  if not Assigned(LTarget) then
+    Exit;
+  // handled: Android must not close the form
+  AKey := 0;
+  AKeyChar := #0;
+  Result := True;
+  if LTarget.IsModal then
+    LTarget.ModalResult := mrCancel
+  else if LTarget.BackKeyAction = baHide then
+    LTarget.Hide
+  else
+    LTarget.HideAndClose;
 end;
 
 procedure TSubjectStand.SubjectComponentRemoved(const AComponent: TComponent);
@@ -1652,6 +1861,8 @@ end;
 
 procedure TSubjectInfo.SubjectShow;
 begin
+  Inc(FShowCount);
+  FShownAt := FShowCount; // order of the subjects on screen, for Back/Esc
   FStatus := TSubjectStatus.Showing;
 
   FireCustomBeforeShowMethods;
@@ -1930,6 +2141,18 @@ begin
   Result := nil;
   if FVisibleSubjects.Count > 0 then
     Result := FVisibleSubjects.Last;
+end;
+
+function TSubjectStandBase<S, I>.BackKeyTarget: TSubjectInfo;
+var
+  LIndex: Integer;
+  LInfo: I;
+begin
+  Result := nil;
+  for LIndex := FVisibleSubjects.Count - 1 downto 0 do
+    if FInfos.TryGetValue(FVisibleSubjects[LIndex], LInfo) and LInfo.IsVisible
+      and not LInfo.Hiding and (LInfo.IsModal or (LInfo.BackKeyAction <> baNone)) then
+      Exit(LInfo);
 end;
 
 procedure TSubjectStandBase<S, I>.Remove(ASubject: TSubject);

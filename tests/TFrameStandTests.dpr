@@ -23,7 +23,8 @@ uses
   Tests.Injection in 'Tests.Injection.pas',
   Tests.Teardown in 'Tests.Teardown.pas',
   Tests.CommonActions in 'Tests.CommonActions.pas',
-  Tests.ModalResult in 'Tests.ModalResult.pas';
+  Tests.ModalResult in 'Tests.ModalResult.pas',
+  Tests.BackKey in 'Tests.BackKey.pas';
 
 var
   LResults: IRunResults;

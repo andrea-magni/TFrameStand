@@ -749,8 +749,9 @@ procedure TSubjectStand.CloseSubjects(const AClasses: TArray<TClass>;
 var
   LInfo: TSubjectInfo;
 begin
-  // closing everything: the navigation stack goes too (no page shown again)
-  if (Length(AClasses) = 0) and not AExcept then
+  // closing everything (CloseAll, HideAndCloseAll: no class given, with or
+  // without "except"): the navigation stack goes too, at once (no page shown again)
+  if Length(AClasses) = 0 then
     FStack.Clear;
   FBulkClosing := True;
   try

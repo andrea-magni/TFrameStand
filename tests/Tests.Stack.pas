@@ -37,6 +37,7 @@ type
     [Test] procedure BackKeyCancelsADialogOverThePage;
     [Test] procedure TopClosedBySomeoneElse;
     [Test] procedure CloseAllEmptiesTheStack;
+    [Test] procedure HideAndCloseAllEmptiesTheStackAtOnce;
     [Test] procedure OwnerDestroyedWithPages;
     [Test] procedure PopWhileThePageBelowIsHiding;
     [Test] procedure FormStandPushAndPop;
@@ -301,6 +302,17 @@ begin
   FFrameStand.CloseAll;
   Pump(300);
   Assert.AreEqual(0, FFrameStand.StackCount);
+  Assert.AreEqual(0, FFrameStand.Count, 'no page shown again');
+end;
+
+procedure TStackFixture.HideAndCloseAllEmptiesTheStackAtOnce;
+begin
+  FFrameStand.Push<TFrame>(FMain);
+  FFrameStand.Push<TFrame>(FMain);
+  FFrameStand.Push<TFrame>(FMain);
+  FFrameStand.HideAndCloseAll;
+  Assert.AreEqual(0, FFrameStand.StackCount, 'at once, while the pages hide');
+  Pump(300);
   Assert.AreEqual(0, FFrameStand.Count, 'no page shown again');
 end;
 

@@ -17,8 +17,14 @@ object MainForm: TMainForm
     object StepButton: TButton
       Align = Center
       TabOrder = 0
-      Text = 'StepButton'
+      Text = 'Start'
       OnClick = StepButtonClick
+    end
+    object BackButton: TButton
+      Align = Left
+      TabOrder = 1
+      Text = 'Back'
+      OnClick = BackButtonClick
     end
   end
   object Layout1: TLayout
@@ -123,6 +129,7 @@ object MainForm: TMainForm
   object FrameStand1: TFrameStand
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
+    CatchBackKey = True
     CommonActionPrefix = 'ca_'
     DefaultHideAndCloseDeferTimeMS = 100
     DefaultStyleName = 'framestand'

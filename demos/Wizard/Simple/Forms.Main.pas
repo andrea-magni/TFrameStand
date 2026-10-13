@@ -12,17 +12,18 @@ type
     FrameStand1: TFrameStand;
     ToolBar1: TToolBar;
     StepButton: TButton;
+    BackButton: TButton;
     Layout1: TLayout;
     Stands: TStyleBook;
     procedure StepButtonClick(Sender: TObject);
+    procedure BackButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FrameStand1BeforeStartAnimation(const ASender: TSubjectStand;
       const ASubjectInfo: TSubjectInfo; const AAnimation: TAnimation);
   private
     { Private declarations }
-    FFrameInfo: TFrameInfo<TFrame>;
-    procedure ShowNext<T: TFrame>;
-    procedure ShowStep<T: TFrame>;
+    procedure FrameStand1AfterShow(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo);
+    procedure UpdateButtons;
   public
     { Public declarations }
   end;
@@ -42,76 +43,84 @@ uses
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  TMessageManager.DefaultManager.SubscribeToMessage(TStepMessage
-  , procedure (const S: TObject; const M: TMessage)
-    var
-      LStepM: TStepMessage;
-    begin
-      LStepM := M as TStepMessage;
-      case LStepM.Value of
-        1: ShowStep<TFrame1>;
-        2: ShowStep<TFrame2>;
-        3: ShowStep<TFrame3>;
-      end;
-    end
-  );
+  FrameStand1.OnAfterShow := FrameStand1AfterShow; // also after Back (key or button)
 
   TMessageManager.DefaultManager.SubscribeToMessage(TFinishMessage
   , procedure (const S: TObject; const M: TMessage)
     begin
-      if Assigned(FFrameInfo) then
-        FFrameInfo.HideAndClose(0
-        , procedure
-          begin
-            FFrameInfo := nil;
-          end
-        );
+      // all the pages go, and the navigation stack with them
+      FrameStand1.HideAndCloseAll;
+      UpdateButtons;
     end
   );
-
+  UpdateButtons;
 end;
 
-procedure TMainForm.ShowNext<T>;
-var
-  LStandName: string;
+procedure TMainForm.StepButtonClick(Sender: TObject);
 begin
-  LStandName := 'wizard';
-  case MainData.Step of
-    1: LStandName := 'wizard_start';
-    MainData.STEP_COUNT: LStandName := 'wizard_end';
+  // the page below is hidden and kept (PushMode = pmHide): Back shows it
+  // again, with what was typed in it
+  case FrameStand1.StackCount of
+    0: FrameStand1.Push<TFrame1>(nil, 'wizard_start');
+    1: FrameStand1.Push<TFrame2>(nil, 'wizard');
+    2: FrameStand1.Push<TFrame3>(nil, 'wizard_end');
   end;
-
-  FFrameInfo := TFrameInfo<TFrame>( FrameStand1.New<T>(nil, LStandName) ); // this cast should not be necessary a T has a TFrame type constraint
-  FFrameInfo.Show();
 end;
 
-procedure TMainForm.ShowStep<T>;
+procedure TMainForm.BackButtonClick(Sender: TObject);
 begin
-  if Assigned(FFrameInfo) then
-    FFrameInfo.HideAndClose(0,
-      procedure
-      begin
-        ShowNext<T>;
-      end
-    )
+  FrameStand1.Pop; // the Back key of Android and Esc do the same (CatchBackKey)
+end;
+
+procedure TMainForm.FrameStand1AfterShow(const ASender: TSubjectStand;
+  const ASubjectInfo: TSubjectInfo);
+begin
+  UpdateButtons;
+end;
+
+procedure TMainForm.UpdateButtons;
+begin
+  BackButton.Enabled := FrameStand1.StackCount > 1;
+  StepButton.Enabled := FrameStand1.StackCount < 3;
+  if FrameStand1.StackCount = 0 then
+    StepButton.Text := 'Start'
   else
-    ShowNext<T>;
+    StepButton.Text := 'Next';
 end;
 
 procedure TMainForm.FrameStand1BeforeStartAnimation(
   const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo;
   const AAnimation: TAnimation);
+var
+  LAnimation: TFloatAnimation;
+  LBack: Boolean;
 begin
+  if not (AAnimation is TFloatAnimation) then
+    Exit;
+  LAnimation := TFloatAnimation(AAnimation);
+  // the property animated by the stand, going forward
+  if LAnimation.TagString = '' then
+    LAnimation.TagString := LAnimation.PropertyName;
+  LBack := ASender.StackOperation = soPop;
+
   if AAnimation.StyleName = 'OnShow_SlideIn' then
-    (AAnimation as TFloatAnimation).StartValue := ASubjectInfo.Stand.Width
-  else if AAnimation.StyleName = 'OnShow_SlideOut' then
-    (AAnimation as TFloatAnimation).StopValue := ASubjectInfo.Stand.Width;
-
-end;
-
-procedure TMainForm.StepButtonClick(Sender: TObject);
-begin
-  MainData.Next;
+  begin
+    // forward: in from the right; back (Pop): in from the left
+    if LBack then
+      LAnimation.PropertyName := 'Margins.Right'
+    else
+      LAnimation.PropertyName := LAnimation.TagString;
+    LAnimation.StartValue := ASubjectInfo.Stand.Width;
+  end
+  else if AAnimation.StyleName = 'OnHide_SlideOut' then
+  begin
+    // forward: out to the left; back (Pop): out to the right
+    if LBack then
+      LAnimation.PropertyName := 'Margins.Left'
+    else
+      LAnimation.PropertyName := LAnimation.TagString;
+    LAnimation.StopValue := ASubjectInfo.Stand.Width;
+  end;
 end;
 
 end.

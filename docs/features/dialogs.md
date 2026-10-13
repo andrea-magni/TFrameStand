@@ -3,7 +3,7 @@
 Most frames shown with TFrameStand are dialogs: pick a colour, confirm a deletion, rate an item. `ShowModal` and `ModalResult` give them the result plumbing of FMX modal forms: the dialog sets a result, the caller gets it in a procedure.
 
 ::: info Since v.2.3
-`ShowModal`, `ModalResult` and the Back/Esc handling are new in v.2.3 (not released yet).
+`ShowModal`, `ModalResult` and the Back/Esc handling are available since v.2.3.
 :::
 
 ## Showing a dialog

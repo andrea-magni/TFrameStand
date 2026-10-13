@@ -1,1 +1,1 @@
-andreamagni.tframestand: 2.2.0
+andreamagni.tframestand: 2.3.0

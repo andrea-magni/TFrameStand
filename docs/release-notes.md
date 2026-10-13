@@ -2,7 +2,9 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
-## Unreleased (v.2.3)
+## v.2.3 — October 2026
+
+Feature release: dialogs that return a result, Back/Esc, navigation stack, a gallery of ready-made stands, live responsive frames, an AI agent skill. Existing code works as before: nothing is removed, the new behaviors are opt-in.
 
 **Dialogs**
 - [Dialog results](/features/dialogs): `ShowModal(AResultProc, AClose = True)` on frame and form infos, with a result procedure that receives the result (and the frame or the form), and a `ModalResult` property that dismisses the dialog. Dialogs hidden or closed without a result report `mrCancel`. The Dialog demo uses them.

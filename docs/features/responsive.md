@@ -71,7 +71,7 @@ Override `GetParentWidth` in a descendant of the component for other kinds of pa
 
 ## Live: following the window
 
-By default (`ResponsiveMode = rmOnCreate`) a frame already on screen is not replaced when the window is resized. Set `ResponsiveMode = rmLive` and it is: when the width of its parent moves to another breakpoint (the window is resized, the phone is rotated), the definitions are checked again and, if they now give another class, stand or parent, the subject is replaced.
+Since v.2.3. By default (`ResponsiveMode = rmOnCreate`) a frame already on screen is not replaced when the window is resized. Set `ResponsiveMode = rmLive` and it is: when the width of its parent moves to another breakpoint (the window is resized, the phone is rotated), the definitions are checked again and, if they now give another class, stand or parent, the subject is replaced.
 
 ```pascal
 FrameStand1.ResponsiveMode := rmLive; // usually set at design time

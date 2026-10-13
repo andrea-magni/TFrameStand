@@ -3,7 +3,7 @@
 Wizards, settings pages, master/detail flows: pages that open one on top of the other and close in the reverse order. `Push` and `Pop` keep that stack for you, with the transitions of the stands.
 
 ::: info Since v.2.3
-The navigation stack is new in v.2.3 (not released yet).
+The navigation stack is available since v.2.3.
 :::
 
 ## Push and Pop

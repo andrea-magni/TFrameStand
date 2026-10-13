@@ -13,7 +13,7 @@ TFrameStand ships with an [Agent Skill](https://code.claude.com/docs/en/skills) 
 A skill is a folder with a `SKILL.md` file (instructions, plus a `description` that tells the agent *when* to use it) and `references/` files read on demand. Once installed, the agent uses it by itself when your code uses TFrameStand or you ask for dialogs, side menus, bottom sheets, pages or Back button handling in a FireMonkey app.
 
 ::: info Since v.2.3
-The skill describes v.2.3 (not released yet): `ShowModal`, Back/Esc, `Push`/`Pop`, the gallery and `ResponsiveMode` are on `master`.
+The skill describes v.2.3 and later: `ShowModal`, Back/Esc, `Push`/`Pop`, the gallery and `ResponsiveMode` are not in older versions.
 :::
 
 ## Installation in Claude Code (recommended: plugin)

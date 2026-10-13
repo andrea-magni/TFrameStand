@@ -3,7 +3,7 @@
 Six ready-made stands for the most common patterns of mobile and desktop apps, in a light and a dark version: load them in a style book and show your frames on them, without designing anything.
 
 ::: info Since v.2.3
-The stand gallery is new in v.2.3 (not released yet).
+The stand gallery is available since v.2.3.
 :::
 
 ![The stands of the gallery, light](/gallery/stands-light.png)

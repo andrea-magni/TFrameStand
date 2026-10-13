@@ -1,0 +1,427 @@
+object TStyleContainer
+  object TLayout
+    StyleName = 'dialog'
+    Align = Contents
+    Size.Width = 360.000000000000000000
+    Size.Height = 640.000000000000000000
+    Size.PlatformDefault = False
+    object TRectangle
+      StyleName = 'background_cancel'
+      Align = Contents
+      Fill.Color = x66000000
+      Stroke.Kind = None
+      object TFloatAnimation
+        StyleName = 'OnShowScrim'
+        AnimationType = Out
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideScrim'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartFromCurrent = True
+        StopValue = 0.000000000000000000
+      end
+    end
+    object TRectangle
+      StyleName = 'card'
+      Align = Center
+      Fill.Color = xFFFFFFFF
+      Stroke.Kind = None
+      XRadius = 12.000000000000000000
+      YRadius = 12.000000000000000000
+      Size.Width = 320.000000000000000000
+      Size.Height = 240.000000000000000000
+      Size.PlatformDefault = False
+      object TLayout
+        StyleName = 'container'
+        Align = Client
+        Margins.Left = 16.000000000000000000
+        Margins.Top = 16.000000000000000000
+        Margins.Right = 16.000000000000000000
+        Margins.Bottom = 16.000000000000000000
+      end
+      object TShadowEffect
+        Distance = 3.000000000000000000
+        Direction = 90.000000000000000000
+        Softness = 0.400000000000000000
+        Opacity = 0.300000000000000000
+        ShadowColor = claBlack
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowFade'
+        AnimationType = Out
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowLift'
+        AnimationType = Out
+        Duration = 0.250000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Top'
+        StartValue = 48.000000000000000000
+        StopValue = 0.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideFade'
+        Duration = 0.150000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartFromCurrent = True
+        StopValue = 0.000000000000000000
+      end
+    end
+  end
+  object TLayout
+    StyleName = 'lightbox'
+    Align = Contents
+    Size.Width = 360.000000000000000000
+    Size.Height = 640.000000000000000000
+    Size.PlatformDefault = False
+    object TRectangle
+      StyleName = 'background_cancel'
+      Align = Contents
+      Fill.Color = xE6000000
+      Stroke.Kind = None
+      object TFloatAnimation
+        StyleName = 'OnShowScrim'
+        AnimationType = Out
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideScrim'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartFromCurrent = True
+        StopValue = 0.000000000000000000
+      end
+    end
+    object TLayout
+      StyleName = 'container'
+      Align = Client
+      Margins.Left = 24.000000000000000000
+      Margins.Top = 24.000000000000000000
+      Margins.Right = 24.000000000000000000
+      Margins.Bottom = 24.000000000000000000
+      object TFloatAnimation
+        StyleName = 'OnShowFade'
+        AnimationType = Out
+        Duration = 0.250000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideFade'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartFromCurrent = True
+        StopValue = 0.000000000000000000
+      end
+    end
+  end
+  object TLayout
+    StyleName = 'bottomsheet'
+    Align = Contents
+    Size.Width = 360.000000000000000000
+    Size.Height = 640.000000000000000000
+    Size.PlatformDefault = False
+    object TRectangle
+      StyleName = 'background_cancel'
+      Align = Contents
+      Fill.Color = x66000000
+      Stroke.Kind = None
+      object TFloatAnimation
+        StyleName = 'OnShowScrim'
+        AnimationType = Out
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideScrim'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartFromCurrent = True
+        StopValue = 0.000000000000000000
+      end
+    end
+    object TRectangle
+      StyleName = 'sheet'
+      Align = Bottom
+      Fill.Color = xFFFFFFFF
+      Stroke.Kind = None
+      Corners = [TopLeft, TopRight]
+      XRadius = 16.000000000000000000
+      YRadius = 16.000000000000000000
+      Size.Height = 360.000000000000000000
+      Size.PlatformDefault = False
+      object TLayout
+        StyleName = 'handle_area'
+        Align = Top
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        object TRectangle
+          StyleName = 'handle'
+          Align = Center
+          Fill.Color = xFFBDBDBD
+          Stroke.Kind = None
+          XRadius = 2.000000000000000000
+          YRadius = 2.000000000000000000
+          Size.Width = 40.000000000000000000
+          Size.Height = 4.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+      object TLayout
+        StyleName = 'container'
+        Align = Client
+        Margins.Left = 16.000000000000000000
+        Margins.Right = 16.000000000000000000
+        Margins.Bottom = 16.000000000000000000
+      end
+      object TShadowEffect
+        Distance = 3.000000000000000000
+        Direction = 90.000000000000000000
+        Softness = 0.400000000000000000
+        Opacity = 0.300000000000000000
+        ShadowColor = claBlack
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowSlide'
+        AnimationType = Out
+        Duration = 0.250000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Bottom'
+        StopValue = 0.000000000000000000
+        object TStyleTag
+          TagString = 'StartValue=-ParentHeight'
+        end
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideSlide'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Bottom'
+        StartFromCurrent = True
+        object TStyleTag
+          TagString = 'StopValue=-ParentHeight'
+        end
+      end
+    end
+  end
+  object TLayout
+    StyleName = 'drawer'
+    Align = Contents
+    Size.Width = 360.000000000000000000
+    Size.Height = 640.000000000000000000
+    Size.PlatformDefault = False
+    object TRectangle
+      StyleName = 'background_cancel'
+      Align = Contents
+      Fill.Color = x66000000
+      Stroke.Kind = None
+      object TFloatAnimation
+        StyleName = 'OnShowScrim'
+        AnimationType = Out
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideScrim'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartFromCurrent = True
+        StopValue = 0.000000000000000000
+      end
+    end
+    object TRectangle
+      StyleName = 'panel'
+      Align = Left
+      Fill.Color = xFFFFFFFF
+      Stroke.Kind = None
+      Size.Width = 300.000000000000000000
+      Size.PlatformDefault = False
+      object TLayout
+        StyleName = 'container'
+        Align = Client
+        Margins.Left = 16.000000000000000000
+        Margins.Top = 16.000000000000000000
+        Margins.Right = 16.000000000000000000
+        Margins.Bottom = 16.000000000000000000
+      end
+      object TShadowEffect
+        Distance = 3.000000000000000000
+        Direction = 90.000000000000000000
+        Softness = 0.400000000000000000
+        Opacity = 0.300000000000000000
+        ShadowColor = claBlack
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowSlide'
+        AnimationType = Out
+        Duration = 0.250000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Left'
+        StopValue = 0.000000000000000000
+        object TStyleTag
+          TagString = 'StartValue=-ParentWidth'
+        end
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideSlide'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Left'
+        StartFromCurrent = True
+        object TStyleTag
+          TagString = 'StopValue=-ParentWidth'
+        end
+      end
+    end
+  end
+  object TLayout
+    StyleName = 'snackbar'
+    Align = Contents
+    Size.Width = 360.000000000000000000
+    Size.Height = 640.000000000000000000
+    Size.PlatformDefault = False
+    HitTest = False
+    object TRectangle
+      StyleName = 'bar'
+      Align = Bottom
+      Fill.Color = xFFFFFFFF
+      Stroke.Kind = None
+      XRadius = 8.000000000000000000
+      YRadius = 8.000000000000000000
+      Size.Height = 56.000000000000000000
+      Size.PlatformDefault = False
+      Margins.Left = 16.000000000000000000
+      Margins.Right = 16.000000000000000000
+      Margins.Bottom = 16.000000000000000000
+      object TLayout
+        StyleName = 'container'
+        Align = Client
+        Margins.Left = 16.000000000000000000
+        Margins.Right = 16.000000000000000000
+      end
+      object TShadowEffect
+        Distance = 3.000000000000000000
+        Direction = 90.000000000000000000
+        Softness = 0.400000000000000000
+        Opacity = 0.300000000000000000
+        ShadowColor = claBlack
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowSlide'
+        AnimationType = Out
+        Duration = 0.250000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Bottom'
+        StopValue = 16.000000000000000000
+        object TStyleTag
+          TagString = 'StartValue=-ParentHeight'
+        end
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowFade'
+        AnimationType = Out
+        Duration = 0.250000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartValue = 0.000000000000000000
+        StopValue = 1.000000000000000000
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideFade'
+        Duration = 0.200000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Opacity'
+        StartFromCurrent = True
+        StopValue = 0.000000000000000000
+      end
+    end
+  end
+  object TLayout
+    StyleName = 'page'
+    Align = Contents
+    Size.Width = 360.000000000000000000
+    Size.Height = 640.000000000000000000
+    Size.PlatformDefault = False
+    object TRectangle
+      StyleName = 'page_background'
+      Align = Client
+      Fill.Color = xFFFFFFFF
+      Stroke.Kind = None
+      object TLayout
+        StyleName = 'container'
+        Align = Client
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowSlideL'
+        AnimationType = Out
+        Duration = 0.300000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Left'
+        StopValue = 0.000000000000000000
+        object TStyleTag
+          TagString = 'StartValue=Width; PopStartValue=-Width'
+        end
+      end
+      object TFloatAnimation
+        StyleName = 'OnShowSlideR'
+        AnimationType = Out
+        Duration = 0.300000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Right'
+        StopValue = 0.000000000000000000
+        object TStyleTag
+          TagString = 'StartValue=-Width; PopStartValue=Width'
+        end
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideSlideL'
+        Duration = 0.300000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Left'
+        StartValue = 0.000000000000000000
+        object TStyleTag
+          TagString = 'StopValue=-Width; PopStopValue=Width'
+        end
+      end
+      object TFloatAnimation
+        StyleName = 'OnHideSlideR'
+        Duration = 0.300000000000000000
+        Interpolation = Quadratic
+        PropertyName = 'Margins.Right'
+        StartValue = 0.000000000000000000
+        object TStyleTag
+          TagString = 'StopValue=Width; PopStopValue=-Width'
+        end
+      end
+    end
+  end
+end

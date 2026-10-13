@@ -146,6 +146,15 @@ type
     function FireCustomShowMethods: Boolean; virtual;
     function FireCustomHideMethods: Boolean; virtual;
     procedure DoBeforeStartAnimation(const AAnimation: TAnimation); virtual;
+    /// <summary>Values of a TFloatAnimation from the TagString of a TStyleTag
+    /// child (in a style) or of the animation itself (in code), e.g.
+    /// 'StartValue=-ParentHeight; StopValue=0' or 'StartValue=Width;
+    /// PopStartValue=-Width': Width/Height of the stand, ParentWidth/
+    /// ParentHeight of the animated control, or a number, optionally negative.
+    /// The Pop* values replace the others while StackOperation = soPop.</summary>
+    procedure ApplyAnimationTags(const AAnimation: TAnimation); virtual;
+    function AnimationTagValue(const AAnimation: TAnimation; const AText: string;
+      out AValue: Single): Boolean;
     function FireAnimations(const AFmxObject: TFmxObject; const APattern: string;
       const AStart: Boolean = True;
       const AOnBeforeStart: TProc<TAnimation> = nil;
@@ -195,6 +204,9 @@ type
 
     function Hide(const ADelay: Integer = 0; const AThen: TProc = nil): Boolean;
     procedure HideAndClose(const ADeferExecutionMS: Integer = 0; const AThen: TProc = nil);
+    /// <summary>HideAndClose after ADelayMS (e.g. a snackbar); nothing happens
+    /// if the subject is closed before.</summary>
+    procedure HideAndCloseAfter(const ADelayMS: Integer);
     procedure Close();
 
     /// <summary>Shows the subject as a dialog: AResultProc is called once,
@@ -461,7 +473,7 @@ type
 implementation
 
 uses
-    System.TypInfo, FMX.Layouts, FMX.StdCtrls, FMX.Platform
+    System.TypInfo, System.Types, FMX.Layouts, FMX.StdCtrls, FMX.Platform, FMX.Styles
   ;
 
 type
@@ -1324,8 +1336,120 @@ end;
 
 { TSubjectInfo }
 
+function TSubjectInfo.AnimationTagValue(const AAnimation: TAnimation;
+  const AText: string; out AValue: Single): Boolean;
+var
+  LName: string;
+  LSign: Single;
+  LControl: TControl;
+  LSize: TSizeF;
+begin
+  LName := AText.Trim;
+  LSign := 1;
+  if LName.StartsWith('-') then
+  begin
+    LSign := -1;
+    LName := LName.Substring(1).Trim;
+  end;
+  Result := True;
+  if SameText(LName, 'Width') or SameText(LName, 'Height') then
+  begin
+    // the stand fills its parent (Align = Contents), but it may not be aligned
+    // yet when the show animations start: the size of the parent
+    if Assigned(FStand.ParentControl) then
+      LSize := FStand.ParentControl.Size.Size
+    else if FStand.Parent is TCommonCustomForm then
+      LSize := TSizeF.Create(TCommonCustomForm(FStand.Parent).ClientWidth,
+        TCommonCustomForm(FStand.Parent).ClientHeight)
+    else
+      LSize := FStand.Size.Size;
+    if SameText(LName, 'Width') then
+      AValue := LSize.Width
+    else
+      AValue := LSize.Height;
+  end
+  else if SameText(LName, 'ParentWidth') or SameText(LName, 'ParentHeight') then
+  begin
+    Result := AAnimation.Parent is TControl;
+    if not Result then
+      Exit;
+    LControl := TControl(AAnimation.Parent);
+    if SameText(LName, 'ParentWidth') then
+      AValue := LControl.Width
+    else
+      AValue := LControl.Height;
+  end
+  else
+    Result := TryStrToFloat(LName, AValue, TFormatSettings.Invariant);
+  if Result then
+    AValue := AValue * LSign;
+end;
+
+procedure TSubjectInfo.ApplyAnimationTags(const AAnimation: TAnimation);
+var
+  LFloat: TFloatAnimation;
+  LText, LPair, LKey, LStart, LStop, LPopStart, LPopStop: string;
+  LParts: TArray<string>;
+  LValue: Single;
+  LChild: TFmxObject;
+begin
+  if not (AAnimation is TFloatAnimation) then
+    Exit;
+  // TagString of the animation (set in code) or of a TStyleTag child: in a
+  // style only TStyleTag stores it (TagString is not published by animations)
+  LText := AAnimation.TagString;
+  if (LText = '') and Assigned(AAnimation.Children) then
+    for LChild in AAnimation.Children do
+      if LChild is TStyleTag then
+      begin
+        LText := LChild.TagString;
+        Break;
+      end;
+  if LText = '' then
+    Exit;
+  LFloat := TFloatAnimation(AAnimation);
+  for LPair in LText.Split([';']) do
+  begin
+    LParts := LPair.Split(['=']);
+    if Length(LParts) <> 2 then
+      Continue;
+    LKey := LParts[0].Trim;
+    if SameText(LKey, 'StartValue') then
+      LStart := LParts[1]
+    else if SameText(LKey, 'StopValue') then
+      LStop := LParts[1]
+    else if SameText(LKey, 'PopStartValue') then
+      LPopStart := LParts[1]
+    else if SameText(LKey, 'PopStopValue') then
+      LPopStop := LParts[1];
+  end;
+  // going back (Pop): the Pop* values, when given, replace the others
+  if Assigned(FSubjectStand) and (FSubjectStand.StackOperation = soPop) then
+  begin
+    if LPopStart <> '' then
+      LStart := LPopStart;
+    if LPopStop <> '' then
+      LStop := LPopStop;
+  end;
+  if (LStart <> '') and AnimationTagValue(AAnimation, LStart, LValue) then
+    LFloat.StartValue := LValue;
+  if (LStop <> '') and AnimationTagValue(AAnimation, LStop, LValue) then
+    LFloat.StopValue := LValue;
+end;
+
+procedure TSubjectInfo.HideAndCloseAfter(const ADelayMS: Integer);
+begin
+  // cancelled if the subject is closed before (Track)
+  Track(TDelayedAction.Schedule(ADelayMS,
+    procedure
+    begin
+      HideAndClose;
+    end));
+end;
+
 procedure TSubjectInfo.DoBeforeStartAnimation(const AAnimation: TAnimation);
 begin
+  ApplyAnimationTags(AAnimation);
   if Assigned(FSubjectStand) and Assigned(FSubjectStand.OnBeforeStartAnimation) then
     FSubjectStand.OnBeforeStartAnimation(FSubjectStand, Self, AAnimation);
 end;

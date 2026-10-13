@@ -34,7 +34,7 @@ The minimal example: two frames in a `bluestand`, a `SayHello*` Common Action, `
 
 ### Dialog
 
-A modal-like colour picker dialog with a `*_cancel` Common Action bound both to a button of the frame and to the background of the stand.
+A colour picker shown with `ShowModal`: the frame sets `ModalResult` through its injected info, and a `*_cancel` Common Action, bound both to a button of the frame and to the background of the stand, cancels it. See [Dialog Results](/features/dialogs).
 
 ### PictureWall
 

@@ -27,6 +27,7 @@ The info is the handle of one subject on its stand. It is created by `New`/`Use`
 | `Status` | `TSubjectStatus` | `Initializing`, `Ready`, `Showing`, `Visible`, `Hiding`, `Hidden`, `Closing`. |
 | `IsVisible` | `Boolean` | `Stand.Visible`. |
 | `Hiding` | `Boolean` | A `Hide` is in progress. |
+| `ModalResult` | `TModalResult` | The result of a subject shown with `ShowModal`: setting a value other than `mrNone` hides it, calls the result procedure and closes it (unless `AClose = False`). The first result wins. On other subjects it is only stored. See [Dialog Results](/features/dialogs). |
 
 ## Methods
 
@@ -36,6 +37,7 @@ The info is the handle of one subject on its stand. It is created by `New`/`Use`
 | `Hide(ADelay = 0; AThen = nil): Boolean` | Starts the hide animations and hides after the longest of them (or after `ADelay` ms, if not 0); then calls `AThen` and `OnAfterHide`. Returns `False` if a hide is already in progress: no new hide starts, and `AThen` is called when the current one completes. |
 | `HideAndClose(ADeferExecutionMS = 0; AThen = nil)` | `Hide`, then waits `DefaultHideAndCloseDeferTimeMS` (or `ADeferExecutionMS`), then `Close` and `AThen`. Calls made while a hide or a hide-and-close is in progress close the subject once, when it completes, and call every `AThen`. |
 | `Close` | Removes the subject, without animations: frees the stand, frees or detaches the subject, frees the info. |
+| `ShowModal(AResultProc; AClose = True)` | Shows the subject as a dialog. `AResultProc` is a `TProc<TModalResult>`, or a `TProc<T, TModalResult>` that receives the frame (`TFrameInfo<T>`) or the form (`TFormInfo<T>`) too. It is called once, after the hide animation and before the close, with `ModalResult` or `mrCancel`. With `AClose = False` the subject is only hidden. See [Dialog Results](/features/dialogs). |
 | `StopAnimations` | Stops all the show and hide animations of the stand. |
 | `DefaultShow` / `DefaultHide` | The default show and hide, useful from your `[Show]` / `[Hide]` methods. |
 | `Show(ABackgroundTask, AOnTaskComplete, AOnTaskCompleteSynchronized): ITask` | **Deprecated.** See [Background Work](/features/background-work). |

@@ -2,6 +2,14 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
+## Unreleased (v.2.3)
+
+**Dialogs**
+- [Dialog results](/features/dialogs): `ShowModal(AResultProc, AClose = True)` on frame and form infos, with a result procedure that receives the result (and the frame or the form), and a `ModalResult` property that dismisses the dialog. Dialogs hidden or closed without a result report `mrCancel`. The Dialog demo uses them.
+
+**Demos**
+- HelloWorld and Dialog find the units in `..\..\source`, like the other demos, instead of relying on the library path of the IDE.
+
 ## v.2.2 — October 2026
 
 Packaging release: setup, TMS Smart Setup, one package folder per Delphi version, TFrameStand in the About box and splash screen of the IDE. No changes to the runtime units.

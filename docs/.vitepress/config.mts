@@ -69,6 +69,7 @@ const guideSidebar = [
       { text: 'Animations', link: '/features/animations' },
       { text: 'Common Actions', link: '/features/common-actions' },
       { text: 'Context Injection', link: '/features/injection' },
+      { text: 'Dialog Results', link: '/features/dialogs' },
       { text: 'TFormStand', link: '/features/formstand' },
       { text: 'Responsive Frames', link: '/features/responsive' },
       { text: 'Background Work', link: '/features/background-work' },

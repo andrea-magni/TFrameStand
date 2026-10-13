@@ -28,9 +28,11 @@ FrameStand1.CommonActions.Add('*_cancel',
   procedure (AInfo: TSubjectInfo)
   begin
     if AInfo.Subject is TColorDialogFrame then
-      TColorDialogFrame(AInfo.Subject).Cancel;
+      TColorDialogFrame(AInfo.Subject).ResetSelection;
   end);
 ```
+
+For dialogs shown with `ShowModal`, setting `AInfo.ModalResult := mrCancel` in a Common Action cancels them all: see [Dialog Results](/features/dialogs#cancelling).
 
 ::: warning Things to know
 - Register Common Actions **before** creating the subjects: they are bound when the subject is created, and controls added to the frame later are not bound.

@@ -138,7 +138,7 @@ All 16 demos build for Win32 with Delphi 13 with no warnings.
 
 Ideas ordered by value for the users, as far as the issues and the demos suggest:
 
-1. **Dialog results**: `ShowModal`-like API for frames, e.g.
+1. ✅ **Dialog results** (done: `ShowModal(AResultProc, AClose)` + `ModalResult`, see `docs\features\dialogs.md`): `ShowModal`-like API for frames, e.g.
    `FrameStand1.NewAndShow<TConfirmFrame>(...).OnClose(procedure(AResult: TModalResult) ...)`,
    with `[FrameInfo] FInfo` + `FInfo.Close(mrOk)` in the frame. Most uses of TFrameStand are dialogs,
    and today every app reinvents the result plumbing.

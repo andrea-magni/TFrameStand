@@ -144,7 +144,7 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
    and today every app reinvents the result plumbing.
 2. ✅ **Back/Escape handling** (done: `CatchBackKey`, `HandleBackKey`, `BackKeyAction`): an option to close the topmost subject (`VisibleFrames.Last`) on
    `vkHardwareBack`/`Esc`, the most common chore in mobile apps (see the `Responsive` demo).
-3. **Navigation stack**: `Push<T>`/`Pop` with stand-based transitions, for wizards and master/detail
+3. ✅ **Navigation stack** (done: `Push<T>`, `Pop`, `PopToRoot`, `PushMode`, `StackOperation`): `Push<T>`/`Pop` with stand-based transitions, for wizards and master/detail
    flows (the `Wizard` demo does it by hand).
 4. **Stand gallery**: a ready-made `.style` with lightbox, dialog, bottom sheet, side drawer,
    snackbar/toast, full-screen page, with light/dark variants, plus a page in the docs. It would

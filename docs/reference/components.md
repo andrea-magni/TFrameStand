@@ -20,6 +20,7 @@ Members are listed for `TFrameStand`; `TFormStand` has the same ones with `Form`
 | `CommonActionList` | `TActionList` | | Action list for prefix-based binding. |
 | `CommonActionPrefix` | `string` | `ca_` | Prefix of the controls bound to `CommonActionList`. |
 | `DefaultHideAndCloseDeferTimeMS` | `Integer` | `100` | Pause between hide and close in `HideAndClose`. |
+| `PushMode` | `TPushMode` | `pmHide` | What `Push` does to the page below: `pmHide`, `pmKeepVisible`, `pmClose`. See [Navigation Stack](/features/navigation). |
 | `CatchBackKey` | `Boolean` | `False` | Back (Android) and Esc, caught in `OnKeyDown` of the owner form, close the topmost dialog or subject: see `HandleBackKey` and [Back and Esc](/features/dialogs#back-and-esc). |
 | `StyleBook` | `TStyleBook` | | Old name of `StandBook`. |
 | `DefaultStyleName` | `string` | | Old name of `DefaultStandName`. |
@@ -39,6 +40,9 @@ Events: `OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide`, `OnBeforeS
 | `Responsive` | `TResponsiveContainer` | Breakpoints and definitions for [responsive](/features/responsive) substitution. |
 | `ResponsiveBreakpoints` | `TArray<TBreakpoint>` | Read/replace all the breakpoints at once. |
 | `ResponsiveBreakpoint[AName]` | `TBreakpoint` | A breakpoint by name. |
+| `StackCount` | `Integer` | Pages in the [navigation stack](/features/navigation). |
+| `StackTop` | `TSubjectInfo` | The top page of the stack, nil when it is empty. |
+| `StackOperation` | `TStackOperation` | `soPush` / `soPop` while `Push` and `Pop` show and hide pages, `soNone` otherwise. |
 
 ## Creating subjects
 
@@ -67,6 +71,17 @@ function NewAndShow<T: TFrame>(const AParent: TFmxObject = nil;
 ```
 
 `New<T>`, then `AConfigProc(Frame)`, then `AConfigFIProc(Info)`, then `Show`.
+
+## Navigation stack
+
+```pascal
+function Push<T: TFrame>(const AParent: TFmxObject = nil;
+  const AStandStyleName: string = ''; const AConfigProc: TProc<T> = nil): TFrameInfo<T>;
+function Pop: Boolean;
+function PopToRoot: Boolean;
+```
+
+`Push` creates a page like `New`, puts it on top of the stack and shows it; the page below is hidden, left visible or closed, as `PushMode` says. `Pop` closes the top page and shows the one below again; `PopToRoot` goes back to the first page. Both return `False` when there is nothing to pop. See [Navigation Stack](/features/navigation).
 
 ## Finding subjects
 

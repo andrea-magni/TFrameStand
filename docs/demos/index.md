@@ -58,7 +58,7 @@ Breakpoints and responsive substitution of the frame class: the orders view is a
 
 ### Wizard\Simple
 
-A three-step wizard where each step is a frame.
+A three-step wizard built on the [navigation stack](/features/navigation): each step is pushed, a Back button and `CatchBackKey` pop it (what was typed is still there), and the slide animations change direction on `Pop`.
 
 ### Stand3D
 

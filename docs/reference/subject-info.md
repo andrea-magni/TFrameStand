@@ -28,7 +28,7 @@ The info is the handle of one subject on its stand. It is created by `New`/`Use`
 | `IsVisible` | `Boolean` | `Stand.Visible`. |
 | `Hiding` | `Boolean` | A `Hide` is in progress. |
 | `IsModal` | `Boolean` | Shown with `ShowModal` and waiting for its result. |
-| `BackKeyAction` | `TBackKeyAction` | What Back and Esc do to this subject when it is on top and is not a dialog: `baNone` (default), `baHide`, `baHideAndClose`. See [Back and Esc](/features/dialogs#back-and-esc). |
+| `BackKeyAction` | `TBackKeyAction` | What Back and Esc do to this subject when it is on top and is not a dialog: `baNone` (default), `baHide`, `baHideAndClose`, `baPop` (set by `Push` on the pages above the root). See [Back and Esc](/features/dialogs#back-and-esc). |
 | `ModalResult` | `TModalResult` | The result of a subject shown with `ShowModal`: setting a value other than `mrNone` hides it, calls the result procedure and closes it (unless `AClose = False`). The first result wins. On other subjects it is only stored. See [Dialog Results](/features/dialogs). |
 
 ## Methods

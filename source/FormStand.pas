@@ -3,7 +3,7 @@ unit FormStand;
 interface
 
 uses
-  Classes, SysUtils, Generics.Collections, System.Threading, System.Rtti
+  Classes, SysUtils, Generics.Collections, System.Threading, System.Rtti, System.UITypes
 , FMX.Types, FMX.Controls, FMX.Forms, FMX.Layouts
 , SubjectStand
 ;
@@ -62,6 +62,11 @@ type
       const AOnTaskComplete: TProc<TFormInfo<T>> = nil;
       const AOnTaskCompleteSynchronized: Boolean = True): ITask; overload; deprecated;
     procedure Show(); overload;
+
+    /// <summary>ShowModal with a result procedure that receives the form too
+    /// (still alive: it is closed after the procedure).</summary>
+    procedure ShowModal(const AResultProc: TProc<T, TModalResult>;
+      const AClose: Boolean = True); overload;
 
     property FormIsOwned: Boolean read FFormIsOwned write FFormIsOwned;
     property Form: T read FForm;
@@ -330,6 +335,21 @@ end;
 procedure TFormInfo<T>.Show;
 begin
   SubjectShow();
+end;
+
+procedure TFormInfo<T>.ShowModal(const AResultProc: TProc<T, TModalResult>;
+  const AClose: Boolean);
+var
+  LForm: T;
+begin
+  LForm := Form;
+  ShowModal(
+    procedure (AResult: TModalResult)
+    begin
+      if Assigned(AResultProc) then
+        AResultProc(LForm, AResult);
+    end
+  , AClose);
 end;
 
 procedure TFormInfo<T>.FreeFormContainer;

@@ -3,7 +3,7 @@ unit FrameStand;
 interface
 
 uses
-  Classes, SysUtils, Generics.Collections, System.Threading, System.Rtti
+  Classes, SysUtils, Generics.Collections, System.Threading, System.Rtti, System.UITypes
 , FMX.Types, FMX.Controls, FMX.Forms
 , SubjectStand
 ;
@@ -37,6 +37,11 @@ type
       const AOnTaskCompleteSynchronized: Boolean = True): ITask; overload; deprecated;
 
     procedure Show(); overload;
+
+    /// <summary>ShowModal with a result procedure that receives the frame too
+    /// (still alive: it is closed after the procedure).</summary>
+    procedure ShowModal(const AResultProc: TProc<T, TModalResult>;
+      const AClose: Boolean = True); overload;
 
     property FrameIsOwned: Boolean read FFrameIsOwned write FFrameIsOwned;
     property Frame: T read FFrame;
@@ -295,6 +300,21 @@ end;
 procedure TFrameInfo<T>.Show;
 begin
   SubjectShow();
+end;
+
+procedure TFrameInfo<T>.ShowModal(const AResultProc: TProc<T, TModalResult>;
+  const AClose: Boolean);
+var
+  LFrame: T;
+begin
+  LFrame := Frame;
+  ShowModal(
+    procedure (AResult: TModalResult)
+    begin
+      if Assigned(AResultProc) then
+        AResultProc(LFrame, AResult);
+    end
+  , AClose);
 end;
 
 function TFrameInfo<T>.Show(const ABackgroundTask,

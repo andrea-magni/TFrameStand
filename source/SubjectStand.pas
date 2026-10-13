@@ -14,7 +14,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Rtti, System.Masks, System.Threading
-, Generics.Collections
+, System.UITypes, Generics.Collections
 , FMX.Controls, FMX.Types, FMX.Forms, FMX.Ani
 , System.Actions, FMX.ActnList
 , DeviceAndPlatformInfo, ResponsiveContainer
@@ -93,7 +93,12 @@ type
     FCloseContinuations: TList<TProc>;
     FTearingDown: Boolean;
     FDeferStandFree: Boolean;
+    FModalResult: TModalResult;
+    FModal: Boolean;
+    FCloseOnResult: Boolean;
+    FResultProc: TProc<TModalResult>;
     function GetIsVisible: Boolean;
+    procedure SetModalResult(const AValue: TModalResult);
   protected
     function GetSubject: TSubject; virtual; abstract;
     procedure SetSubject(const Value: TSubject); virtual; abstract;
@@ -151,6 +156,12 @@ type
     procedure CancelPendingActions;
     procedure CompleteHide(const AThen: TProc); virtual;
     procedure CloseAndContinue;
+    /// <summary>Closes the subject after DefaultHideAndCloseDeferTimeMS (at
+    /// least on the next timer tick), like HideAndClose once hidden.</summary>
+    procedure ScheduleClose;
+    /// <summary>Calls the ShowModal result procedure, once: with ModalResult,
+    /// or mrCancel when the subject is hidden or closed without a result.</summary>
+    procedure DeliverModalResult;
   public
     procedure DefaultShow; virtual;
     procedure DefaultHide; virtual;
@@ -167,6 +178,14 @@ type
     procedure HideAndClose(const ADeferExecutionMS: Integer = 0; const AThen: TProc = nil);
     procedure Close();
 
+    /// <summary>Shows the subject as a dialog: AResultProc is called once,
+    /// when ModalResult is set (or with mrCancel when the subject is hidden
+    /// or closed in another way), after the hide animation and before the
+    /// subject is closed. With AClose = False the subject is only hidden, to
+    /// be shown again. Like TForm.ShowModal in FMX, it does not block.</summary>
+    procedure ShowModal(const AResultProc: TProc<TModalResult>;
+      const AClose: Boolean = True); overload;
+
     constructor Create(const ASubjectStand: TSubjectStand; const ASubject: TSubject;
       const AParent: TFmxObject; const AStandStyleName: string); virtual;
     destructor Destroy; override;
@@ -181,6 +200,11 @@ type
     property IsVisible: Boolean read GetIsVisible;
     property Hiding: Boolean read FHiding;
     property Status: TSubjectStatus read FStatus;
+    /// <summary>The result of a subject shown with ShowModal: setting a value
+    /// other than mrNone hides it (and closes it, unless ShowModal was called
+    /// with AClose = False). The first result set wins. On a subject not shown
+    /// with ShowModal it is just stored.</summary>
+    property ModalResult: TModalResult read FModalResult write SetModalResult;
   end;
 
   TOnAfterShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
@@ -918,10 +942,63 @@ begin
 end;
 
 procedure TSubjectInfo.Close;
+var
+  LGuard: ILifeGuard;
 begin
+  LGuard := FGuard;
+  // a dialog closed without a result: the subject is still there for the result procedure
+  DeliverModalResult;
+  if not LGuard.IsAlive then // closed by the result procedure
+    Exit;
   FStatus := TSubjectStatus.Closing;
   if Assigned(FSubjectStand) then
     FSubjectStand.DoClose(Subject);
+end;
+
+procedure TSubjectInfo.ShowModal(const AResultProc: TProc<TModalResult>;
+  const AClose: Boolean);
+begin
+  FModalResult := mrNone;
+  FResultProc := AResultProc;
+  FCloseOnResult := AClose;
+  FModal := True;
+  SubjectShow;
+end;
+
+procedure TSubjectInfo.SetModalResult(const AValue: TModalResult);
+begin
+  if FModal and (FModalResult <> mrNone) then // the first result wins
+    Exit;
+  FModalResult := AValue;
+  if FModal and (AValue <> mrNone) then
+  begin
+    // the result procedure runs when the hide completes (DeliverModalResult)
+    if FCloseOnResult then
+      HideAndClose
+    else
+      Hide;
+  end;
+end;
+
+procedure TSubjectInfo.DeliverModalResult;
+var
+  LResultProc: TProc<TModalResult>;
+  LResult: TModalResult;
+begin
+  if not FModal then
+    Exit;
+  FModal := False;
+  LResultProc := FResultProc;
+  FResultProc := nil;
+  // not while the component, its owner or this info are being destroyed
+  if FTearingDown or (Assigned(FSubjectStand) and (csDestroying in FSubjectStand.ComponentState)) then
+    Exit;
+  LResult := FModalResult;
+  if LResult = mrNone then
+    LResult := mrCancel;
+  FModalResult := LResult;
+  if Assigned(LResultProc) then
+    LResultProc(LResult); // may close (free) this info
 end;
 
 constructor TSubjectInfo.Create(const ASubjectStand: TSubjectStand;
@@ -1302,6 +1379,7 @@ var
   LSubjectStand: TSubjectStand;
   LContinuations: TArray<TProc>;
   LContinuation: TProc;
+  LCloseAfterResult: Boolean;
 begin
   LGuard := FGuard;
   if not FireCustomHideMethods then
@@ -1315,8 +1393,15 @@ begin
   FHideContinuations.Clear;
   LSubjectStand := SubjectStand;
 
-  // AThen and the continuations may close (free) this info: from here on,
-  // check LGuard before touching Self
+  // a dialog (ShowModal): its result procedure runs now, before the close;
+  // hidden without HideAndClose, it is closed here when ShowModal asked so
+  LCloseAfterResult := FModal and FCloseOnResult and not FCloseRequested;
+  DeliverModalResult;
+  if LCloseAfterResult and LGuard.IsAlive then
+    ScheduleClose;
+
+  // the result procedure, AThen and the continuations may close (free) this
+  // info: from here on, check LGuard before touching Self
   if Assigned(AThen) then
     AThen();
   for LContinuation in LContinuations do
@@ -1361,6 +1446,25 @@ begin
         ));
     end
   );
+end;
+
+procedure TSubjectInfo.ScheduleClose;
+var
+  LDelay: Integer;
+begin
+  FCloseRequested := True;
+  LDelay := 100;
+  if Assigned(SubjectStand) then
+    LDelay := SubjectStand.DefaultHideAndCloseDeferTimeMS;
+  // never synchronously: this may run inside an event handler of the subject
+  if LDelay <= 0 then
+    LDelay := 1;
+  Track(TDelayedAction.Schedule(LDelay
+  , procedure
+    begin
+      CloseAndContinue;
+    end
+  ));
 end;
 
 procedure TSubjectInfo.CloseAndContinue;

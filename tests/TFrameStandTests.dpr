@@ -22,7 +22,8 @@ uses
   Tests.Lifecycle in 'Tests.Lifecycle.pas',
   Tests.Injection in 'Tests.Injection.pas',
   Tests.Teardown in 'Tests.Teardown.pas',
-  Tests.CommonActions in 'Tests.CommonActions.pas';
+  Tests.CommonActions in 'Tests.CommonActions.pas',
+  Tests.ModalResult in 'Tests.ModalResult.pas';
 
 var
   LResults: IRunResults;

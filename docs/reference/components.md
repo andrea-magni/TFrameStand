@@ -20,6 +20,7 @@ Members are listed for `TFrameStand`; `TFormStand` has the same ones with `Form`
 | `CommonActionList` | `TActionList` | | Action list for prefix-based binding. |
 | `CommonActionPrefix` | `string` | `ca_` | Prefix of the controls bound to `CommonActionList`. |
 | `DefaultHideAndCloseDeferTimeMS` | `Integer` | `100` | Pause between hide and close in `HideAndClose`. |
+| `ResponsiveMode` | `TResponsiveMode` | `rmOnCreate` | `rmLive`: subjects created with `New`/`Push` are replaced when their parent changes breakpoint. See [Responsive Frames](/features/responsive#live-following-the-window). |
 | `PushMode` | `TPushMode` | `pmHide` | What `Push` does to the page below: `pmHide`, `pmKeepVisible`, `pmClose`. See [Navigation Stack](/features/navigation). |
 | `CatchBackKey` | `Boolean` | `False` | Back (Android) and Esc, caught in `OnKeyDown` of the owner form, close the topmost dialog or subject: see `HandleBackKey` and [Back and Esc](/features/dialogs#back-and-esc). |
 | `StyleBook` | `TStyleBook` | | **Deprecated**: old name of `StandBook`. |
@@ -29,7 +30,7 @@ Members are listed for `TFrameStand`; `TFormStand` has the same ones with `Form`
 
 `StandBook`, `CommonActionList` and `DefaultParent` may refer to components on other forms or data modules: when one of them is freed, the property is cleared.
 
-Events: `OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide`, `OnBeforeStartAnimation`, `OnBindCommonActionList`, `OnGetSubjectClass`. See [Events](/reference/events).
+Events: `OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide`, `OnBeforeStartAnimation`, `OnBindCommonActionList`, `OnGetSubjectClass`, `OnResponsiveChange`. See [Events](/reference/events).
 
 ## Public properties
 

@@ -67,26 +67,39 @@ The lookup runs in `New` (not in `Use`, which receives an already created frame)
 - the width in pixels of the 2D content of 3D layers (`TLayer3D`...: `Width * Resolution`, or `Width` with the `Screen` projection);
 - any other `Width` property, read through RTTI.
 
-Override `GetParentWidth` in a descendant of the component for other kinds of parents. A frame already on screen is not replaced when the window is resized: if you want that, close it and create it again when the breakpoint changes, as the `Responsive` demo does.
+Override `GetParentWidth` in a descendant of the component for other kinds of parents.
+
+## Live: following the window
+
+By default (`ResponsiveMode = rmOnCreate`) a frame already on screen is not replaced when the window is resized. Set `ResponsiveMode = rmLive` and it is: when the width of its parent moves to another breakpoint (the window is resized, the phone is rotated), the definitions are checked again and, if they now give another class, stand or parent, the subject is replaced.
 
 ```pascal
-procedure TMainForm.FormResize(Sender: TObject);
-var
-  LBreakpoint: TBreakpoint;
+FrameStand1.ResponsiveMode := rmLive; // usually set at design time
+FOrdersInfo := FrameStand1.New<TOrdersFrame_xs>(MainContent);
+FOrdersInfo.Show;
+// wider window: FOrdersInfo.Frame is now a TOrdersFrame_sm, then a TOrdersFrame_lg...
+```
+
+- **The info stays the same**: keep the info in your fields, not the frame. `FOrdersInfo` stays valid, as do its place in the [navigation stack](/features/navigation), a [dialog](/features/dialogs) in progress and its result procedure; `FOrdersInfo.Frame` returns the new frame.
+- **Visible subjects** are replaced once the resize is over, and shown again with the show animations of their stand; **hidden** ones when they are shown again.
+- Only subjects created with `New` or `Push` are replaced: `Use` receives a frame that already exists, with no class to look up.
+- `OnGetSubjectClass` is called again too, so it can take part in the choice.
+
+The new frame starts from scratch. To keep what the user did, copy it in `OnResponsiveChange`, which runs when the new frame is ready and the old one still exists (it is freed right after):
+
+```pascal
+procedure TMainForm.FrameStand1ResponsiveChange(const ASender: TSubjectStand;
+  const AInfo: TSubjectInfo; const AOldSubject: TSubject);
 begin
-  LBreakpoint := FrameStand1.Responsive.CurrentBreakpoint(MainContent.Width);
-  if LBreakpoint.Name <> FBreakpoint.Name then
+  if (AInfo.Subject is TOrdersFrame_xs) and (AOldSubject is TOrdersFrame_xs) then
   begin
-    FBreakpoint := LBreakpoint;
-    if Assigned(FOrdersInfo) then
-    begin
-      FOrdersInfo.Close;
-      FOrdersInfo := FrameStand1.New<TOrdersFrame_xs>(MainContent);
-      FOrdersInfo.Show;
-    end;
+    TOrdersFrame_xs(AInfo.Subject).DM := TOrdersFrame_xs(AOldSubject).DM;
+    TOrdersFrame_xs(AInfo.Subject).SelectedOrder := TOrdersFrame_xs(AOldSubject).SelectedOrder;
   end;
 end;
 ```
+
+The `Responsive` demo uses `rmLive`.
 
 ## The OnGetSubjectClass event
 

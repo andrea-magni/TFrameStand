@@ -58,7 +58,7 @@ A bottom sheet that the user can drag up and down, built by driving elements of 
 
 ### Responsive
 
-Breakpoints and responsive substitution of the frame class: the orders view is a list on small widths, a list with details on medium ones, a grid on large ones. See [Responsive Frames](/features/responsive).
+Breakpoints and responsive substitution of the frame class: the orders view is a list on small widths, a list with details on medium ones, a grid on large ones. With `ResponsiveMode = rmLive` the view follows the window as it is resized, and `OnResponsiveChange` hands the data module to the new frame. See [Responsive Frames](/features/responsive).
 
 ### Wizard\Simple
 

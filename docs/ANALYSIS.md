@@ -149,7 +149,7 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
 4. ✅ **Stand gallery** (done: `stands\Stands.Light.style`/`Stands.Dark.style`, six stands, Gallery demo, `TStyleTag` animation values): a ready-made `.style` with lightbox, dialog, bottom sheet, side drawer,
    snackbar/toast, full-screen page, with light/dark variants, plus a page in the docs. It would
    lower the entry barrier more than any API change.
-5. **Live responsive**: an opt-in `ResponsiveMode = rmLive` that re-creates (or re-parents) visible
+5. ✅ **Live responsive** (done: `ResponsiveMode = rmLive`, `OnResponsiveChange`, same info): an opt-in `ResponsiveMode = rmLive` that re-creates (or re-parents) visible
    subjects when the breakpoint changes, instead of the manual close/new of the demo.
 6. ✅ Deprecations (done: message on `Show(ABackgroundTask...)`, the two properties hidden in the Object Inspector, since Delphi has no `deprecated` for properties): mark `Show(ABackgroundTask…)`, `StyleBook` and `DefaultStyleName` as
    `deprecated` (removing them breaks compatibility: a future v.3.0). Already done in v.2.1: the

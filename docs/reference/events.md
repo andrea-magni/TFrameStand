@@ -49,3 +49,12 @@ TOnGetFormClassEvent = procedure(const ASender: TFormStand; var AParent: TFmxObj
 ```
 
 Fired by `New`, after the responsive lookup, before the subject is created: change class, stand or parent. See [Responsive Frames](/features/responsive#the-ongetsubjectclass-event).
+
+## OnResponsiveChange
+
+```pascal
+TOnResponsiveChangeEvent = procedure(const ASender: TSubjectStand; const AInfo: TSubjectInfo;
+  const AOldSubject: TSubject) of object;
+```
+
+With `ResponsiveMode = rmLive`, called when the subject of `AInfo` has been replaced because its parent changed breakpoint: `AInfo.Subject` is the new subject, ready on its stand; `AOldSubject` still exists and is freed right after. Copy here the state the user built in the old subject. See [Responsive Frames](/features/responsive#live-following-the-window).

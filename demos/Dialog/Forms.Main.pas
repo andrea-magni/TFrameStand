@@ -20,13 +20,8 @@ type
     ColorAnimation1: TColorAnimation;
     procedure ChangeColorButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
-    FColorDialog: TFrameInfo<TColorDialogFrame>;
-  protected
-    procedure DoCancelColorDialog(Sender: TObject);
-    function ColorDialog: TFrameInfo<TColorDialogFrame>;
   public
     { Public declarations }
   end;
@@ -39,73 +34,38 @@ implementation
 {$R *.fmx}
 
 procedure TMainForm.ChangeColorButtonClick(Sender: TObject);
+var
+  LColorDialog: TFrameInfo<TColorDialogFrame>;
 begin
-  ColorDialog.Show();
-end;
+  LColorDialog := FrameStand1.New<TColorDialogFrame>();
+  LColorDialog.Frame.AvailableColors := [TAlphaColorRec.Green, TAlphaColorRec.Yellow
+    , TAlphaColorRec.Red, TAlphaColorRec.Magenta, TAlphaColorRec.Blue, TAlphaColorRec.Teal
+  ];
 
-function TMainForm.ColorDialog: TFrameInfo<TColorDialogFrame>;
-begin
-  // creation on demand
-  if not Assigned(FColorDialog) then
-  begin
-    FColorDialog := FrameStand1.New<TColorDialogFrame>();
-
-    FColorDialog.Frame.AvailableColors := [TAlphaColorRec.Green, TAlphaColorRec.Yellow
-      , TAlphaColorRec.Red, TAlphaColorRec.Magenta, TAlphaColorRec.Blue, TAlphaColorRec.Teal
-    ];
-
-    FColorDialog.Frame.OnColorChosen :=
-      procedure (AColor: TAlphaColor)
-      begin
-        // use the value here (do whatever you need)
-        // Rember you can even assign a new anonymous methods to ColorDialog.Frame.OnColorChosen
-//        Rectangle1.Fill.Color := AColor;
-        ColorAnimation1.StopValue := AColor;
-        ColorAnimation1.Start;
-
-        FColorDialog.Hide;
-      end;
-
-    (FColorDialog.Stand.FindStyleResource('background_cancel') as TRectangle).OnClick := DoCancelColorDialog;
-
-    FColorDialog.Frame.OnCancel :=
-      procedure
-      begin
-        // do something when user cancel dialog?
-        FColorDialog.Hide;
-      end;
-  end;
-  Result := FColorDialog;
-end;
-
-procedure TMainForm.DoCancelColorDialog(Sender: TObject);
-begin
-  if Assigned(FColorDialog) and (FColorDialog.IsVisible) then
-    FColorDialog.Frame.Cancel;
-end;
-
-procedure TMainForm.FormCreate(Sender: TObject);
-begin
-  // this action will be tied to the rectangle implementing
-  // the "faded" background of the stand (see 'background_cancel')
-  // element in StyleBook1 and also tied to Button_cancel TButton
-  // on the frame
-  FrameStand1.CommonActions.Add('*_cancel'
-  , procedure (AInfo: TSubjectInfo)
+  // the result procedure runs when the dialog is dismissed (after its hide
+  // animation), the dialog is closed afterwards: the frame is still there
+  LColorDialog.ShowModal(
+    procedure (AFrame: TColorDialogFrame; AResult: TModalResult)
     begin
-      if (AInfo.Subject is TColorDialogFrame) then
-        TColorDialogFrame(AInfo.Subject).Cancel;
+      if AResult = mrOk then
+      begin
+        ColorAnimation1.StopValue := AFrame.ChosenColor;
+        ColorAnimation1.Start;
+      end;
     end
   );
 end;
 
-procedure TMainForm.FormDestroy(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  if Assigned(FColorDialog) then
-  begin
-    FColorDialog.Close;
-    FColorDialog := nil;
-  end;
+  // tied to Button_cancel on the frame and to the "faded" background of the
+  // stand ('background_cancel' element in StyleBook1): both cancel the dialog
+  FrameStand1.CommonActions.Add('*_cancel'
+  , procedure (AInfo: TSubjectInfo)
+    begin
+      AInfo.ModalResult := mrCancel;
+    end
+  );
 end;
 
 end.

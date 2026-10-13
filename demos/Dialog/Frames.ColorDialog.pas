@@ -3,9 +3,10 @@ unit Frames.ColorDialog;
 interface
 
 uses
-  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Layouts, FMX.Controls.Presentation, FMX.Objects;
+  FMX.Layouts, FMX.Controls.Presentation, FMX.Objects,
+  SubjectStand, FrameStand;
 
 type
   TColorDialogFrame = class(TFrame)
@@ -19,18 +20,15 @@ type
     FAvailableColorsRect: TArray<TRectangle>;
     FChosenColor: TAlphaColor;
     procedure SetAvailableColors(const Value: TArray<TAlphaColor>);
-    procedure SetChosenColor(const Value: TAlphaColor);
   protected
+    // injected by TFrameStand: the info of this frame, to report the result
+    [FrameInfo] FInfo: TFrameInfo<TColorDialogFrame>;
     procedure DoRenderAvailableColors;
     procedure RectOnClickHandler(Sender: TObject);
   public
     { Public declarations }
-    OnColorChosen: TProc<TAlphaColor>;
-    OnCancel: TProc;
-
-    procedure Cancel;
     property AvailableColors: TArray<TAlphaColor> read FAvailableColors write SetAvailableColors;
-    property ChosenColor: TAlphaColor read FChosenColor write SetChosenColor;
+    property ChosenColor: TAlphaColor read FChosenColor;
   end;
 
 implementation
@@ -39,19 +37,14 @@ implementation
 
 { TColorDialogFrame }
 
-procedure TColorDialogFrame.Cancel;
-begin
-  if Assigned(OnCancel) then
-    OnCancel();
-end;
-
 procedure TColorDialogFrame.DoRenderAvailableColors;
 var
   LRect: TRectangle;
   LColor: TAlphaColor;
 begin
-  while Length(FAvailableColorsRect) > 0 do
-    FAvailableColorsRect[0].Free;
+  for LRect in FAvailableColorsRect do
+    LRect.Free;
+  FAvailableColorsRect := nil;
 
   for LColor in AvailableColors do
   begin
@@ -70,7 +63,9 @@ end;
 
 procedure TColorDialogFrame.RectOnClickHandler(Sender: TObject);
 begin
-  ChosenColor := (Sender as TRectangle).Fill.Color;
+  FChosenColor := (Sender as TRectangle).Fill.Color;
+  // hides the dialog, calls the result procedure of ShowModal, closes the dialog
+  FInfo.ModalResult := mrOk;
 end;
 
 procedure TColorDialogFrame.SetAvailableColors(
@@ -78,13 +73,6 @@ procedure TColorDialogFrame.SetAvailableColors(
 begin
   FAvailableColors := Value;
   DoRenderAvailableColors;
-end;
-
-procedure TColorDialogFrame.SetChosenColor(const Value: TAlphaColor);
-begin
-  FChosenColor := Value;
-  if Assigned(OnColorChosen) then
-    OnColorChosen(FChosenColor);
 end;
 
 end.

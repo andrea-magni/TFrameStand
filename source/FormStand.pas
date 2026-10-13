@@ -84,6 +84,9 @@ type
   protected
     function NewSubject(const AClass: TClass; const AParent: TFmxObject;
       const AStandStyleName: string): TSubjectInfo; override;
+    procedure ResolveSubjectClass(var AClass: TSubjectClass; var AParent: TFmxObject;
+      var AStandStyleName: string); override;
+    function CreateSubject(const AClass: TSubjectClass): TSubject; override;
     function GetFormClass<T: TForm>(var AParent: TFmxObject; var AStandStyleName: string): TFormClass;
   public
     function LastShownForm: TForm;
@@ -175,6 +178,7 @@ begin
     LForm.Name := '';
     Result := Use<T>(LForm, LParent, LStandName);
     Result.FormIsOwned := True;
+    RememberRequest(Result, TClass(T), AParent, AStandStyleName);
   except
     LForm.Free;
     raise;
@@ -200,25 +204,41 @@ begin
   PushInfo(Result, TClass(T), AParent, AStandStyleName, LConfig);
 end;
 
+procedure TFormStand.ResolveSubjectClass(var AClass: TSubjectClass;
+  var AParent: TFmxObject; var AStandStyleName: string);
+var
+  LClass: TFormClass;
+begin
+  DoResponsiveLookup(AClass, AStandStyleName, AParent);
+  LClass := TFormClass(AClass);
+  if Assigned(FOnGetFormClass) then
+    FOnGetFormClass(Self, AParent, AStandStyleName, LClass);
+  AClass := LClass;
+end;
+
+function TFormStand.CreateSubject(const AClass: TSubjectClass): TSubject;
+begin
+  Result := TFormClass(AClass).Create(nil);
+  Result.Name := '';
+end;
+
 function TFormStand.NewSubject(const AClass: TClass; const AParent: TFmxObject;
   const AStandStyleName: string): TSubjectInfo;
 var
-  LClass: TFormClass;
+  LClass: TSubjectClass;
   LParent: TFmxObject;
   LStandName: string;
   LForm: TForm;
 begin
   LParent := ResolveParent(AParent);
   LStandName := AStandStyleName;
-  LClass := TFormClass(AClass);
-  DoResponsiveLookup(TSubjectClass(LClass), LStandName, LParent);
-  if Assigned(FOnGetFormClass) then
-    FOnGetFormClass(Self, LParent, LStandName, LClass);
-  LForm := LClass.Create(nil);
+  LClass := TSubjectClass(AClass);
+  ResolveSubjectClass(LClass, LParent, LStandName);
+  LForm := TForm(CreateSubject(LClass));
   try
-    LForm.Name := '';
     Result := Use<TForm>(LForm, LParent, LStandName);
     TFormInfo<TForm>(Result).FormIsOwned := True;
+    RememberRequest(Result, AClass, AParent, AStandStyleName);
   except
     LForm.Free;
     raise;
@@ -393,15 +413,14 @@ end;
 
 procedure TFormInfo<T>.ShowModal(const AResultProc: TProc<T, TModalResult>;
   const AClose: Boolean);
-var
-  LForm: T;
 begin
-  LForm := Form;
   ShowModal(
     procedure (AResult: TModalResult)
     begin
+      // the form at the time of the result (ResponsiveMode = rmLive may have
+      // replaced the one shown)
       if Assigned(AResultProc) then
-        AResultProc(LForm, AResult);
+        AResultProc(Form, AResult);
     end
   , AClose);
 end;

@@ -88,6 +88,11 @@ type
   /// (e.g. slide from the right on Push, from the left on Pop).</summary>
   TStackOperation = (soNone, soPush, soPop);
 
+  /// <summary>When the responsive definitions apply: only when a subject is
+  /// created (New, Push), or also afterwards, when the width of the parent
+  /// moves to another breakpoint (the subject is replaced in its info).</summary>
+  TResponsiveMode = (rmOnCreate, rmLive);
+
   TSubjectInfo = class
   private
     FSubjectStand: TSubjectStand;
@@ -114,6 +119,12 @@ type
     FResultProc: TProc<TModalResult>;
     FBackKeyAction: TBackKeyAction;
     FShownAt: Int64;
+    // what New was asked for, before the responsive lookup (ResponsiveMode = rmLive)
+    FRequestedClass: TClass;
+    FRequestedParent: TFmxObject;
+    FRequestedStand: string;
+    FReplacing: Boolean;
+    FResponsiveCheck: IDelayedAction;
     class var FShowCount: Int64;
     function GetIsVisible: Boolean;
     procedure SetModalResult(const AValue: TModalResult);
@@ -186,6 +197,15 @@ type
     /// <summary>Closes the subject after DefaultHideAndCloseDeferTimeMS (at
     /// least on the next timer tick), like HideAndClose once hidden.</summary>
     procedure ScheduleClose;
+    /// <summary>The stand was resized (with its parent): with ResponsiveMode =
+    /// rmLive, the definitions are checked again, once the resize is over.</summary>
+    procedure StandResized(Sender: TObject);
+    /// <summary>Puts ANewSubject (owned) in place of the subject, on a new clone
+    /// of the stand AStandStyleName in AParent; the old subject is freed (if
+    /// owned) after OnResponsiveChange. AReshow: show the new one if the old
+    /// one was visible.</summary>
+    procedure ReplaceSubject(const ANewSubject: TSubject; const AStandStyleName: string;
+      const AParent: TFmxObject; const AReshow: Boolean);
     /// <summary>Calls the ShowModal result procedure, once: with ModalResult,
     /// or mrCancel when the subject is hidden or closed without a result.</summary>
     procedure DeliverModalResult;
@@ -261,6 +281,11 @@ type
   TOnBeforeHideEvent = TOnBeforeShowEvent;
   TOnBeforeStartAnimationEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo; const AAnimation: TAnimation) of object;
   TOnBindCommonActionList = procedure(ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo; const AObject: TFmxObject; var ACommonActionName: string) of object;
+  /// <summary>ResponsiveMode = rmLive replaced the subject of AInfo: AInfo.Subject
+  /// is the new one, AOldSubject still exists (freed right after): copy what the
+  /// user did (text, selection...) from the old one to the new one.</summary>
+  TOnResponsiveChangeEvent = procedure(const ASender: TSubjectStand; const AInfo: TSubjectInfo;
+    const AOldSubject: TSubject) of object;
 
   TCommonActionDictionary<Info: TSubjectInfo> = class
   private
@@ -309,6 +334,8 @@ type
     FStackOperation: TStackOperation;
     FStackAction: IDelayedAction;
     FBulkClosing: Boolean;
+    FResponsiveMode: TResponsiveMode;
+    FOnResponsiveChange: TOnResponsiveChangeEvent;
     procedure SetCatchBackKey(const AValue: Boolean);
     procedure UpdateBackKeyHook;
     function GetStackCount: Integer;
@@ -337,6 +364,25 @@ type
     /// <summary>A subject is being destroyed: it leaves the stack; if it was
     /// the top page, closed by someone else, the page below is shown again.</summary>
     procedure StackInfoDestroyed(const AInfo: TSubjectInfo);
+    /// <summary>The subject class for a request: responsive lookup, then
+    /// OnGetSubjectClass (what New does before creating the subject).</summary>
+    procedure ResolveSubjectClass(var AClass: TSubjectClass; var AParent: TFmxObject;
+      var AStandStyleName: string); virtual; abstract;
+    /// <summary>A new subject of class AClass, not on a stand yet.</summary>
+    function CreateSubject(const AClass: TSubjectClass): TSubject; virtual; abstract;
+    /// <summary>AInfo now holds ANewSubject instead of AOldSubject: the infos
+    /// and the Show/Hide history follow (ADropLastShow: the subject is about to
+    /// be shown again, which adds it back).</summary>
+    procedure ReplaceRegistration(const AInfo: TSubjectInfo; const AOldSubject,
+      ANewSubject: TSubject; const ADropLastShow: Boolean); virtual; abstract;
+    /// <summary>What New was asked for (before the responsive lookup), for
+    /// ResponsiveMode = rmLive.</summary>
+    procedure RememberRequest(const AInfo: TSubjectInfo; const AClass: TClass;
+      const AParent: TFmxObject; const AStandStyleName: string);
+    /// <summary>With ResponsiveMode = rmLive, replaces the subject of AInfo if
+    /// the definitions now give another class, stand or parent.</summary>
+    procedure CheckResponsive(const AInfo: TSubjectInfo; const AReshow: Boolean);
+    procedure DoResponsiveChange(const AInfo: TSubjectInfo; const AOldSubject: TSubject); virtual;
     function GetDefaultParent: TFmxObject; virtual;
     /// <summary>The parent for a new stand: AParent, else DefaultParent, else
     /// the owner when it is a FMX object. Raises ESubjectStandError if none.</summary>
@@ -426,6 +472,10 @@ type
     property CatchBackKey: Boolean read FCatchBackKey write SetCatchBackKey default False;
     /// <summary>What Push does to the page below (see TPushMode).</summary>
     property PushMode: TPushMode read FPushMode write FPushMode default pmHide;
+    /// <summary>rmLive: subjects created with New or Push are replaced when the
+    /// width of their parent moves to another breakpoint (visible ones at
+    /// once, hidden ones when shown). The info stays the same.</summary>
+    property ResponsiveMode: TResponsiveMode read FResponsiveMode write FResponsiveMode default rmOnCreate;
     property DefaultHideAndCloseDeferTimeMS: Integer read FDefaultHideAndCloseDeferTimeMS write FDefaultHideAndCloseDeferTimeMS;
     property DefaultStyleName: string read FDefaultStandName write FDefaultStandName stored False; // deprecated: use DefaultStandName (hidden in the Object Inspector)
     property DefaultStandName: string read FDefaultStandName write FDefaultStandName;
@@ -440,6 +490,7 @@ type
     property OnBeforeShow: TOnBeforeShowEvent read FOnBeforeShow write FOnBeforeShow;
     property OnBeforeStartAnimation: TOnBeforeStartAnimationEvent read FOnBeforeStartAnimation write FOnBeforeStartAnimation;
     property OnBindCommonActionList: TOnBindCommonActionList read FOnBindCommonActionList write FOnBindCommonActionList;
+    property OnResponsiveChange: TOnResponsiveChangeEvent read FOnResponsiveChange write FOnResponsiveChange;
   end;
 
   /// <summary>Registry of the subjects of one kind, shared by TFrameStand
@@ -460,6 +511,8 @@ type
     function FindInfo(const AClass: TClass): I; overload;
     function LastShownSubject: S;
     function BackKeyTarget: TSubjectInfo; override;
+    procedure ReplaceRegistration(const AInfo: TSubjectInfo; const AOldSubject,
+      ANewSubject: TSubject; const ADropLastShow: Boolean); override;
     property VisibleSubjects: TList<S> read FVisibleSubjects;
   public
     constructor Create(AOwner: TComponent); override;
@@ -783,6 +836,49 @@ begin
   finally
     FBulkClosing := False;
   end;
+end;
+
+procedure TSubjectStand.RememberRequest(const AInfo: TSubjectInfo; const AClass: TClass;
+  const AParent: TFmxObject; const AStandStyleName: string);
+begin
+  AInfo.FRequestedClass := AClass;
+  AInfo.FRequestedParent := AParent;
+  AInfo.FRequestedStand := AStandStyleName;
+  // the requested parent may live longer than the stand (a definition can
+  // move the subject elsewhere): forgotten when it is freed
+  if Assigned(AParent) then
+    AParent.FreeNotification(Self);
+end;
+
+procedure TSubjectStand.CheckResponsive(const AInfo: TSubjectInfo; const AReshow: Boolean);
+var
+  LClass: TSubjectClass;
+  LParent: TFmxObject;
+  LStand: string;
+begin
+  if (FResponsiveMode <> rmLive) or (csDestroying in ComponentState)
+    or not Assigned(AInfo.FRequestedClass) then
+    Exit;
+  // not while it is going away
+  if AInfo.FTearingDown or AInfo.FCloseRequested or AInfo.Hiding
+    or not TSubjectInfo.IsUsable(AInfo.Subject) then
+    Exit;
+  LClass := TSubjectClass(AInfo.FRequestedClass);
+  LStand := AInfo.FRequestedStand;
+  LParent := ResolveParent(AInfo.FRequestedParent);
+  ResolveSubjectClass(LClass, LParent, LStand);
+  LStand := GetStandStyleName(LStand);
+  if (LClass = AInfo.Subject.ClassType) and SameText(LStand, AInfo.StandStyleName)
+    and (LParent = AInfo.Parent) then
+    Exit;
+  AInfo.ReplaceSubject(CreateSubject(LClass), LStand, LParent, AReshow);
+end;
+
+procedure TSubjectStand.DoResponsiveChange(const AInfo: TSubjectInfo;
+  const AOldSubject: TSubject);
+begin
+  if Assigned(FOnResponsiveChange) then
+    FOnResponsiveChange(Self, AInfo, AOldSubject);
 end;
 
 function TSubjectStand.GetStackCount: Integer;
@@ -1312,6 +1408,11 @@ var
   LInfo: TSubjectInfo;
   LSubject: TSubject;
 begin
+  // the parent asked to New, freed: the default parent from now on
+  for LInfo in GetSubjectInfos do
+    if LInfo.FRequestedParent = AComponent then
+      LInfo.FRequestedParent := nil;
+
   // a stand or a subject is being destroyed by someone else (typically by
   // FMX, with its parent or its form): forget it and drop the info, without
   // touching the objects already gone
@@ -2211,6 +2312,7 @@ begin
   // also see https://quality.embarcadero.com/browse/RSP-14806
   FStand.Align := TAlignLayout.Contents;
   FStand.Visible := False;
+  FStand.OnResize := StandResized; // ResponsiveMode = rmLive
 end;
 
 procedure TSubjectInfo.SetupStandParent(const AParent: TFmxObject);
@@ -2234,8 +2336,82 @@ begin
   FireAnimations(FStand, FSubjectStand.AnimationShow, False);
 end;
 
+procedure TSubjectInfo.StandResized(Sender: TObject);
+begin
+  if not Assigned(FSubjectStand) or (FSubjectStand.ResponsiveMode <> rmLive)
+    or FReplacing or not IsVisible then
+    Exit;
+  // after the resize (not inside the alignment of the parent), once per burst
+  if Assigned(FResponsiveCheck) and FResponsiveCheck.Pending then
+    Exit;
+  FResponsiveCheck := TDelayedAction.Schedule(1,
+    procedure
+    begin
+      FResponsiveCheck := nil;
+      // hidden meanwhile: checked when shown again (SubjectShow)
+      if Assigned(FSubjectStand) and IsVisible then
+        FSubjectStand.CheckResponsive(Self, True);
+    end);
+  Track(FResponsiveCheck); // cancelled if this info is destroyed before
+end;
+
+procedure TSubjectInfo.ReplaceSubject(const ANewSubject: TSubject;
+  const AStandStyleName: string; const AParent: TFmxObject; const AReshow: Boolean);
+var
+  LOld: TSubject;
+  LOldOwned, LWasVisible: Boolean;
+  LGuard: ILifeGuard;
+begin
+  LOld := Subject;
+  LOldOwned := SubjectIsOwned;
+  LWasVisible := IsVisible;
+  StopAnimations;
+
+  // the old subject leaves its stand, without being freed (OnResponsiveChange reads it)
+  SubjectIsOwned := False;
+  TeardownSubjectContainer;
+  TeardownStandParent;
+  TeardownStand;
+
+  // the new one, on a new clone of its stand, in its parent: what the constructor does
+  FStandStyleName := AStandStyleName;
+  FParent := AParent;
+  Subject := ANewSubject;
+  SubjectIsOwned := True;
+  SetupCustomMethods;
+  SetupStand;
+  SetupStandParent(AParent);
+  SetupContainer;
+  SetupSubjectContainer;
+  SetupCommonActions(FStand);
+  WatchComponents;
+  InjectContext;
+  FSubjectStand.ReplaceRegistration(Self, LOld, ANewSubject, AReshow and LWasVisible);
+
+  LGuard := FGuard;
+  FSubjectStand.DoResponsiveChange(Self, LOld);
+  if LOldOwned then
+    LOld.Free;
+  if not LGuard.IsAlive then // closed by OnResponsiveChange
+    Exit;
+
+  if AReshow and LWasVisible then
+  begin
+    FReplacing := True;
+    try
+      SubjectShow;
+    finally
+      FReplacing := False;
+    end;
+  end;
+end;
+
 procedure TSubjectInfo.SubjectShow;
 begin
+  // ResponsiveMode = rmLive: the breakpoint may have changed while it was hidden
+  if not FReplacing and Assigned(FSubjectStand) then
+    FSubjectStand.CheckResponsive(Self, False);
+
   Inc(FShowCount);
   FShownAt := FShowCount; // order of the subjects on screen, for Back/Esc
   FStatus := TSubjectStatus.Showing;
@@ -2516,6 +2692,28 @@ begin
   Result := nil;
   if FVisibleSubjects.Count > 0 then
     Result := FVisibleSubjects.Last;
+end;
+
+procedure TSubjectStandBase<S, I>.ReplaceRegistration(const AInfo: TSubjectInfo;
+  const AOldSubject, ANewSubject: TSubject; const ADropLastShow: Boolean);
+var
+  LInfo: I;
+  LIndex: Integer;
+begin
+  if FInfos.TryGetValue(S(AOldSubject), LInfo) then
+  begin
+    FInfos.Remove(S(AOldSubject));
+    FInfos.Add(S(ANewSubject), LInfo);
+  end;
+  for LIndex := 0 to FVisibleSubjects.Count - 1 do
+    if FVisibleSubjects[LIndex] = S(AOldSubject) then
+      FVisibleSubjects[LIndex] := S(ANewSubject);
+  if ADropLastShow then
+  begin
+    LIndex := FVisibleSubjects.LastIndexOf(S(ANewSubject));
+    if LIndex <> -1 then
+      FVisibleSubjects.Delete(LIndex);
+  end;
 end;
 
 function TSubjectStandBase<S, I>.BackKeyTarget: TSubjectInfo;

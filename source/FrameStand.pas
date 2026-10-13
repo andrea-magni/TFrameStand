@@ -59,8 +59,12 @@ type
   protected
     function NewSubject(const AClass: TClass; const AParent: TFmxObject;
       const AStandStyleName: string): TSubjectInfo; override;
+    procedure ResolveSubjectClass(var AClass: TSubjectClass; var AParent: TFmxObject;
+      var AStandStyleName: string); override;
+    function CreateSubject(const AClass: TSubjectClass): TSubject; override;
     function GetFrameClass<T: TFrame>(var AParent: TFmxObject;
       var AStandStyleName: string): TFrameClass; overload;
+    function FindFrameClass(const AClassName: string): TFrameClass;
     function GetFrameClass(const AClassName: string; var AParent: TFmxObject;
       var AStandStyleName: string): TFrameClass; overload;
   public
@@ -129,6 +133,15 @@ end;
 
 function TFrameStand.GetFrameClass(const AClassName: string;
   var AParent: TFmxObject; var AStandStyleName: string): TFrameClass;
+var
+  LClass: TSubjectClass;
+begin
+  LClass := FindFrameClass(AClassName);
+  ResolveSubjectClass(LClass, AParent, AStandStyleName);
+  Result := TFrameClass(LClass);
+end;
+
+function TFrameStand.FindFrameClass(const AClassName: string): TFrameClass;
 begin
   var LContext := TRttiContext.Create;
   var LType := LContext.FindType(AClassName);
@@ -145,9 +158,6 @@ begin
     raise Exception.CreateFmt('Type %s is not a TFrame descendant', [AClassName]);
 
   Result := TFrameClass(LInstanceType.MetaclassType);
-  DoResponsiveLookup(TSubjectClass(Result), AStandStyleName, AParent);
-  if Assigned(FOnGetFrameClass) then
-    FOnGetFrameClass(Self, AParent, AStandStyleName, Result);
 end;
 
 function TFrameStand.GetFrameClass<T>(var AParent: TFmxObject;
@@ -186,6 +196,7 @@ begin
     LFrame.Name := '';
     Result := Use(LFrame, LParent, LStandName);
     Result.FrameIsOwned := True;
+    RememberRequest(Result, FindFrameClass(AFrameClassName), AParent, AStandStyleName);
   except
     LFrame.Free;
     raise;
@@ -205,6 +216,7 @@ begin
     LFrame.Name := '';
     Result := Use<T>(LFrame, LParent, LStandName);
     Result.FrameIsOwned := True;
+    RememberRequest(Result, TClass(T), AParent, AStandStyleName);
   except
     LFrame.Free;
     raise;
@@ -230,25 +242,41 @@ begin
   PushInfo(Result, TClass(T), AParent, AStandStyleName, LConfig);
 end;
 
+procedure TFrameStand.ResolveSubjectClass(var AClass: TSubjectClass;
+  var AParent: TFmxObject; var AStandStyleName: string);
+var
+  LClass: TFrameClass;
+begin
+  DoResponsiveLookup(AClass, AStandStyleName, AParent);
+  LClass := TFrameClass(AClass);
+  if Assigned(FOnGetFrameClass) then
+    FOnGetFrameClass(Self, AParent, AStandStyleName, LClass);
+  AClass := LClass;
+end;
+
+function TFrameStand.CreateSubject(const AClass: TSubjectClass): TSubject;
+begin
+  Result := TFrameClass(AClass).Create(nil);
+  Result.Name := '';
+end;
+
 function TFrameStand.NewSubject(const AClass: TClass; const AParent: TFmxObject;
   const AStandStyleName: string): TSubjectInfo;
 var
-  LClass: TFrameClass;
+  LClass: TSubjectClass;
   LParent: TFmxObject;
   LStandName: string;
   LFrame: TFrame;
 begin
   LParent := ResolveParent(AParent);
   LStandName := AStandStyleName;
-  LClass := TFrameClass(AClass);
-  DoResponsiveLookup(TSubjectClass(LClass), LStandName, LParent);
-  if Assigned(FOnGetFrameClass) then
-    FOnGetFrameClass(Self, LParent, LStandName, LClass);
-  LFrame := LClass.Create(nil);
+  LClass := TSubjectClass(AClass);
+  ResolveSubjectClass(LClass, LParent, LStandName);
+  LFrame := TFrame(CreateSubject(LClass));
   try
-    LFrame.Name := '';
     Result := Use(LFrame, LParent, LStandName);
     TFrameInfo<TFrame>(Result).FrameIsOwned := True;
+    RememberRequest(Result, AClass, AParent, AStandStyleName);
   except
     LFrame.Free;
     raise;
@@ -358,15 +386,14 @@ end;
 
 procedure TFrameInfo<T>.ShowModal(const AResultProc: TProc<T, TModalResult>;
   const AClose: Boolean);
-var
-  LFrame: T;
 begin
-  LFrame := Frame;
   ShowModal(
     procedure (AResult: TModalResult)
     begin
+      // the frame at the time of the result (ResponsiveMode = rmLive may have
+      // replaced the one shown)
       if Assigned(AResultProc) then
-        AResultProc(LFrame, AResult);
+        AResultProc(Frame, AResult);
     end
   , AClose);
 end;

@@ -26,7 +26,8 @@ uses
   Tests.ModalResult in 'Tests.ModalResult.pas',
   Tests.BackKey in 'Tests.BackKey.pas',
   Tests.Stack in 'Tests.Stack.pas',
-  Tests.Gallery in 'Tests.Gallery.pas';
+  Tests.Gallery in 'Tests.Gallery.pas',
+  Tests.ResponsiveLive in 'Tests.ResponsiveLive.pas';
 
 var
   LResults: IRunResults;

@@ -66,6 +66,7 @@ const guideSidebar = [
   {
     text: 'Features',
     items: [
+      { text: 'Stand Gallery', link: '/features/gallery' },
       { text: 'Animations', link: '/features/animations' },
       { text: 'Common Actions', link: '/features/common-actions' },
       { text: 'Context Injection', link: '/features/injection' },

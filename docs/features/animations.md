@@ -51,6 +51,27 @@ end;
 
 You can also use different masks per component (`AnimationShow := 'Enter*'`), or start animations yourself from a `[Show]` method (see [Context Injection](/features/injection#lifecycle-methods)).
 
+## Values from the size of the stand
+
+A panel that slides in from the left should start just outside the screen, wherever the form is: its start value depends on sizes known only at runtime. Instead of setting it in `OnBeforeStartAnimation`, put a `TStyleTag` inside the `TFloatAnimation` in the stand, with the values in its `TagString`:
+
+```
+TFloatAnimation   StyleName = 'OnShowSlide', PropertyName = 'Margins.Left', StopValue = 0
+└── TStyleTag     TagString = 'StartValue=-ParentWidth'
+```
+
+Just before the animation starts, TFrameStand sets its `StartValue` and `StopValue` from the tag:
+
+| In the tag | Value |
+|---|---|
+| `Width`, `Height` | the size of the stand, which fills its parent |
+| `ParentWidth`, `ParentHeight` | the size of the element the animation belongs to |
+| a number | that number (`0.5`, `16`...) |
+
+Each of them can be negative (`-Width`). `PopStartValue` and `PopStopValue` replace `StartValue` and `StopValue` while the [navigation stack](/features/navigation) goes back (`Pop`), so the same stand slides the other way. For example, the `page` stand of the [gallery](/features/gallery) animates `Margins.Left` with `StartValue=Width; PopStartValue=-Width`.
+
+Keys are separated by `;`, unknown keys are ignored, and `OnBeforeStartAnimation` runs afterwards, so it can still change the values. Animations created in code can set the same text in their own `TagString` (in a style, animations do not store `TagString`, `TStyleTag` does).
+
 ## Effects
 
 Any FMX effect (`TShadowEffect`, `TGlowEffect`, `TGaussianBlurEffect`...) placed in the stand is applied to its element as usual.

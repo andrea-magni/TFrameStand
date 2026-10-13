@@ -32,6 +32,10 @@ Material Design-like transitions to open a view (the details of an employee) and
 
 The minimal example: two frames in a `bluestand`, a `SayHello*` Common Action, `[FrameInfo]` injection and a `[BeforeShow]` method. The demo of the CodeRage X session.
 
+### Gallery
+
+The [stand gallery](/features/gallery), light and dark: a dialog with a result, a lightbox, a bottom sheet and a drawer with choices, a snackbar that goes away by itself and pages with `Push`/`Pop`. The two style files are embedded as resources.
+
 ### Dialog
 
 A colour picker shown with `ShowModal`: the frame sets `ModalResult` through its injected info, and a `*_cancel` Common Action, bound both to a button of the frame and to the background of the stand, cancels it, as do Back and Esc (`CatchBackKey`). See [Dialog Results](/features/dialogs).

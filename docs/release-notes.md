@@ -11,6 +11,14 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 **Navigation**
 - [Navigation stack](/features/navigation): `Push<T>`, `Pop`, `PopToRoot`, `StackCount`, `StackTop` on `TFrameStand` and `TFormStand`. `PushMode` says what happens to the page below (`pmHide`: hidden and kept, the default; `pmKeepVisible`; `pmClose`: created again by `Pop`). `StackOperation` tells `OnBeforeStartAnimation` whether pages move forward or back. Back and Esc pop the stack. The Wizard demo uses it.
 
+**Stands**
+- [Stand Gallery](/features/gallery): `stands\Stands.Light.style` and `stands\Stands.Dark.style` with six ready-made stands (`dialog`, `lightbox`, `bottomsheet`, `drawer`, `snackbar`, `page`), and the Gallery demo.
+- [Animation values from the size of the stand](/features/animations#values-from-the-size-of-the-stand): a `TStyleTag` in a `TFloatAnimation` sets its start and stop values from the size of the stand or of the animated element, and from the direction of the navigation stack (`PopStartValue`, `PopStopValue`).
+- `HideAndCloseAfter(ADelayMS)` on the infos, for snackbars and toasts.
+
+**Setup**
+- The uninstaller also removes `stands`, `tmsbuild.yaml` and `version.txt`.
+
 **Deprecations** (nothing removed: existing code and forms work as before)
 - `Show(ABackgroundTask, ...)`: the compiler warning now says what to use instead.
 - `StyleBook` and `DefaultStyleName` (old names of `StandBook` and `DefaultStandName`) are no longer shown in the Object Inspector. They still load from old forms, which the IDE saves with the new names. The demos use the new names.

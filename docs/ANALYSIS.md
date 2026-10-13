@@ -146,7 +146,7 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
    `vkHardwareBack`/`Esc`, the most common chore in mobile apps (see the `Responsive` demo).
 3. ✅ **Navigation stack** (done: `Push<T>`, `Pop`, `PopToRoot`, `PushMode`, `StackOperation`): `Push<T>`/`Pop` with stand-based transitions, for wizards and master/detail
    flows (the `Wizard` demo does it by hand).
-4. **Stand gallery**: a ready-made `.style` with lightbox, dialog, bottom sheet, side drawer,
+4. ✅ **Stand gallery** (done: `stands\Stands.Light.style`/`Stands.Dark.style`, six stands, Gallery demo, `TStyleTag` animation values): a ready-made `.style` with lightbox, dialog, bottom sheet, side drawer,
    snackbar/toast, full-screen page, with light/dark variants, plus a page in the docs. It would
    lower the entry barrier more than any API change.
 5. **Live responsive**: an opt-in `ResponsiveMode = rmLive` that re-creates (or re-parents) visible

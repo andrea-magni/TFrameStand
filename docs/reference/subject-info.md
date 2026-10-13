@@ -40,6 +40,7 @@ The info is the handle of one subject on its stand. It is created by `New`/`Use`
 | `HideAndClose(ADeferExecutionMS = 0; AThen = nil)` | `Hide`, then waits `DefaultHideAndCloseDeferTimeMS` (or `ADeferExecutionMS`), then `Close` and `AThen`. Calls made while a hide or a hide-and-close is in progress close the subject once, when it completes, and call every `AThen`. |
 | `Close` | Removes the subject, without animations: frees the stand, frees or detaches the subject, frees the info. |
 | `ShowModal(AResultProc; AClose = True)` | Shows the subject as a dialog. `AResultProc` is a `TProc<TModalResult>`, or a `TProc<T, TModalResult>` that receives the frame (`TFrameInfo<T>`) or the form (`TFormInfo<T>`) too. It is called once, after the hide animation and before the close, with `ModalResult` or `mrCancel`. With `AClose = False` the subject is only hidden. See [Dialog Results](/features/dialogs). |
+| `HideAndCloseAfter(ADelayMS)` | `HideAndClose` after `ADelayMS` milliseconds (a snackbar); nothing happens if the subject is closed before. |
 | `StopAnimations` | Stops all the show and hide animations of the stand. |
 | `DefaultShow` / `DefaultHide` | The default show and hide, useful from your `[Show]` / `[Hide]` methods. |
 | `Show(ABackgroundTask, AOnTaskComplete, AOnTaskCompleteSynchronized): ITask` | **Deprecated.** See [Background Work](/features/background-work). |

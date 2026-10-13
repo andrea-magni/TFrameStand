@@ -1,5 +1,9 @@
 # Designing Stands
 
+::: tip Ready-made stands
+The [Stand Gallery](/features/gallery) has a dialog, a lightbox, a bottom sheet, a drawer, a snackbar and a page, light and dark, ready to load in a style book.
+:::
+
 A stand is an ordinary FireMonkey style item. You design it in the **style designer** of a `TStyleBook` (double-click the style book), exactly like a custom style for a control, and assign that style book to the `StandBook` property of the component.
 
 ## Anatomy

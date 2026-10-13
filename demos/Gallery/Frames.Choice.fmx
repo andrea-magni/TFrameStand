@@ -1,0 +1,22 @@
+object ChoiceFrame: TChoiceFrame
+  Align = Client
+  Size.Width = 268.000000000000000000
+  Size.Height = 324.000000000000000000
+  Size.PlatformDefault = False
+  object TitleLabel: TLabel
+    Align = Top
+    StyledSettings = [Family, Style, FontColor]
+    Margins.Bottom = 8.000000000000000000
+    Size.Width = 268.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 20.000000000000000000
+    Text = 'Title'
+  end
+  object ChoicesLayout: TLayout
+    Align = Client
+    Size.Width = 268.000000000000000000
+    Size.Height = 276.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

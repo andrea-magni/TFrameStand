@@ -1,0 +1,49 @@
+object PhotoFrame: TPhotoFrame
+  Align = Client
+  Size.Width = 312.000000000000000000
+  Size.Height = 480.000000000000000000
+  Size.PlatformDefault = False
+  object Photo: TRectangle
+    Align = Client
+    Fill.Kind = Gradient
+    Fill.Gradient.Points = <
+      item
+        Color = xFFFF9A62
+        Offset = 0.000000000000000000
+      end
+      item
+        Color = xFF7B4397
+        Offset = 1.000000000000000000
+      end>
+    Size.Width = 312.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    XRadius = 8.000000000000000000
+    YRadius = 8.000000000000000000
+    object CaptionLabel: TLabel
+      Align = Bottom
+      StyledSettings = [Family, Style]
+      Margins.Left = 16.000000000000000000
+      Margins.Bottom = 12.000000000000000000
+      Position.X = 16.000000000000000000
+      Position.Y = 428.000000000000000000
+      Size.Width = 296.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.FontColor = claWhite
+      Text = 'Sunset at the lake'
+    end
+    object Close_cancel: TButton
+      Anchors = [akTop, akRight]
+      Position.X = 224.000000000000000000
+      Position.Y = 12.000000000000000000
+      Size.Width = 76.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Close'
+    end
+  end
+end

@@ -1,0 +1,165 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Caption = 'TFrameStand - Stand Gallery'
+  ClientHeight = 640
+  ClientWidth = 380
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Background: TRectangle
+    Align = Client
+    Fill.Color = xFFF2F2F5
+    Size.Width = 380.000000000000000000
+    Size.Height = 640.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object Header: TRectangle
+      Align = Top
+      Fill.Color = xFF3F51B5
+      Size.Width = 380.000000000000000000
+      Size.Height = 56.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object TitleLabel: TLabel
+        Align = Client
+        StyledSettings = [Family, Style]
+        Margins.Left = 16.000000000000000000
+        Size.Width = 216.000000000000000000
+        Size.Height = 56.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 18.000000000000000000
+        TextSettings.FontColor = claWhite
+        Text = 'Stand Gallery'
+      end
+      object DarkLabel: TLabel
+        Align = Right
+        StyledSettings = [Family, Style]
+        Position.X = 248.000000000000000000
+        Size.Width = 48.000000000000000000
+        Size.Height = 56.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.FontColor = claWhite
+        TextSettings.HorzAlign = Trailing
+        Text = 'Dark'
+      end
+      object DarkSwitch: TSwitch
+        Align = Right
+        IsChecked = False
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 14.000000000000000000
+        Margins.Right = 16.000000000000000000
+        Margins.Bottom = 14.000000000000000000
+        Position.X = 304.000000000000000000
+        Position.Y = 14.000000000000000000
+        Size.Width = 60.000000000000000000
+        Size.Height = 28.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        OnSwitch = DarkSwitchSwitch
+      end
+    end
+    object Content: TLayout
+      Align = Client
+      Size.Width = 380.000000000000000000
+      Size.Height = 584.000000000000000000
+      Size.PlatformDefault = False
+      object Buttons: TVertScrollBox
+        Align = Client
+        Margins.Left = 16.000000000000000000
+        Margins.Top = 16.000000000000000000
+        Margins.Right = 16.000000000000000000
+        Size.Width = 348.000000000000000000
+        Size.Height = 568.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Viewport.Width = 348.000000000000000000
+        Viewport.Height = 568.000000000000000000
+        object DialogButton: TButton
+          Align = Top
+          Margins.Bottom = 12.000000000000000000
+          Size.Width = 348.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'Dialog'
+          OnClick = DialogButtonClick
+        end
+        object LightboxButton: TButton
+          Align = Top
+          Margins.Bottom = 12.000000000000000000
+          Position.Y = 60.000000000000000000
+          Size.Width = 348.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Lightbox'
+          OnClick = LightboxButtonClick
+        end
+        object BottomSheetButton: TButton
+          Align = Top
+          Margins.Bottom = 12.000000000000000000
+          Position.Y = 120.000000000000000000
+          Size.Width = 348.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Text = 'Bottom sheet'
+          OnClick = BottomSheetButtonClick
+        end
+        object DrawerButton: TButton
+          Align = Top
+          Margins.Bottom = 12.000000000000000000
+          Position.Y = 180.000000000000000000
+          Size.Width = 348.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 3
+          Text = 'Drawer'
+          OnClick = DrawerButtonClick
+        end
+        object SnackbarButton: TButton
+          Align = Top
+          Margins.Bottom = 12.000000000000000000
+          Position.Y = 240.000000000000000000
+          Size.Width = 348.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 4
+          Text = 'Snackbar'
+          OnClick = SnackbarButtonClick
+        end
+        object PageButton: TButton
+          Align = Top
+          Margins.Bottom = 12.000000000000000000
+          Position.Y = 300.000000000000000000
+          Size.Width = 348.000000000000000000
+          Size.Height = 48.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 5
+          Text = 'Pages (Push / Pop)'
+          OnClick = PageButtonClick
+        end
+      end
+    end
+  end
+  object Stands: TStyleBook
+    Left = 288
+    Top = 488
+  end
+  object FrameStand1: TFrameStand
+    AnimationShow = 'OnShow*'
+    AnimationHide = 'OnHide*'
+    CatchBackKey = True
+    CommonActionPrefix = 'ca_'
+    DefaultHideAndCloseDeferTimeMS = 100
+    DefaultStandName = 'dialog'
+    DefaultParent = Content
+    StandBook = Stands
+    OnBeforeShow = FrameStand1BeforeShow
+    Left = 288
+    Top = 432
+  end
+end

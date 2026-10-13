@@ -1,0 +1,56 @@
+object PageFrame: TPageFrame
+  Align = Client
+  Size.Width = 380.000000000000000000
+  Size.Height = 584.000000000000000000
+  Size.PlatformDefault = False
+  Padding.Left = 16.000000000000000000
+  Padding.Top = 16.000000000000000000
+  Padding.Right = 16.000000000000000000
+  Padding.Bottom = 16.000000000000000000
+  object TitleLabel: TLabel
+    Align = Top
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 16.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 348.000000000000000000
+    Size.Height = 48.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 26.000000000000000000
+    Text = 'Page'
+  end
+  object TextLabel: TLabel
+    Align = Client
+    StyledSettings = [Family, Style, FontColor]
+    Size.Width = 348.000000000000000000
+    Size.Height = 464.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    TextSettings.VertAlign = Leading
+    Text = 'Text'
+  end
+  object ButtonsLayout: TLayout
+    Align = Bottom
+    Size.Width = 348.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    object BackButton: TButton
+      Align = Left
+      Size.Width = 120.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Back'
+      OnClick = BackButtonClick
+    end
+    object NextButton: TButton
+      Align = Right
+      Position.X = 228.000000000000000000
+      Size.Width = 120.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Next page'
+      OnClick = NextButtonClick
+    end
+  end
+end

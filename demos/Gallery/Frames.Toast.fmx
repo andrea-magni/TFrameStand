@@ -1,0 +1,15 @@
+object ToastFrame: TToastFrame
+  Align = Client
+  Size.Width = 296.000000000000000000
+  Size.Height = 56.000000000000000000
+  Size.PlatformDefault = False
+  object TextLabel: TLabel
+    Align = Client
+    StyledSettings = [Family, Style, FontColor]
+    Size.Width = 296.000000000000000000
+    Size.Height = 56.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    Text = 'Message'
+  end
+end

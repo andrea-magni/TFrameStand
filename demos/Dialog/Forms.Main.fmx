@@ -81,6 +81,7 @@ object MainForm: TMainForm
   object FrameStand1: TFrameStand
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
+    CatchBackKey = True
     CommonActionPrefix = 'ca_'
     DefaultStyleName = 'simple'
     StyleBook = StyleBook1

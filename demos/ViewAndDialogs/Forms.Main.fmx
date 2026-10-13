@@ -7,7 +7,6 @@ object MainForm: TMainForm
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
-  OnKeyDown = FormKeyDown
   DesignerMasterStyle = 0
   object Layout1: TLayout
     Align = Client
@@ -94,6 +93,7 @@ object MainForm: TMainForm
   object FrameStand1: TFrameStand
     AnimationShow = 'OnShow*'
     AnimationHide = 'OnHide*'
+    CatchBackKey = True
     CommonActionPrefix = 'ca_'
     DefaultHideAndCloseDeferTimeMS = 100
     DefaultStyleName = 'expand'

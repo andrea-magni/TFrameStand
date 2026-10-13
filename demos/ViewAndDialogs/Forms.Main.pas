@@ -29,8 +29,6 @@ type
     Rectangle1: TRectangle;
     procedure ListView1ButtonClick(const Sender: TObject;
       const AItem: TListItem; const AObject: TListItemSimpleControl);
-    procedure FormKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
-      Shift: TShiftState);
     procedure ListView1ItemClickEx(const Sender: TObject; ItemIndex: Integer;
       const [Ref] LocalClickPos: TPointF; const ItemObject: TListItemDrawable);
     procedure FrameStand1BeforeShow(const ASender: TSubjectStand;
@@ -56,13 +54,6 @@ implementation
 
 uses DataModules.Main;
 
-procedure TMainForm.FormKeyDown(Sender: TObject; var Key: Word;
-  var KeyChar: Char; Shift: TShiftState);
-begin
-  // handle hardware back to close frames
-end;
-
-
 procedure TMainForm.FrameStand1BeforeShow(const ASender: TSubjectStand;
   const ASubjectInfo: TSubjectInfo);
 var
@@ -79,7 +70,11 @@ end;
 function TMainForm.GetEmployeeDetailsInfo: TFrameInfo<TEmployeeDetailsFrame>;
 begin
   if not Assigned(FEmployeeDetailsInfo) then
+  begin
     FEmployeeDetailsInfo := FrameStand1.New<TEmployeeDetailsFrame>(ListView1);
+    // Back (Android) and Esc hide it (it is kept, to be shown again): see CatchBackKey
+    FEmployeeDetailsInfo.BackKeyAction := baHide;
+  end;
   Result := FEmployeeDetailsInfo;
 end;
 
@@ -88,6 +83,7 @@ begin
   if not Assigned(FRatingDialogInfo) then
   begin
     FRatingDialogInfo := FrameStand1.New<TRatingDialogFrame>(ListView1);
+    FRatingDialogInfo.BackKeyAction := baHide;
 
     FRatingDialogInfo.Frame.OnRatingChanged :=
       procedure (ARating: Integer)

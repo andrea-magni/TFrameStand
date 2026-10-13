@@ -23,6 +23,9 @@ Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/r
 **Setup**
 - The uninstaller also removes `stands`, `tmsbuild.yaml` and `version.txt`.
 
+**AI**
+- [AI Agent Skill](/guide/agent-skills) for TFrameStand and TFormStand in `Skills\tframestand-development`, installable as a Claude Code plugin (`/plugin marketplace add andrea-magni/TFrameStand`) or with `npx skills add andrea-magni/TFrameStand`.
+
 **Deprecations** (nothing removed: existing code and forms work as before)
 - `Show(ABackgroundTask, ...)`: the compiler warning now says what to use instead.
 - `StyleBook` and `DefaultStyleName` (old names of `StandBook` and `DefaultStandName`) are no longer shown in the Object Inspector. They still load from old forms, which the IDE saves with the new names. The demos use the new names.

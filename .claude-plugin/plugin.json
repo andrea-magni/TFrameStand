@@ -1,0 +1,16 @@
+{
+  "name": "tframestand",
+  "displayName": "TFrameStand",
+  "version": "1.0.0",
+  "description": "Agent Skill for TFrameStand and TFormStand, the Delphi FireMonkey components that show frames and forms on stands: dialogs with a result, Back/Esc, navigation stacks, the stand gallery (dialog, lightbox, bottom sheet, drawer, snackbar, page), animations, Common Actions, context injection and responsive frames.",
+  "author": {
+    "name": "Andrea Magni",
+    "email": "andrea.magni@gmail.com",
+    "url": "https://github.com/andrea-magni"
+  },
+  "homepage": "https://andrea-magni.github.io/TFrameStand/",
+  "repository": "https://github.com/andrea-magni/TFrameStand",
+  "license": "MIT",
+  "keywords": ["delphi", "firemonkey", "fmx", "frames", "dialogs", "navigation", "responsive", "ui"],
+  "skills": ["./Skills"]
+}

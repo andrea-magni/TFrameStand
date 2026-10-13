@@ -159,7 +159,7 @@ Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl,.\InnoSetupSc
 #endif
 ; packages: one folder per Delphi version (10.4 to 13), each with FrameStand.groupproj
 Source: "..\{#LibraryPackagesFolder}\*"; Excludes: "{#CommonRADStudioFilesExcludes}"; DestDir: "{app}\{#LibraryPackagesFolder}"; Flags: recursesubdirs ignoreversion
-Source: "..\*"; Excludes: "{#CommonRADStudioFilesExcludes},*.gitattributes,*.gitignore,\.git\*,\.github\*,\.claude\*,\{#LibraryDCUFolder}\*,\{#SetupFolder}\*,\{#LibraryPackagesFolder}\*,\build\*,\docs\node_modules\*,\docs\.vitepress\cache\*,\docs\.vitepress\dist\*,\docs\public\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
+Source: "..\*"; Excludes: "{#CommonRADStudioFilesExcludes},*.gitattributes,*.gitignore,\.git\*,\.github\*,\.claude\*,\.claude-plugin\*,\{#LibraryDCUFolder}\*,\{#SetupFolder}\*,\{#LibraryPackagesFolder}\*,\build\*,\docs\node_modules\*,\docs\.vitepress\cache\*,\docs\.vitepress\dist\*,\docs\public\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 [Icons]
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
@@ -186,6 +186,7 @@ Type: filesandordirs; Name: "{app}\gifs\*";
 Type: filesandordirs; Name: "{app}\lib\*";
 Type: filesandordirs; Name: "{app}\media\*";
 Type: filesandordirs; Name: "{app}\packages\*";
+Type: filesandordirs; Name: "{app}\Skills\*";
 Type: filesandordirs; Name: "{app}\source\*";
 Type: filesandordirs; Name: "{app}\stands\*";
 Type: filesandordirs; Name: "{app}\tests\*";
@@ -202,6 +203,7 @@ Type: dirifempty; Name: "{app}\gifs";
 Type: dirifempty; Name: "{app}\lib";
 Type: dirifempty; Name: "{app}\media";
 Type: dirifempty; Name: "{app}\stands";
+Type: dirifempty; Name: "{app}\Skills";
 Type: dirifempty; Name: "{app}\packages";
 Type: dirifempty; Name: "{app}\source";
 Type: dirifempty; Name: "{app}\tests";

@@ -154,7 +154,7 @@ Ideas ordered by value for the users, as far as the issues and the demos suggest
 6. ✅ Deprecations (done: message on `Show(ABackgroundTask...)`, the two properties hidden in the Object Inspector, since Delphi has no `deprecated` for properties): mark `Show(ABackgroundTask…)`, `StyleBook` and `DefaultStyleName` as
    `deprecated` (removing them breaks compatibility: a future v.3.0). Already done in v.2.1: the
    `AUTOREFCOUNT` branches, minimum Delphi 10.4, the frame/form duplication (B13).
-7. **AI agent skill** for TFrameStand, like the MARS skills (`mars-development`): the docs and
+7. ✅ **AI agent skill** (done: `Skills\tframestand-development`, plugin marketplace in `.claude-plugin`) for TFrameStand, like the MARS skills (`mars-development`): the docs and
    `llms.txt` are a ready base.
 
 v.2.3 adds features without breaking existing code (the version was going to be v.3.0, renamed to keep

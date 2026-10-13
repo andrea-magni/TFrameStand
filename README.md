@@ -29,6 +29,9 @@ Details in the [installation guide](https://andrea-magni.github.io/TFrameStand/g
 
 _Installing manually you get the latest updates (beware! :-) )_
 
+## AI Agent Skill
+The [`Skills/`](Skills) folder has an [Agent Skill](https://code.claude.com/docs/en/skills) that teaches Claude Code and other AI coding agents to work with TFrameStand and TFormStand. In Claude Code: `/plugin marketplace add andrea-magni/TFrameStand` and `/plugin install tframestand@tframestand`. See [AI Agent Skill](https://andrea-magni.github.io/TFrameStand/guide/agent-skills).
+
 ## Main functionalities
 * Use any TFrame/TForm and show it through TFrame/TFormStand to add animations, effects and stands (a common visual layer between the TFrame/TForm and its Parent)
 * Share CommonActions through different UI combinations

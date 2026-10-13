@@ -1,0 +1,15 @@
+{
+  "name": "tframestand",
+  "description": "Official plugin marketplace of TFrameStand, the Delphi FireMonkey components to show frames and forms on stands: an Agent Skill to develop with TFrameStand and TFormStand.",
+  "owner": {
+    "name": "Andrea Magni",
+    "url": "https://github.com/andrea-magni"
+  },
+  "plugins": [
+    {
+      "name": "tframestand",
+      "source": "./",
+      "description": "Agent Skill for TFrameStand and TFormStand (Delphi FMX): stands, dialogs with a result, Back/Esc, navigation stacks, the stand gallery, animations, Common Actions, injection and responsive frames."
+    }
+  ]
+}

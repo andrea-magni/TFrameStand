@@ -61,6 +61,7 @@ const guideSidebar = [
       { text: 'Lifecycle & Ownership', link: '/guide/lifecycle' },
       { text: 'FAQ & Troubleshooting', link: '/guide/faq' },
       { text: 'Building & Testing', link: '/guide/building' },
+      { text: 'AI Agent Skill', link: '/guide/agent-skills' },
     ],
   },
   {

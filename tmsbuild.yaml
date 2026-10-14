@@ -10,7 +10,7 @@ application:
   description: FireMonkey components to show frames and forms on a "stand" (a style that wraps them, with animations, lifecycle events and responsive layouts) for every FMX platform.
   company name: Andrea Magni
   copyright: Andrea Magni
-  license: MIT
+  license: MPL-2.0
   license url: https://github.com/andrea-magni/TFrameStand/blob/master/LICENSE
   url: https://github.com/andrea-magni/TFrameStand
   docs: https://andrea-magni.github.io/TFrameStand/

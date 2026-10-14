@@ -10,7 +10,7 @@
   },
   "homepage": "https://andrea-magni.github.io/TFrameStand/",
   "repository": "https://github.com/andrea-magni/TFrameStand",
-  "license": "MIT",
+  "license": "MPL-2.0",
   "keywords": ["delphi", "firemonkey", "fmx", "frames", "dialogs", "navigation", "responsive", "ui"],
   "skills": ["./Skills"]
 }

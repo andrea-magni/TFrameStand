@@ -32,7 +32,7 @@ Destruction: freeing the parent or the form with subjects on screen is safe (Fre
 
 ## Events of the component
 
-`OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide` (`procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo)`), `OnBeforeStartAnimation` (adds `const AAnimation: TAnimation`), `OnBindCommonActionList`, `OnGetSubjectClass`, `OnResponsiveChange`. Check `ASubjectInfo.StandStyleName` or `ASubjectInfo.Subject is TMyFrame` to act on specific subjects; `ASubjectInfo.Stand.FindStyleResource('card')` reaches stand elements.
+`OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide` (`procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo)`), `OnBeforeStartAnimation` (adds `const AAnimation: TAnimation`, unit `FMX.Ani`), `OnBindCommonActionList`, `OnGetSubjectClass`, `OnResponsiveChange`. Check `ASubjectInfo.StandStyleName` or `ASubjectInfo.Subject is TMyFrame` to act on specific subjects; `ASubjectInfo.Stand.FindStyleResource('card')` reaches stand elements.
 
 ## Context injection
 

@@ -1,6 +1,6 @@
 # API at a glance (declarations)
 
-Units: `SubjectStand` (base classes, enums, lifecycle and context attributes), `FrameStand` (TFrameStand, TFrameInfo<T>, `[FrameInfo]`, `[FrameStand]`), `FormStand` (TFormStand, TFormInfo<T>, `[FormInfo]`, `[FormStand]`, `[Align]`, `[ClipChildren]`), `ResponsiveContainer` (TBreakpoint, TResponsiveDefinition: needed only to use `TResponsiveDefinition` or `TBreakpoint` explicitly), `System.UITypes` (`TModalResult`, `mrOk`, `vkHardwareBack`).
+Units: `SubjectStand` (base classes, enums, lifecycle and context attributes), `FrameStand` (TFrameStand, TFrameInfo<T>, `[FrameInfo]`, `[FrameStand]`), `FormStand` (TFormStand, TFormInfo<T>, `[FormInfo]`, `[FormStand]`, `[Align]`, `[ClipChildren]`), `ResponsiveContainer` (TBreakpoint, TResponsiveDefinition: needed only to use `TResponsiveDefinition` or `TBreakpoint` explicitly), `System.UITypes` (`TModalResult`, `mrOk`, `vkHardwareBack`), `FMX.Ani` (`TAnimation`, `TFloatAnimation`: needed by an `OnBeforeStartAnimation` handler; not `FMX.Types`).
 
 ```pascal
 // unit SubjectStand
@@ -49,7 +49,7 @@ type
 
   TOnAfterShowEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo) of object;
   TOnBeforeStartAnimationEvent = procedure(const ASender: TSubjectStand; const ASubjectInfo: TSubjectInfo;
-    const AAnimation: TAnimation) of object;  // TAnimation: FMX.Types
+    const AAnimation: TAnimation) of object;  // TAnimation: FMX.Ani
   TOnResponsiveChangeEvent = procedure(const ASender: TSubjectStand; const AInfo: TSubjectInfo;
     const AOldSubject: TSubject) of object;
 

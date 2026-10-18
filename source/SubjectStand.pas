@@ -95,6 +95,9 @@ type
 
   TSubjectInfo = class
   private
+    type
+      TGestureCounts = array [TInteractiveGesture] of Integer;
+  private
     FSubjectStand: TSubjectStand;
     FStand: TControl;
     FParent: TFmxObject;
@@ -125,9 +128,13 @@ type
     FRequestedStand: string;
     FReplacing: Boolean;
     FResponsiveCheck: IDelayedAction;
+    // interactive gestures registered with the hosting form (SetupGestures)
+    FGestureForm: TCommonCustomForm;
+    FGestures: TGestureCounts;
     class var FShowCount: Int64;
     function GetIsVisible: Boolean;
     procedure SetModalResult(const AValue: TModalResult);
+    procedure SetGestures(const AForm: TCommonCustomForm; const AGestures: TGestureCounts);
   protected
     function GetSubject: TSubject; virtual; abstract;
     procedure SetSubject(const Value: TSubject); virtual; abstract;
@@ -180,7 +187,12 @@ type
     procedure SetupSubjectContainer; virtual;
     procedure SetupCommonActions(const AFmxObject: TFmxObject); virtual;
     procedure SetupCustomMethods; virtual;
+    /// <summary>Registers the interactive gestures (Touch.InteractiveGestures)
+    /// of the controls of the subject with the form hosting the stand; again
+    /// at every show (only the differences reach the form).</summary>
+    procedure SetupGestures; virtual;
     // teardown
+    procedure TeardownGestures; virtual;
     procedure TeardownSubjectContainer; virtual;
     procedure TeardownStandParent; virtual;
     procedure TeardownStand; virtual;
@@ -1413,6 +1425,11 @@ begin
     if LInfo.FRequestedParent = AComponent then
       LInfo.FRequestedParent := nil;
 
+  // the form the gestures were registered with, freed: nothing to give back
+  for LInfo in GetSubjectInfos do
+    if LInfo.FGestureForm = AComponent then
+      LInfo.FGestureForm := nil;
+
   // a stand or a subject is being destroyed by someone else (typically by
   // FMX, with its parent or its form): forget it and drop the info, without
   // touching the objects already gone
@@ -1710,6 +1727,7 @@ begin
   SetupContainer;
   SetupSubjectContainer;
   SetupCommonActions(FStand);
+  SetupGestures;
 
   WatchComponents;
   FStatus := Ready;
@@ -1737,6 +1755,7 @@ begin
     FGuard.Kill;
   CancelPendingActions;
 
+  TeardownGestures;
   TeardownSubjectContainer;
   TeardownStandParent;
   TeardownStand;
@@ -2384,6 +2403,7 @@ begin
   SetupContainer;
   SetupSubjectContainer;
   SetupCommonActions(FStand);
+  SetupGestures; // the gestures of the new subject replace those of the old one
   WatchComponents;
   InjectContext;
   FSubjectStand.ReplaceRegistration(Self, LOld, ANewSubject, AReshow and LWasVisible);
@@ -2411,6 +2431,8 @@ begin
   // ResponsiveMode = rmLive: the breakpoint may have changed while it was hidden
   if not FReplacing and Assigned(FSubjectStand) then
     FSubjectStand.CheckResponsive(Self, False);
+  // the stand may have reached a form (or changed it) after its creation
+  SetupGestures;
 
   Inc(FShowCount);
   FShownAt := FShowCount; // order of the subjects on screen, for Back/Esc
@@ -2498,6 +2520,108 @@ begin
     if IsUsable(FStand) and IsUsable(FContainer) then
       FContainer.RemoveObject(Subject);
   end;
+end;
+
+// Interactive gestures (Touch.InteractiveGestures: Zoom, Pan, DoubleTap...)
+// are recognized (Android) only once registered with the form
+// (TCommonCustomForm.AddRecognizer). FMX registers them when they are set, with
+// the form found through the Owner chain of the control: none for a subject
+// created with Create(nil), its own form for a subject of a TFormStand. They
+// are registered here with the form hosting the stand, as FMX would have done
+// (one recognizer per control and gesture), and given back exactly
+// (RemoveRecognizer) when the subject goes: the form counts them per gesture.
+
+procedure TSubjectInfo.SetupGestures;
+var
+  LForm: TCommonCustomForm;
+  LParent: TFmxObject;
+  LGestures: TGestureCounts;
+
+  procedure Collect(const AObject: TFmxObject);
+  var
+    LChild: TFmxObject;
+    LOwner: TComponent;
+    LOwnedBySubject: Boolean;
+    LGesture: TInteractiveGesture;
+  begin
+    if AObject is TControl then
+    begin
+      // the controls of the subject (style objects of the stand left out, as
+      // FMX does); those owned by the hosting form are registered already
+      LOwnedBySubject := False;
+      LOwner := AObject;
+      while Assigned(LOwner) and (LOwner <> LForm) do
+      begin
+        if LOwner = Subject then
+          LOwnedBySubject := True;
+        LOwner := LOwner.Owner;
+      end;
+      if LOwnedBySubject and not Assigned(LOwner) then
+        for LGesture in TControl(AObject).Touch.InteractiveGestures do
+          Inc(LGestures[LGesture]);
+    end;
+    if Assigned(AObject.Children) then
+      for LChild in AObject.Children do
+        Collect(LChild);
+  end;
+
+begin
+  LForm := nil;
+  FillChar(LGestures, SizeOf(LGestures), 0);
+  if IsUsable(FStand) and IsUsable(Subject) then
+  begin
+    LParent := FStand.Parent;
+    while Assigned(LParent) and not (LParent is TCommonCustomForm) do
+      LParent := LParent.Parent;
+    if IsUsable(LParent) then
+    begin
+      LForm := TCommonCustomForm(LParent);
+      Collect(FStand);
+    end;
+  end;
+  SetGestures(LForm, LGestures);
+end;
+
+procedure TSubjectInfo.TeardownGestures;
+var
+  LNone: TGestureCounts;
+begin
+  FillChar(LNone, SizeOf(LNone), 0);
+  SetGestures(nil, LNone);
+end;
+
+procedure TSubjectInfo.SetGestures(const AForm: TCommonCustomForm;
+  const AGestures: TGestureCounts);
+var
+  LGesture: TInteractiveGesture;
+  LCount, LIndex: Integer;
+begin
+  // the new ones first: a gesture still in use never drops to zero recognizers
+  if Assigned(AForm) then
+    for LGesture := Low(TInteractiveGesture) to High(TInteractiveGesture) do
+    begin
+      LCount := AGestures[LGesture];
+      if AForm = FGestureForm then
+        Dec(LCount, FGestures[LGesture]);
+      for LIndex := 1 to LCount do
+        AForm.AddRecognizer(LGesture);
+    end;
+
+  // a form being destroyed has no recognizers to give back
+  if IsUsable(FGestureForm) then
+    for LGesture := Low(TInteractiveGesture) to High(TInteractiveGesture) do
+    begin
+      LCount := FGestures[LGesture];
+      if AForm = FGestureForm then
+        Dec(LCount, AGestures[LGesture]);
+      for LIndex := 1 to LCount do
+        FGestureForm.RemoveRecognizer(LGesture);
+    end;
+
+  if Assigned(AForm) and (AForm <> FGestureForm) then
+    AForm.FreeNotification(FSubjectStand); // SubjectComponentRemoved
+  FGestureForm := AForm;
+  FGestures := AGestures;
 end;
 
 procedure TSubjectInfo.WatchComponents;

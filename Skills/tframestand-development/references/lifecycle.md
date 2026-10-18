@@ -25,6 +25,7 @@ function GetFrameInfo<T: TFrame>(const ANewIfNotFound: Boolean = True; ...): TFr
 - Bulk: `CloseAll`, `CloseAll([TClassA])`, `CloseAllExcept(TMenuFrame)`, `HideAndCloseAll`, `HideAndCloseAllExcept(...)`.
 - Info state: `Status` (Initializing, Ready, Showing, Visible, Hiding, Hidden, Closing), `IsVisible`, `Hiding`.
 - Component lists: `FrameInfos` (dictionary frame → info), `VisibleFrames` (Show/Hide history: a frame shown twice is listed twice), `LastShownFrame`, `FrameInfo<T>`, `Count`.
+- `FrameInfos` / `FormInfos` do not own the infos: never call `Clear` (or `Remove`) on them, the infos leak. No cleanup is needed in `OnDestroy` (remove any `FrameInfos.Clear` left there by v.1.x code); the component frees the infos itself, also for subjects destroyed by FMX with their form.
 
 Timing: delays use the FMX timer (main thread). Pending callbacks are cancelled when the subject is closed or the component destroyed: `Close` during a `Hide` cancels its `AThen` and `OnAfterHide`.
 

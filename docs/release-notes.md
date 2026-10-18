@@ -73,6 +73,10 @@ Packaging release: setup, TMS Smart Setup, one package folder per Delphi version
 - 3D parents (`TLayer3D`, `TForm3D`) and owners that are not FMX objects: `New` no longer fails with "cannot determine parent Width" when there are no responsive definitions; responsive lookups on 3D layers use the pixel width of their 2D content; a missing parent raises a clear `ESubjectStandError` (before: `EInvalidCast`, or a stand silently left without parent by `Use`).
 - `TFormStand`: closing an adopted form without controls no longer raises an assertion, and an adopted form gets back all its controls (about half of them were freed with the stand).
 
+::: tip Migrating to 2.1
+Code written for v.1.x may call `FrameInfos.Clear` (`FormInfos.Clear`) in the `OnDestroy` of its forms: remove it. Since v.2.1 the component forgets the subjects destroyed by FMX and frees their infos by itself. `FrameInfos` does not own the infos: `Clear` only drops them from the dictionary, and they leak (`ReportMemoryLeaksOnShutdown` lists `TFrameInfo<...>`, `TLifeGuard` and some lists for each subject).
+:::
+
 ## v.2.0.1 — October 2026
 
 Maintenance release: packages, demos and a few runtime fixes. No API changes.

@@ -59,12 +59,13 @@ Legend: ✅ verified (compiled or executed), 📖 found by reading the code.
 
 All 16 demos build for Win32 with Delphi 13 with no warnings.
 
-## Status v.2.2 and v.2.3 (released)
+## Status v.2.2, v.2.3 and v.2.4 (released)
 
 | Item | Status |
 |---|---|
 | v.2.2 | setup (Inno Setup), TMS Smart Setup (`tmsbuild.yaml`, registry), one package folder per Delphi version (P7), design-time package for the 64-bit IDE, IDE splash/About |
 | v.2.3 | the v.3.0 roadmap renamed v.2.3, all done: dialog results, Back/Esc, navigation stack, stand gallery, live responsive, deprecations, AI agent skill; 119 tests |
+| v.2.4 | bug fix: interactive gestures of the subjects registered with the hosting form (#121), tests (#123); docs: `FrameInfos`/`FormInfos` do not own the infos (#122) |
 
 ## 1. Packaging and release
 

@@ -37,7 +37,7 @@ Events: `OnBeforeShow`, `OnAfterShow`, `OnBeforeHide`, `OnAfterHide`, `OnBeforeS
 | Property | Type | Description |
 |---|---|---|
 | `Count` | `Integer` | Number of subjects handled. |
-| `FrameInfos` | `TObjectDictionary<TFrame, TFrameInfo<TFrame>>` | All the infos, keyed by frame. |
+| `FrameInfos` | `TObjectDictionary<TFrame, TFrameInfo<TFrame>>` | All the infos, keyed by frame. Read it, don't change it: the component frees the infos (`Close`, its destructor); `Clear` or `Remove` on the dictionary drop them without freeing them. |
 | `VisibleFrames` | `TList<TFrame>` | History of the `Show`/`Hide` calls: each `Show` appends the frame (a frame shown twice is listed twice), each `Hide` removes its most recent entry, `Close` removes all its entries. |
 | `CommonActions` | `TCommonActionDictionary<TSubjectInfo>` | Registered [Common Actions](/features/common-actions). |
 | `Responsive` | `TResponsiveContainer` | Breakpoints and definitions for [responsive](/features/responsive) substitution. |

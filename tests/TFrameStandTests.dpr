@@ -27,7 +27,8 @@ uses
   Tests.BackKey in 'Tests.BackKey.pas',
   Tests.Stack in 'Tests.Stack.pas',
   Tests.Gallery in 'Tests.Gallery.pas',
-  Tests.ResponsiveLive in 'Tests.ResponsiveLive.pas';
+  Tests.ResponsiveLive in 'Tests.ResponsiveLive.pas',
+  Tests.Gestures in 'Tests.Gestures.pas';
 
 var
   LResults: IRunResults;

@@ -2,6 +2,11 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
+## Unreleased
+
+**Runtime**
+- Interactive gestures (`Touch.InteractiveGestures`: Zoom, Pan, Rotate, DoubleTap, LongTap...) of the controls of frames and forms shown by a stand now work on Android. FMX registers them with the form reached through the `Owner` chain, which a frame created by the stand (`Create(nil)`) does not have: the stand now registers them with the form that hosts it, every time the subject is shown, and gives them back when the subject is closed. Workarounds that call `AddRecognizer` on the form can be removed.
+
 ## v.2.3 — October 2026
 
 Feature release: dialogs that return a result, Back/Esc, navigation stack, a gallery of ready-made stands, live responsive frames, an AI agent skill. Existing code works as before: nothing is removed, the new behaviors are opt-in.

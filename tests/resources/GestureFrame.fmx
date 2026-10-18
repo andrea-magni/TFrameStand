@@ -1,0 +1,11 @@
+object GestureFrame: TGestureFrame
+  Size.Width = 200.000000000000000000
+  Size.Height = 100.000000000000000000
+  Size.PlatformDefault = False
+  object Area: TRectangle
+    Size.Width = 100.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    Touch.InteractiveGestures = [Zoom, DoubleTap]
+  end
+end

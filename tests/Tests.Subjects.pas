@@ -78,6 +78,19 @@ type
 
   TBaseFrame = class(TFrame);
 
+  // a control with Touch.InteractiveGestures = [Zoom, DoubleTap]
+  TGestureFrame = class(TFrame)
+    Area: TRectangle;
+  end;
+
+  // a control with Touch.InteractiveGestures = [Pan]; counts its destructions
+  // in FormsDestroyed
+  TGestureForm = class(TForm)
+    Area: TRectangle;
+  public
+    destructor Destroy; override;
+  end;
+
   // [FrameInfo] typed on itself: cannot receive the info of New<TBaseFrame>
   TDerivedFrame = class(TBaseFrame)
   public
@@ -116,6 +129,8 @@ implementation
 {$R 'resources\BaseFrame.fmx'}
 {$R 'resources\DerivedFrame.fmx'}
 {$R 'resources\Derived2Frame.fmx'}
+{$R 'resources\GestureFrame.fmx'}
+{$R 'resources\GestureForm.fmx'}
 
 procedure Pump(const AMS: Integer);
 var
@@ -167,6 +182,14 @@ end;
 { TEmptyForm }
 
 destructor TEmptyForm.Destroy;
+begin
+  Inc(FormsDestroyed);
+  inherited;
+end;
+
+{ TGestureForm }
+
+destructor TGestureForm.Destroy;
 begin
   Inc(FormsDestroyed);
   inherited;

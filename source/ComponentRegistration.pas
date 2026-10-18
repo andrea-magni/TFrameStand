@@ -22,7 +22,7 @@ uses
 
 const
   // keep in sync with LibraryVersion in setup\Setup.iss and with version.txt
-  TFrameStandVersion = '2.3';
+  TFrameStandVersion = '2.4';
   RsAboutTitle = 'TFrameStand';
   RsAboutDescription = 'TFrameStand and TFormStand - https://github.com/andrea-magni/TFrameStand' + sLineBreak +
     'FireMonkey components to show frames and forms on a stand, with animations, lifecycle events and responsive layouts.' + sLineBreak +

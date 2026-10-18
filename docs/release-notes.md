@@ -2,10 +2,21 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
-## Unreleased
+## v.2.4 — October 2026
+
+Bug fix release: interactive gestures of frames and forms shown by a stand work on Android. Existing code works as before.
 
 **Runtime**
 - Interactive gestures (`Touch.InteractiveGestures`: Zoom, Pan, Rotate, DoubleTap, LongTap...) of the controls of frames and forms shown by a stand now work on Android. FMX registers them with the form reached through the `Owner` chain, which a frame created by the stand (`Create(nil)`) does not have: the stand now registers them with the form that hosts it, every time the subject is shown, and gives them back when the subject is closed. Workarounds that call `AddRecognizer` on the form can be removed.
+
+**Tests**
+- `Tests.Gestures.pas`: the gestures of frames and forms are registered with the hosting form once and given back exactly (New, Show, Hide, Close, HideAndClose, several frames, a host form freed before the subject).
+
+**Docs**
+- `FrameInfos` and `FormInfos` do not own the infos: `Clear` or `Remove` on them drop the infos without freeing them. Migration tip in the [v.2.1 notes](#v-2-1-october-2026): remove `FrameInfos.Clear` from `OnDestroy`, the component frees the infos by itself. Same note in the [components reference](/reference/components) and in the agent skill.
+
+**AI**
+- Agent skill (plugin 1.0.2): `TAnimation` is declared in `FMX.Ani`, not `FMX.Types`; `FrameInfos.Clear` is not needed.
 
 ## v.2.3 — October 2026
 

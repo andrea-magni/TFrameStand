@@ -11,7 +11,7 @@ Baseline: `master` at `8693c7e` (v.2.0 + PR #95). Compiler used for the checks: 
 | Packages | runtime + design-time for 10.3 → 13 (plus stale XE8–10.2 runtime packages) |
 | Demos | 17 projects, 14 in `AllDemosProjectGroup` |
 | Tests / CI | none |
-| GitHub | 277 stars, 86 forks, 2 open issues (#81 can't reproduce, #17 Delphinus) |
+| GitHub | 277 stars, 86 forks, 2 open issues (#81 can't reproduce, #17 Delphinus), both closed on 2026-10-08: no open issues at v.2.4 |
 | Last release | v.2.0, 2026-03-06 (Delphi 13) |
 
 The runtime units compile with no hints or warnings on Delphi 13. The design is sound and still

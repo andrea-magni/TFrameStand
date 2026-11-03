@@ -1,0 +1,88 @@
+# DPM package spec file
+metadata:
+  id: andreamagni.tframestand
+  version: 2.4.0
+  description: 'FireMonkey components to show frames and forms on a "stand" (a style that wraps them, with animations, lifecycle events and responsive layouts) for every FMX platform.'
+  authors:
+    - Andrea Magni
+  projectUrl: https://github.com/andrea-magni/TFrameStand
+  repositoryUrl: https://github.com/andrea-magni/TFrameStand
+  license: MPL-2.0
+  copyright: Andrea Magni
+  tags:
+    - fmx
+    - animations
+    - frames
+    - transitions
+    - responsive
+  frameworks:
+    - fmx
+  readme: README.md
+targetPlatforms:
+  - compiler: delphi10.4
+    platforms:
+      - win32
+      - win64
+      - macos64
+      - android
+      - android64
+      - ios64
+      - iossimulator
+      - linux64
+    variables:
+      packageSource: /packages/104Sydney
+  - compiler: delphi11.0
+    platforms:
+      - win32
+      - win64
+      - macos64
+      - macosarm64
+      - android
+      - android64
+      - ios64
+      - iossimarm64
+      - linux64
+    variables:
+      packageSource: /packages/11Alexandria
+  - compiler: delphi12.0
+    platforms:
+      - win32
+      - win64
+      - macos64
+      - macosarm64
+      - android
+      - android64
+      - ios64
+      - iossimarm64
+      - linux64
+    variables:
+      packageSource: /packages/12Athens
+  - compiler: delphi13.0
+    platforms:
+      - win32
+      - win64
+      - winarm64ec
+      - macos64
+      - macosarm64
+      - android
+      - android64
+      - ios64
+      - iossimarm64
+      - linux64
+    variables:
+      packageSource: /packages/13Florence
+templates:
+  - name: default
+    source:
+      - src: /source/*.pas
+      - src: /source/*.fmx
+      - src: /stands/*.style
+      - src: /packages/**.dpk
+      - src: /packages/**.dproj
+      - src: /packages/**.res
+      - src: /media/*.*
+      - src: /LICENSE
+    build:
+      - project: $packageSource$/FrameStandPackage.dproj
+    design:
+      - project: $packageSource$/dclFrameStandPackage.dproj

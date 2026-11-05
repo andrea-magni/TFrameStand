@@ -2,6 +2,17 @@
 
 Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
 
+## Unreleased {#unreleased}
+
+**Installation**
+- TFrameStand 2.4 is on [DPM](/guide/installation#dpm), the Delphi Package Manager: `dpm install andreamagni.tframestand` adds it to a project, for Delphi 10.4 to 13. The package spec (`andreamagni.tframestand.dspec`) was contributed by Vincent Parrett, the author of DPM ([#125](https://github.com/andrea-magni/TFrameStand/pull/125)).
+
+**Docs**
+- [Building & Testing](/guide/building#releasing): the release steps, with the four places where the version is written and the DPM packages to publish.
+
+**AI**
+- Agent skill (plugin 1.0.3): the description has no angle brackets (`TFrameInfo<T>`), which claude.ai refuses.
+
 ## v.2.4 — October 2026
 
 Bug fix release: interactive gestures of frames and forms shown by a stand work on Android. Existing code works as before.

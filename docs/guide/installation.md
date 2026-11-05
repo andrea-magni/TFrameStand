@@ -60,6 +60,19 @@ configuration for andreamagni.tframestand:
 ```
 :::
 
+## DPM
+
+[DPM](https://delphi.dev), the Delphi Package Manager, installs packages per project: it downloads them, builds them for the platforms of the project and adds them to it. TFrameStand is published there as `andreamagni.tframestand` (since v.2.4), for Delphi 10.4 to 13.
+
+1. [Install DPM](https://docs.delphi.dev/).
+2. Add TFrameStand to your project, from the DPM package manager in the IDE or from the folder of the project:
+
+   ```bash
+   dpm install andreamagni.tframestand
+   ```
+
+DPM builds the runtime package for the platforms installed in the IDE, and the design-time package for the IDE. Linux64 needs [FMXLinux](https://getitnow.embarcadero.com/?q=fmxlinux): without it, DPM skips that platform.
+
 ## Manual installation
 
 1. Clone or download the repository from [GitHub](https://github.com/andrea-magni/TFrameStand).

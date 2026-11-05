@@ -19,6 +19,9 @@ Download `TFrameStand_<version>_Setup.exe` from the [latest release](https://git
 ## Installation - TMS Smart Setup
 `tms install andreamagni.tframestand` builds and installs the packages for every supported Delphi version on your machine. See [TMS Smart Setup](https://andrea-magni.github.io/TFrameStand/guide/installation#tms-smart-setup).
 
+## Installation - DPM
+`dpm install andreamagni.tframestand` adds TFrameStand to your project with [DPM](https://delphi.dev), the Delphi Package Manager. See [DPM](https://andrea-magni.github.io/TFrameStand/guide/installation#dpm).
+
 ## Installation - Manual
 1. Open the package group for your Delphi version, e.g. “packages\13Florence\FrameStand.groupproj” (Delphi 13) or “packages\12Athens\FrameStand.groupproj” (Delphi 12)
 2. Build both contained packages

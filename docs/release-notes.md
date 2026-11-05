@@ -1,6 +1,6 @@
 # Release Notes
 
-Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases) and on GetIt.
+Releases are published on [GitHub](https://github.com/andrea-magni/TFrameStand/releases); GetIt is updated later and may list an older version.
 
 ## Unreleased {#unreleased}
 

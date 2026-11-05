@@ -1,13 +1,13 @@
 # Installation
 
-## GetIt (recommended)
+## GetIt
 
 TFrameStand is available in **GetIt**, the Embarcadero package manager. In the IDE choose **Tools ▸ GetIt Package Manager**, search for `TFrameStand` and click **Install**. GetIt compiles the packages, installs the design-time package and sets the library path for you.
 
 You can also browse it on the [GetIt website](https://getitnow.embarcadero.com/?q=TFrameStand).
 
 ::: tip
-The GetIt version is the latest release. Installing from the repository gives you the latest commits, including fixes not released yet.
+GetIt may not have the latest release: it is updated by Embarcadero some time after a release on GitHub. Compare the version shown in GetIt with the [latest release](https://github.com/andrea-magni/TFrameStand/releases/latest); for the latest one use the [setup](#setup), [TMS Smart Setup](#tms-smart-setup) or [DPM](#dpm). Installing from the repository gives you the latest commits, including fixes not released yet.
 :::
 
 ## Setup

@@ -40,6 +40,24 @@ It compiles a clean export of `HEAD` (`git archive`), so local changes and untra
 
 `setup\Setup.iss` is based on the InnoSetupScripts library by Ethea (MIT license, derived from the Skia4Delphi setup), the same used by MARS-Curiosity: the shared code is in `setup\InnoSetupScripts`, the TFrameStand-specific parts (folders, library paths for all the platforms, demo folders) are in `Setup.iss`.
 
+## Releasing
+
+The version is written in four places, all updated by the release commit:
+
+- `version.txt` (TMS Smart Setup), e.g. `andreamagni.tframestand: 2.4.0`;
+- `andreamagni.tframestand.dspec`, `version` (DPM), e.g. `2.4.0`;
+- `setup\Setup.iss`, the `LibraryVersion` define, e.g. `2.4`;
+- `source\ComponentRegistration.pas`, `TFrameStandVersion` (About box and splash screen of the IDE), e.g. `2.4`.
+
+After the release is tagged on GitHub, with the setup attached, publish the DPM packages: `dpm pack`, on a clean checkout of the tag, builds one package per Delphi version; `dpm push` uploads each of them to delphi.dev (it needs the API key of the maintainer's account, in the `DPM_API_KEY` environment variable).
+
+```bash
+dpm pack andreamagni.tframestand.dspec -o=build\dpm
+dpm push build\dpm\<package>.dpkg -source=DPM
+```
+
+TMS Smart Setup needs nothing more: it finds the new version through the GitHub tag.
+
 ## The test suite
 
 `tests\TFrameStandTests.dpr` is a DUnitX console application. FireMonkey runs headless enough on Windows for these tests: frames and forms are created, shown, hidden and closed without showing any window.
